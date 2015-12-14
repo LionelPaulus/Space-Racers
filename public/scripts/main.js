@@ -1,11 +1,11 @@
 var canvas = document.getElementById("game");
 var ctx = canvas.getContext("2d");
-​
+
 var canvas_height = canvas.height;
 var canvas_width  = canvas.width;
-​
+
 var stars = [];
-​
+
 function createStars()
 {
     var star = {};
@@ -16,14 +16,14 @@ function createStars()
     star.style = "white";
     stars.push(star);
 };
-​
+
 function updateStars()
 {
     for(var i = 0; i < stars.length; i++)
     {
         var star = stars[i];
         star.y += star.speed;
-​
+
         if (star.y > canvas_height)
         {
             stars.splice(i,1);
@@ -37,7 +37,7 @@ function updateStars()
         }
     }
 }
-​
+
 function draw()
 {
     window.requestAnimationFrame(draw);
@@ -47,10 +47,10 @@ function draw()
     createStars();
     updateStars();
 }
-​
-​
-​
-​
+
+
+
+
 function rNumber(x,y)
 {
     if (x != y && x < y)
@@ -60,10 +60,10 @@ function rNumber(x,y)
         else return random
     }
 }
-​
+
 function clear()
 {
     ctx.clearRect(0,0,canvas.width,canvas.height);
 }
-​
+
 draw();
