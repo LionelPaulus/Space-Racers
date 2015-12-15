@@ -8,6 +8,9 @@ var gyroscope = null;
 var game = null;
 var startInfos = {};
 
+// Site static 
+app.use(express.static(__dirname + '/public'));
+
 // Lorsqu'un utilisateur se connecte au serv
 io.on('connection', function(socket) {
     
