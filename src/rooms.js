@@ -56,6 +56,15 @@ var rooms_manager = {
     },
 
     /**
+     * Recupere tous les joueurs d'une room
+     * @param int id
+     * @return array
+     */
+    getPlayers: function (id) {
+        return this.rooms[id].players;
+    },
+
+    /**
      * Supprime une room
      * @param int id
      */

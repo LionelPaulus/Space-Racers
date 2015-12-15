@@ -5,6 +5,7 @@ var io = require('socket.io')(server);
 var port = process.env.PORT || 3000; // Process c'est pour heroku car le port peut changer
 
 
+// Partials
 var rooms = require('./src/rooms.js');
 
 
@@ -65,11 +66,22 @@ io.on('connection', function(socket) {
         // Lorsque l'hote se deconnecte on supprime la room
         // Et on deconnecte les telephones de la room
         if (socket.roomID) {
+            var roomPlayers = rooms.getPlayers(socket.roomID);
+
             rooms.remove(socket.roomID);
+
+            // On deconnecte tous les utilisateurs de la room
+            for(var user in roomPlayers) {
+                var player = roomPlayers[user];
+                player.socket.emit('room:close');
+            }
+
             console.log("Host logged out, delete the room "+ socket.roomID);
+        } else {
+            // Lorsqu'un joueur se deconnecte on le supprime de la room a laquelle il appartient
+
         }
 
-        // Lorsqu'un joueur se deconnecte on le supprime de la room a laquelle il appartient
     });
 
 });

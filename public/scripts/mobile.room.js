@@ -11,6 +11,15 @@ socket.on('room:error', function (message) {
 });
 
 
+// Quand l'hote se deconnecte
+socket.on('room:close', function () {
+	alert('L\'hote de la partie c\'est deconnecte');
+	$('#end').html('');
+	$('#code').val('');
+	$('#code-submit').show();
+});
+
+
 // Quand on soumet le code
 $('#code-submit').on('submit', function (e) {
     e.preventDefault();
