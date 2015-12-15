@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Accelerometer Javascript Test</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no" />
+    <style>
+        body {
+            font-family: helvetica, arial, sans serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="content">
+        <h1>Accelerometer Javascript Test</h1>
+        <div id="sphere"></div>
+        <ul>
+            <li>acceleration x:
+                <span id="accelerationX"></span>g</li>
+            <li>acceleration y:
+                <span id="accelerationY"></span>g</li>
+            <li>acceleration z:
+                <span id="accelerationZ"></span>g</li>
+        </ul>
+    </div>
+
+    <script src="http://192.168.1.15:3000/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+
+        var socket = io.connect('192.168.1.15:3000');
+        var datas = {};
+
+        socket.emit('gyroscope');
+
+        socket.on('init', function (a) {
+            datas = JSON.parse(a);
+            // datas.height et datas.width et datas.x et datas.y
+        });
+
+        var x = 0,
+            y = 0,
+            vx = 0,
+            vy = 0,
+            ax = 0,
+            ay = 0,
+            inertia = 5,
+            x_old = 0,
+            y_old = 0;
+
+        if (window.DeviceMotionEvent !== undefined) {
+            window.ondevicemotion = function(e) {
+                ax = event.accelerationIncludingGravity.x * 5;
+                ax -= 35;
+                ay = event.accelerationIncludingGravity.y * 5;
+                az = event.accelerationIncludingGravity.z * 5;
+                if(az < 0){ // Correction bug marche arrière
+                    ax -= az;
+                }
+                document.getElementById("accelerationX").innerHTML = Math.floor(ax);
+                document.getElementById("accelerationY").innerHTML = Math.floor(ay);
+                document.getElementById("accelerationZ").innerHTML = Math.floor(az);
+            };
+
+            setInterval(function() {
+                if(ax > -10 && ax < 10){
+                    ax = 0;
+                    if(vx > inertia){
+                        vx -= inertia;
+                    }else if(vx < -inertia){
+                        vx += inertia;
+                    }else{
+                        vx = 0;
+                    }
+                }
+                if(ay > -10 && ay < 10){
+                    ay = 0;
+                    if(vy > inertia){
+                        vy -= inertia;
+                    }else if(vy < -inertia){
+                        vy += inertia;
+                    }else{
+                        vy = 0;
+                    }
+                }
+
+                vx = vx + ay;
+                vy = vy + ax;
+
+                vx = vx * 0.97;
+                vy = vy * 0.97;
+                y = parseInt(y + vy / 50);
+                x = parseInt(x + vx / 50);
+
+                boundingBoxCheck();
+
+                // Vérif si changement
+                if(x != x_old || y != y_old){
+                    // Envoie au serveur
+                    socket.emit('position', JSON.stringify({x: x, y: y}));
+                    x_old = x;
+                    y_old = y;
+                }
+            }, 25);
+        }
+
+
+        function boundingBoxCheck() {
+            if (x < 0) {
+                x = 0;
+                vx = -vx;
+            }
+            if (y < 0) {
+                y = 0;
+                vy = -vy;
+            }
+            if (x > datas.width - 20) {
+                x = datas.width - 20;
+                vx = -vx;
+            }
+            if (y > datas.height - 20) {
+                y = datas.height - 20;
+                vy = -vy;
+            }
+
+        }
+    </script>
+
+</body>
+
+</html>
