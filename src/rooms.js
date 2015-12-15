@@ -42,7 +42,7 @@ var rooms_manager = {
      * @param int id
      */
     remove: function (id) {
-        this.rooms.splice(id, 1);
+        delete this.rooms[id];
     },
 
 
