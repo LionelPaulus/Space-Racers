@@ -64,6 +64,11 @@ var rooms_manager = {
         return this.rooms[id].players;
     },
 
+    /**
+     * Recupere la room et l'id de l'utilisateur
+     * @param string socketID
+     * @return object
+     */
     getPlayersParents: function (socketID) {
         var infos = false;
 
