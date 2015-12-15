@@ -11,6 +11,12 @@ var inc_js = function (js_files) {
     }
 };
 
+// Pour changer de page
+var changePage = function (page) {
+    $('[data-page].active').removeClass('active');
+    $('[data-page="'+ page +'"]').addClass('active');
+};
+
 
 var mobile_js_files = ["scripts/mobile.room.js"];
 var desktop_js_files = ["scripts/desktop.room.js"];

@@ -6,6 +6,16 @@
 
 }
 
+#mobile [data-page] {
+	display: none;
+	width: 100%;
+	height: 100vh;
+}
+
+#mobile [data-page].active {
+	display: block;
+}
+
 #mobile #txt {
 	height: 10vh;
 	padding-top: calc(5vh - 10px);

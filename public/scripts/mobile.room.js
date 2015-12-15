@@ -1,8 +1,7 @@
 // Quand on a rejoint la room
 socket.on('room:success', function (id) {
-    $('#code-submit').hide();
+    changePage('spaceship');
     alert('Room joined');
-    $('#end').html('You are in the room '+ id);
 });
 
 // Quand on ne peut pas rejoindre la room
@@ -19,6 +18,11 @@ socket.on('room:close', function () {
 	$('#code-submit').show();
 });
 
+
+
+////////////////
+// EVENEMENTS //
+////////////////
 
 // Quand on soumet le code
 $('#join').on('click', function (e) {
