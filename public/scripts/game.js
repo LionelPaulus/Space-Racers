@@ -1,3 +1,5 @@
+var socket = io.connect('192.168.1.6:3000');
+
 var canvas = document.getElementById("game");
 var ctx = canvas.getContext("2d");
 
@@ -6,6 +8,7 @@ var canvas_width  = canvas_size[0];
 var canvas_height = canvas_size[1];
 canvas.setAttribute("width", canvas_width);
 canvas.setAttribute("height", canvas_height);
+
 
 var stars = [];
 
@@ -20,6 +23,8 @@ for(var i = 0; i < 600;i++)
     star.style = "white";
     stars.push(star)
 }
+
+// Create the stars in the background
 function createStars()
 {
     var star = {};
@@ -31,6 +36,8 @@ function createStars()
     stars.push(star);
 };
 
+
+// Update the position of the stars and delete them if they are off canvas
 function updateStars()
 {
     for(var i = 0; i < stars.length; i++)
@@ -53,6 +60,7 @@ function updateStars()
 
 var asteroids = [];
 
+// Create the asteroids
 function createAsteroid()
 {
     var random = rNumber(1,3);
@@ -85,7 +93,7 @@ function createAsteroid()
         asteroids.push(asteroid);
     }
 }
-
+//Update the position of asteroids and delete them if they are off canvas
 function updateAsteroid()
 {
     for(var i = 0; i < asteroids.length; i++)
@@ -105,8 +113,111 @@ function updateAsteroid()
     }
 }
 
+var players = []
+
+function createPlayerShip(number_of_player,ship_number, player_number)
+{
+    var ship = {};
+    ship.id = player_number;
+    ship.score = 0;
+    if(ship_number == 1)
+    {
+        ship.size = {};
+        ship.size.x = 53;
+        ship.size.y = 113;
+        ship.sprite = new Image();
+        ship.sprite.src = "img/game/jedi1.png";
+    }
+    if (number_of_player == 1)
+    {
+        ship.x = canvas_width/2 - ship.size.x/2;
+        ship.y = canvas_height-ship.size.y -50;
+    }
+    else if (number_of_player == 2)
+    {
+        if(player_number == 1)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 - 100;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+        else if (player_number == 2)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 + 100;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+    }
+
+    else if (number_of_player == 3)
+    {
+        if(player_number == 1)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 -100;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+        else if (player_number == 2)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+        else if (player_number == 3)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 + 100;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+    }
+
+    else if (number_of_player == 4)
+    {
+        if(player_number == 1)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 -200;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+        else if (player_number == 2)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 -100;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+        else if (player_number == 3)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 + 100;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+
+        else if (player_number == 4)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 + 100;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+    }
+
+    players.push(ship);
+
+        socket.emit('game', JSON.stringify({
+            width: canvas_width,
+            height: canvas_height,
+            x: ship.x,
+            y: ship.y
+        }));
+}
+
+socket.on('position', function (datas) {
+    datas = JSON.parse(datas);
+    var ship = players[0];
+    ship.x = datas.x;
+    ship.y = datas.y;
+});
 
 
+
+function drawShip()
+{
+    for(var i = 0; i < players.length;i++)
+    {
+        var ship = players[i];
+        ctx.drawImage(ship.sprite,ship.x,ship.y);
+    }
+}
 
 function draw()
 {
@@ -124,7 +235,10 @@ function draw()
         createAsteroid();
     }
     updateAsteroid();
+    drawShip();
 }
+
+createPlayerShip(1,1,1);
 
 draw();
 
