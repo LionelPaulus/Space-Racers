@@ -12,9 +12,11 @@ var startInfos = {};
 io.on('connection', function(socket) {
     
     socket.on('gyroscope', function () {
-        gyroscope = game;
+        gyroscope = socket;
 
-        if (game != null) socket.emit('init', startInfos);
+        console.log('GYRO JOINED');
+
+        if (game != null) socket.emit('init', JSON.stringify(startInfos));
     });
 
     // client width
@@ -24,11 +26,17 @@ io.on('connection', function(socket) {
         game = socket;
         startInfos = JSON.parse(infos);
 
+        console.log('GAME JOINED');
+        console.log(startInfos);
+
         if (gyroscope != null) socket.emit('init', startInfos);
     });
 
     socket.on('position', function (pos) {
         game.emit('position', pos);
+
+        console.log('POSIITION');
+        console.log(pos);
     });
 
 });
