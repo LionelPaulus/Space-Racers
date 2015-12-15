@@ -18,7 +18,7 @@ var changePage = function (page) {
 };
 
 
-var mobile_js_files = ["scripts/mobile.room.js"];
+var mobile_js_files = ["scripts/mobile.room.js", "scripts/mobile.spaceship.js"];
 var desktop_js_files = ["scripts/desktop.room.js"];
 
 if (is_mobile() === true) {
@@ -34,6 +34,6 @@ if (is_mobile() === true) {
 }
 
 
-var socket = io.connect('localhost:3000');
+var socket = io.connect('192.168.1.39:3000');
 //var socket = io.connect('star-wars-racers.herokuapp.com');
 new FastClick(document.body);

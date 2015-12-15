@@ -106,6 +106,9 @@
 	font-size: 18px;
 }
 
+
+/*** SPACESHIP CAROUSEL ***/ 
+
 #mobile [data-page="spaceship"] {
 	color: #fff;
 	position: fixed;
@@ -123,6 +126,12 @@
 	height: 100%;
 	transform: translateX(100%);
 	transition-duration: 200ms;
+}
+
+#mobile .spaceship .ship_name {
+	width: 100px;
+	text-align: center;
+	color:white;
 }
 
 
