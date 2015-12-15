@@ -29,3 +29,4 @@ if (is_mobile() === true) {
 
 
 var socket = io.connect('localhost:3000');
+new FastClick(document.body);

@@ -21,9 +21,24 @@ socket.on('room:close', function () {
 
 
 // Quand on soumet le code
-$('#code-submit').on('submit', function (e) {
+$('#join').on('click', function (e) {
     e.preventDefault();
-    var code = $('#code').val();
+    var code = $('#code').html();
 
     socket.emit('room:join', code);
 });
+
+// entering the code on smartphone
+$('button[data-value]').on('click', function() {
+    if ($('#mobile #code').html().length == 4) return;
+    
+    $("#mobile #code").first().append($(this).data("value"));
+});
+
+//deleting a number
+$('#del').on('click', function() {
+    $("#mobile #code").text(function(i, text) {
+        return text.slice(0, -1);
+    });
+});
+

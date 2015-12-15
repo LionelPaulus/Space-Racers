@@ -1,0 +1,132 @@
+#mobile  {
+	width: 100vw;
+	height: 100vh;
+	background: #000001;
+	border:0;
+
+}
+
+#mobile #txt {
+	height: 10vh;
+	padding-top: calc(5vh - 10px);
+	text-align: center;
+	font-family: 'Roboto', sans-serif;
+	color: #FFF;
+	font-size: 20px;
+	font-weight: 900;
+	box-sizing:border-box;
+}
+
+#mobile #keyboard {
+	padding-top: calc(45vh - 240px);
+	width: 100%;
+	height: 90vh;
+	background: rgba(255, 255, 255, 0.4);
+	box-sizing: border-box;
+}
+
+#mobile #code {
+	width: 268px;
+	height: 70px;
+	margin-right: auto;
+	margin-left: auto;
+	padding-top:16px;
+	padding-right:20px;
+	text-align: right;
+	box-sizing:border-box;
+	font-weight: 900;
+	font-family: 'Roboto', sans-serif;
+	color: #FFF;
+	font-size: 30px;
+	background: #363135;
+
+}
+
+#mobile .number-buttons {
+	position:relative;
+	width: 268px;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 20px;
+
+}
+
+#mobile .number-buttons button:nth-child(3), 
+#mobile .number-buttons button:nth-child(6),
+#mobile .number-buttons button:nth-child(9), 
+#mobile .number-buttons button:nth-child(12)  {
+	margin-right:0;
+
+}
+
+#mobile .number-buttons button {
+	outline: none;
+	border:none;
+	border-left: 7px solid #21B6CA;
+	width: 70px;
+	height: 55px;
+	background: #363135;
+	text-align: center;
+	font-size: 20px;
+	font-weight: 900;
+	color:#fff;
+	margin-right:25px;
+	margin-bottom: 20px;
+
+
+}
+
+#mobile .number-buttons button:active {
+	background:#FFF;
+	color:#363135;
+
+}
+
+#mobile .number-buttons button:nth-child(10), 
+#mobile .number-buttons button:nth-child(11),
+#mobile .number-buttons button:nth-child(12) {
+	margin-bottom: 0;
+
+}
+
+#mobile .code-label {
+	text-align: center;
+	color: #363135;
+	text-transform: uppercase;
+	font-size: 18px;
+}
+
+
+
+/** iphone 4 **/
+@media only screen and (min-height:480px) and (max-height: 568px) {
+
+	#mobile #code {
+		width: 240px;
+		height: 62px;
+	}
+
+	#mobile .number-buttons button {
+		width: 60px;
+		height: 50px;
+		margin-right:25px;
+		margin-bottom: 10px;
+
+	}
+
+	#mobile .number-buttons {
+		width: 240px;
+	}
+
+	#mobile #keyboard {
+		height: 90vh;
+		padding-top: calc(45vh - 200px);
+	}
+}
+
+
+
+
+
+
+
