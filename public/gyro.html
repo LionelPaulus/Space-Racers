@@ -1,20 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 
 <head>
-    <title>Accelerometer Javascript Test</title>
+    <title>Star Wars : Space Racers</title>
     <meta name="viewport" content="width=device-width,user-scalable=no" />
-    <style>
-        body {
-            font-family: helvetica, arial, sans serif;
-        }
-    </style>
 </head>
 
 <body>
     <div id="content">
-        <h1>Accelerometer Javascript Test</h1>
-        <div id="sphere"></div>
         <ul>
             <li>acceleration x:
                 <span id="accelerationX"></span>g</li>
@@ -26,14 +19,18 @@
     </div>
 
     <script src="http://192.168.1.15:3000/socket.io/socket.io.js"></script>
+    <script src="scripts/NoSleep.min.js"></script>
     <script type="text/javascript">
+        // Enable noSleep
+        var noSleep = new NoSleep();
+        noSleep.enable();
 
+        // Node server connect
         var socket = io.connect('192.168.1.15:3000');
         var datas = {};
-
         socket.emit('gyroscope');
 
-        socket.on('init', function (a) {
+        socket.on('init', function(a) {
             datas = JSON.parse(a);
             // datas.height et datas.width et datas.x et datas.y
         });
@@ -50,40 +47,49 @@
 
         if (window.DeviceMotionEvent !== undefined) {
             window.ondevicemotion = function(e) {
+                // Recover acceleration datas
                 ax = event.accelerationIncludingGravity.x * 5;
-                ax -= 35;
                 ay = event.accelerationIncludingGravity.y * 5;
                 az = event.accelerationIncludingGravity.z * 5;
-                if(az < 0){ // Correction bug marche arrière
+
+                // Calibration
+                ax -= 35;
+
+                // Fix bug reverse
+                if (az < 0) {
                     ax -= az;
                 }
+
+                // For tests only
                 document.getElementById("accelerationX").innerHTML = Math.floor(ax);
                 document.getElementById("accelerationY").innerHTML = Math.floor(ay);
                 document.getElementById("accelerationZ").innerHTML = Math.floor(az);
             };
 
             setInterval(function() {
-                if(ax > -10 && ax < 10){
+                // Dead zone
+                if (ax > -10 && ax < 10) {
                     ax = 0;
-                    if(vx > inertia){
+                    if (vx > inertia) {
                         vx -= inertia;
-                    }else if(vx < -inertia){
+                    } else if (vx < -inertia) {
                         vx += inertia;
-                    }else{
+                    } else {
                         vx = 0;
                     }
                 }
-                if(ay > -10 && ay < 10){
+                if (ay > -10 && ay < 10) {
                     ay = 0;
-                    if(vy > inertia){
+                    if (vy > inertia) {
                         vy -= inertia;
-                    }else if(vy < -inertia){
+                    } else if (vy < -inertia) {
                         vy += inertia;
-                    }else{
+                    } else {
                         vy = 0;
                     }
                 }
 
+                // Inertia
                 vx = vx + ay;
                 vy = vy + ax;
 
@@ -94,10 +100,13 @@
 
                 boundingBoxCheck();
 
-                // Vérif si changement
-                if(x != x_old || y != y_old){
-                    // Envoie au serveur
-                    socket.emit('position', JSON.stringify({x: x, y: y}));
+                // Check changes
+                if (x != x_old || y != y_old) {
+                    // Send position to server
+                    socket.emit('position', JSON.stringify({
+                        x: x,
+                        y: y
+                    }));
                     x_old = x;
                     y_old = y;
                 }
