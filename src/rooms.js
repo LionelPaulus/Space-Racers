@@ -58,10 +58,32 @@ var rooms_manager = {
     /**
      * Recupere tous les joueurs d'une room
      * @param int id
-     * @return array
+     * @return array || false
      */
     getPlayers: function (id) {
         return this.rooms[id].players;
+    },
+
+    getPlayersParents: function (socketID) {
+        var infos = false;
+
+        // Parcourt les rooms
+        for(var i in this.rooms) {
+            // Parcourt les players
+            for(var userI in this.rooms[i].players) {
+                var currentPlayer = this.rooms[i].players[userI];
+
+                // Si on a trouve l'utilisateur
+                if (currentPlayer.socket.id == socketID) {
+                    infos = {playerID: userI, roomID: i};
+                    break;
+                }
+            }
+
+            if (infos != false) break;
+        }
+
+        return infos;
     },
 
     /**

@@ -56,7 +56,7 @@ io.on('connection', function(socket) {
             spaceship: null
         });
         
-        console.log('New user join room '+ room + ' ('+ rooms.countPlayers(room) +'/4)');
+        console.log('Player '+ socket.id +' join room '+ room + ' ('+ rooms.countPlayers(room) +'/4)');
         socket.emit('room:success', room);
     });
 
@@ -79,6 +79,12 @@ io.on('connection', function(socket) {
             console.log("Host logged out, delete the room "+ socket.roomID);
         } else {
             // Lorsqu'un joueur se deconnecte on le supprime de la room a laquelle il appartient
+            var playerParents = rooms.getPlayersParents(socket.id);
+
+            // Si il n'appartient a aucune partie
+            if (playerParents === false) return;
+
+            console.log('Player '+ socket.id +' is leaving the room '+ playerParents.roomID);
 
         }
 
