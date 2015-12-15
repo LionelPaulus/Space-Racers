@@ -9,23 +9,12 @@ canvas.setAttribute("height", canvas_height);
 
 var stars = [];
 
-// creating the first stars background
-for(var i = 0; i < 600;i++)
-{
-    var star = {};
-    star.x = rNumber(0,canvas_width);
-    star.y = rNumber(0,canvas_height);
-    star.size = rNumber(1,4);
-    star.speed = star.size*0.5;
-    star.style = "white";
-    stars.push(star)
-}
 function createStars()
 {
     var star = {};
     star.x = rNumber(0,canvas_width);
     star.y = 0;
-    star.size = rNumber(1,4);
+    star.size = rNumber(1,6);
     star.speed = star.size*0.5;
     star.style = "white";
     stars.push(star);
@@ -59,7 +48,7 @@ function createAsteroid()
     var asteroid = {};
     asteroid.x = rNumber(0,canvas_width);
     asteroid.rotation = rNumber(1,360);
-    asteroid.sprite = new Image();
+
     asteroid.size = {};
     if(random == 1)
     {
@@ -76,9 +65,8 @@ function createAsteroid()
         asteroid.size.x = 66;
         asteroid.size.y = 66;
     }
-
-    asteroid.sprite.src = "img/game/asteroid" + random +".png";
-    asteroid.speed = 2;
+    asteroid.random = random;
+    asteroid.speed = 6 - (Math.round(asteroid.size.x * 0.1)/2);
     asteroid.y = 0 - asteroid.size.y ;
     if (tooCloseTo(asteroid) == false)
     {
@@ -92,14 +80,16 @@ function updateAsteroid()
     {
         var asteroid = asteroids[i];
         asteroid.y += asteroid.speed;
-        if (asteroid.y-asteroid.size.y > canvas_height)
+        if (asteroid.y > canvas_height)
         {
             asteroids.splice(i,1);
         }
         else
         {
                 ctx.beginPath();
-                drawRotated(asteroid.sprite,asteroid.x,asteroid.y,asteroid.rotation);
+                asteroid.sprite = new Image();
+                asteroid.sprite.src = "img/game/asteroid" + asteroid.random + ".png";
+                asteroid.sprite.onload = function() {drawRotated(asteroid.sprite,asteroid.x,asteroid.y,asteroid.rotation);}
                 ctx.closePath();
         }
     }
@@ -112,17 +102,17 @@ function draw()
 {
     var random = rNumber(1,100);
     window.requestAnimationFrame(draw);
-    //erase canvas
-    clear();
-    //background updates
-    createStars();
-    updateStars();
+//    //erase canvas
+//    //background updates
+//    createStars();
+//    updateStars();
 
     //asteroid updates
-    if(random > 85)
+    if(random > 70)
     {
         createAsteroid();
     }
+
     updateAsteroid();
 }
 
