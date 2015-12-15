@@ -5,7 +5,7 @@ var rooms_manager = {
      * Genere un id de room
      */
     generateID: function () {
-        return Math.round(Math.random() * 10000);
+        return Math.round(Math.random() * 10000) + 1;
     },
 
     /**
@@ -36,6 +36,18 @@ var rooms_manager = {
     getState: function (id) {
         return this.rooms[id].state;
     },
+
+    /**
+     * Supprime une room
+     * @param int id
+     */
+    remove: function (id) {
+        this.rooms.splice(id, 1);
+    },
+
+
+
+
 
     /**
      * Ajoute un joueur a une room
@@ -92,11 +104,32 @@ var rooms_manager = {
     },
 
     /**
-     * Supprime une room
+     * Supprime un utilisateur de la room
      * @param int id
+     * @param int user
      */
-    remove: function (id) {
-        delete this.rooms[id];
+    playerRemove: function (id, user) {
+        this.rooms[id].players.splice(user, 1);
+    },
+
+
+
+    /**
+     * Verify if spaceship is already taken
+     * @param int id
+     * @param int spacehip
+     */
+    isSpaceshipUsed: function (id, spaceship) {
+        var exists = false;
+
+        for(var user in this.getPlayers(id)) {
+            if (this.getPlayers(id)[user].spaceship == spaceship) {
+                exists = true;
+                break
+            }
+        }
+
+        return exists;
     }
 };
 
