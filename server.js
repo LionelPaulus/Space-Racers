@@ -61,6 +61,29 @@ io.on('connection', function(socket) {
     });
 
 
+    // Lorsqu'un utilisateur choisi son vaisseau
+    socket.on('spaceship:choose', function (spaceship) {
+        var playerParents = rooms.getPlayersParents(socket.id);
+
+        // Si la partie est deja en cours
+        if (rooms.getState(playerParents.roomID) === true) {
+            socket.emit('spaceship:error', 'Partie deja en cours');
+            return;
+        }
+
+        // Si le vaisseau est deja occupe
+        if (rooms.isSpaceshipUsed(playerParents.roomID, spaceship) === true) {
+            socket.emit('spaceship:error', 'Vaisseau deja utilisé');
+            return;
+        }
+
+        rooms.spaceshipAssign(playerParents.roomID, playerParents.playerID, spaceship);
+        socket.emit('spacehip:success');
+
+        console.log('The player '+ socket.id +' chose the spaceship '+ spaceship);
+    });
+
+
     // Lorsqu'un client se deconnecte
     socket.on('disconnect', function () {
         // Lorsque l'hote se deconnecte on supprime la room
@@ -84,10 +107,9 @@ io.on('connection', function(socket) {
             // Si il n'appartient a aucune partie
             if (playerParents === false) return;
 
+            rooms.playerRemove(playerParents.roomID, playerParents.playerID);
             console.log('Player '+ socket.id +' is leaving the room '+ playerParents.roomID);
-
         }
-
     });
 
 });

@@ -125,11 +125,21 @@ var rooms_manager = {
         for(var user in this.getPlayers(id)) {
             if (this.getPlayers(id)[user].spaceship == spaceship) {
                 exists = true;
-                break
+                break;
             }
         }
 
         return exists;
+    },
+
+    /**
+     * Assign a spaceship to an user
+     * @param int id
+     * @param int user
+     * @param int spaceship
+     */
+    spaceshipAssign: function (id, user, spaceship) {
+        this.rooms[id].players[user].spaceship = spaceship;
     }
 };
 
