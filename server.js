@@ -8,7 +8,7 @@ var port = process.env.PORT || 3000; // Process c'est pour heroku car le port pe
 var rooms = require('./src/rooms.js');
 
 
-// Site static
+// Site static 
 app.use(express.static(__dirname + '/public'));
 
 
