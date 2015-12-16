@@ -1,3 +1,6 @@
+
+
+
 var currentSlide = 1;
 var hammertime = new Hammer(document.querySelector('#mobile [data-page="spaceship"]'));
 hammertime.get('swipe').set({ direction: Hammer.DIRECTION_VERTICAL });
@@ -63,14 +66,22 @@ function updateSlider(dir) {
 	if ($('.spaceship[data-spaceship="'+ currentSlide +'"]').hasClass('unavailable')) {
 		$('#spaceship-play').html('ALREADY USED').css('opacity', '0.3');
 	} else {
-		$('#spaceship-play').html('PLAY').css('opacity', '1');
+		$('#spaceship-play').html('READY').css('opacity', '1');
+	}
+
+	var side = $('.spaceship[data-spaceship="'+ currentSlide +'"]').attr('data-side');
+
+	if (side == 'dark') {
+		$('#mobile [data-page="spaceship"]').removeClass('lightside');
+	} else {
+		$('#mobile [data-page="spaceship"]').addClass('lightside');
 	}
 }
 
 function updateUsedSpaceship(spaceships) {
 	// On reset a chaque update
 	$('.spaceship').removeClass('unavailable');
-	$('#spaceship-play').html('PLAY').css('opacity', '1');
+	$('#spaceship-play').html('READY').css('opacity', '1');
 
 	for (var i in spaceships) {
 		var spaceship = spaceships[i];
