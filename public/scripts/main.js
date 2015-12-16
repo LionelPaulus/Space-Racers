@@ -34,6 +34,9 @@ if (is_mobile() === true) {
 }
 
 
-var socket = io.connect('192.168.1.39:3000');
+var socket = io.connect('localhost:3000');
 //var socket = io.connect('star-wars-racers.herokuapp.com');
-new FastClick(document.body);
+
+window.addEventListener('load', function () {
+    new FastClick(document.body);
+});
