@@ -13,8 +13,8 @@ var inc_js = function (js_files) {
 
 // Pour changer de page
 var changePage = function (page) {
-    $('[data-page].active').removeClass('active');
-    $('[data-page="'+ page +'"]').addClass('active');
+    $('#mobile [data-page].active').removeClass('active');
+    $('#mobile [data-page="'+ page +'"]').addClass('active');
 };
 
 

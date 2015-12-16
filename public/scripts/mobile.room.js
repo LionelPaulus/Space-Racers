@@ -5,7 +5,6 @@ socket.on('room:success', function (spaceship) {
     
     changePage('spaceship');
     updateUsedSpaceship(usedSpaceships);
-    updateSlider('init');
 });
 
 // Quand on ne peut pas rejoindre la room

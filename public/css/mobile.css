@@ -117,100 +117,40 @@
 	right: 0;
 	top: 0;
 	bottom: 0;
-	background: #bd5d5c; /* Old browsers */
-	background: -moz-linear-gradient(top, #bd5d5c 0%, #bd5d5c 50%, #f2f2f2 50%, #f2f2f2 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(top, #bd5d5c 0%,#bd5d5c 50%,#f2f2f2 50%,#f2f2f2 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(to bottom, #bd5d5c 0%,#bd5d5c 50%,#f2f2f2 50%,#f2f2f2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bd5d5c', endColorstr='#f2f2f2',GradientType=0 ); /* IE6-9 */
-copy
-}
-
-#mobile [data-page="spaceship"].lightside {
-	background: #bd5d5c; /* Old browsers */
-	background: -moz-linear-gradient(top, #004697 0%, #004697 50%, #f2f2f2 50%, #f2f2f2 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(top, #004697 0%,#004697 50%,#f2f2f2 50%,#f2f2f2 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(to bottom, #004697 0%,#004697 50%,#f2f2f2 50%,#f2f2f2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#004697', endColorstr='#f2f2f2',GradientType=0 ); /* IE6-9 */
-copy
 }
 
 #mobile .spaceship {
-	position: absolute;
-	top: 0; bottom: 50px;
-	left: 0; right: 0;
-	width: 100%;
-	transform: translateY(calc(100% + 60px));
-	transition-duration: 200ms;
+	float: left;
+	width: calc(100% / 4);
+	height: 100vh;
+}
+
+#mobile .spaceship:nth-child(even) {
+	background: rgba(0,0,0,0.3);
 }
 
 #mobile .spaceship .preview {
-	width: 300px;
+	width: 150px;
+	height: 112px;
+	margin-top: calc(40vh - 56px);
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: -30px;
-
+	transform: rotate(-90deg);
 }
 
-#mobile .spaceship.unavailable .preview {
-	opacity: 0.3;
+#mobile .spaceship.unavailable .preview,
+#mobile .spaceship.unavailable .ship_name {
+	opacity: 0.1;
 }
 
-#mobile  .ship_name {
-	height: 15vh ;
-	padding-top: calc(15vh - 10px);
-	width: 200px;
+#mobile .ship_name {
+	margin-top: 10vh;
 	font-weight: 900;
 	font-family: 'Roboto', sans-serif;
-	font-size:20px;
-	margin-right: auto;
-	margin-left: auto;
+	font-size: 16px;
 	text-align: center;
-	/* JEDI STARFIGHT Copy: */
 	color: #F1F0F0;
-}
-
-#mobile #swipe-anim {
-	width: 7px;
-	height: 52px;
-	margin-top: calc(50vh - 26px);
-	margin-left: 95%;
-}
-
-#mobile #swipe-anim .swipe-rounds {
-	width: 7px;
-	height: 7px;
-	border-radius: 100%;
-	display: inline-block;
-	background-color: #fff;
-	z-index: 30;
-	position:relative;
-	margin-right: 4px;
-	opacity: 0.5;
-}
-
-#mobile #swipe-anim .swipe-rounds.active {
-	opacity: 1;
-}
-
-#mobile #swipe-anim .swipe-rounds:nth-child(4) {
-	margin-right: 0;
-}
-
-#mobile #spaceship-play {
-	position: absolute;
-	z-index: 2;
-	width: 200px;
-	text-align: center;
-	font-size: 20px;
-	color: #fff;
-	border: 0;
-	background: #D6D6D1;
-	box-shadow: 2px 3px 4px 0px rgba(0,0,0,0.50);
-	outline: none;
-	position: absolute;
-	bottom: 30px;
-	left: calc(50% - 100px);
 }
 
 
