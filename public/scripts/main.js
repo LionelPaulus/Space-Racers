@@ -18,7 +18,7 @@ var changePage = function (page) {
 };
 
 
-var mobile_js_files = ["scripts/mobile.room.js", "scripts/mobile.spaceship.js"];
+var mobile_js_files = ["scripts/mobile.room.js", "scripts/mobile.spaceship.js", "scripts/mobile.waiting.js"];
 var desktop_js_files = ["scripts/desktop.room.js"];
 
 if (is_mobile() === true) {
