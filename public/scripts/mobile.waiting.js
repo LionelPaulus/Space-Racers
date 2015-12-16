@@ -1,5 +1,5 @@
 // Quand la partie commence
-socket.on('game:start', function (spaceships) {
+socket.on('game:started', function (spaceships) {
     $('#mobile .spaceship-waiting').addClass('leave');
-    setTimeout(function() { changePage('game'); }, 600);
+    setTimeout(function() { changePage('game'); $('#mobile .spaceship-waiting').removeClass('leave'); }, 600);
 });

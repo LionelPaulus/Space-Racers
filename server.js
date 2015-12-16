@@ -20,7 +20,7 @@ io.on('connection', function(socket) {
     // Lorsque le PC cree une room
     socket.on('room:create', function () {
         var id = rooms.generateID();
-        rooms.create(id);
+        rooms.create(id, socket);
         socket.roomID = id;
 
         // On envoie l'id de la room au client
@@ -92,6 +92,42 @@ io.on('connection', function(socket) {
         }
 
         console.log('The player '+ socket.id +' chose the spaceship '+ spaceship);
+    });
+
+
+    // Lorsque le pc demande a demarer
+    socket.on('game:start', function () {
+        if (!socket.roomID) return;
+
+        // Si la partie est deja en cours
+        if (rooms.getState(socket.roomID) === true) {
+            socket.emit('game:error', 'Partie deja en cours');
+            return;
+        }
+
+        // Si il n'y a pas de joueurs
+        if (rooms.getPlayers(socket.roomID).length == 0) {
+            socket.emit('game:error', 'Aucun joueur');
+            return;
+        }
+
+        // Si tous les joueurs n'ont pas choisi un vaisseau
+        if (rooms.countPlayersWithoutSpaceships(socket.roomID) > 0) {
+            socket.emit('game:error', 'Des joueurs ont pas encore choisi leur vaisseau');
+            return;
+        }
+
+        rooms.setStarted(socket.roomID);
+        socket.emit('game:started');
+        
+        console.log('The game '+ socket.roomID +' just started');
+
+        // On previent les joueurs
+        var players = rooms.getPlayers(socket.roomID);
+        for (var user in players) {
+            var player = players[user];
+            player.socket.emit('game:started');
+        }
     });
 
 

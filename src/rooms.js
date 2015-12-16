@@ -12,10 +12,11 @@ var rooms_manager = {
      * Cree une room
      * @param int id
      */
-    create: function (id) {
+    create: function (id, host) {
         this.rooms[id] = {
             players: [],
-            state: false
+            state: false,
+            host: host
         };
     },
 
@@ -35,6 +36,14 @@ var rooms_manager = {
      */
     getState: function (id) {
         return this.rooms[id].state;
+    },
+
+    /**
+     * Set le jeu a commence
+     * @param int id
+     */
+    setStarted: function (id) {
+        this.rooms[id].state = true;
     },
 
     /**
@@ -164,6 +173,21 @@ var rooms_manager = {
         }
 
         return spaceships;
+    },
+
+    /**
+     * Compte les joueurs sans vaisseau
+     * @param int id
+     * @return int
+     */
+    countPlayersWithoutSpaceships: function (id) {
+        var players = 0;
+
+        for(var player in this.rooms[id].players) {
+            if (this.rooms[id].players[player].spaceship === null) players++;
+        }
+
+        return players;
     },
 
     /**
