@@ -2,18 +2,18 @@ var express = require('express'); //EXPRESS c'est un framework qui va juste serv
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var port = process.env.PORT || 3000; // Process c'est pour heroku car le port peut changer
+var port = process.env.PORT || 7777; // Process c'est pour heroku car le port peut changer
 
 var gyroscope = null;
 var game = null;
 var startInfos = {};
 
-// Site static 
+// Site static
 app.use(express.static(__dirname + '/public'));
 
 // Lorsqu'un utilisateur se connecte au serv
 io.on('connection', function(socket) {
-    
+
     socket.on('gyroscope', function () {
         gyroscope = socket;
 
