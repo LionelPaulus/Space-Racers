@@ -9,6 +9,7 @@ var canvas_height = canvas_size[1];
 canvas.setAttribute("width", canvas_width);
 canvas.setAttribute("height", canvas_height);
 
+var positions = {}; // Positions x, y and z from gyroscope
 
 var stars = [];
 
@@ -193,6 +194,7 @@ function createPlayerShip(number_of_player,ship_number, player_number)
 
     players.push(ship);
 
+        // No need anymore
         socket.emit('game', JSON.stringify({
             width: canvas_width,
             height: canvas_height,
@@ -201,14 +203,15 @@ function createPlayerShip(number_of_player,ship_number, player_number)
         }));
 }
 
+var first_time = true;
 socket.on('position', function (datas) {
-    datas = JSON.parse(datas);
-    var ship = players[0];
-    ship.x = datas.x;
-    ship.y = datas.y;
+    positions = JSON.parse(datas);
+
+    if(first_time){
+        gyroIntelligence();
+        first_time = false;
+    }
 });
-
-
 
 function drawShip()
 {
