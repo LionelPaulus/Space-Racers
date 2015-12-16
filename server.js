@@ -57,7 +57,9 @@ io.on('connection', function(socket) {
         });
         
         console.log('Player '+ socket.id +' join room '+ room + ' ('+ rooms.countPlayers(room) +'/4)');
-        socket.emit('room:success', room);
+        socket.emit('room:success', JSON.stringify(
+            rooms.getUsedSpaceships(room)
+        ));
     });
 
 
@@ -78,7 +80,16 @@ io.on('connection', function(socket) {
         }
 
         rooms.spaceshipAssign(playerParents.roomID, playerParents.playerID, spaceship);
-        socket.emit('spacehip:success');
+        socket.emit('spaceship:success');
+
+        // On previent les autres utilisateurs
+        var adversaries = rooms.getAdversaries(playerParents.roomID, playerParents.playerID);
+        for (var user in adversaries) {
+            var player = adversaries[user];
+            player.socket.emit('spaceship:picked', JSON.stringify(
+                rooms.getUsedSpaceships(playerParents.roomID)
+            ));
+        }
 
         console.log('The player '+ socket.id +' chose the spaceship '+ spaceship);
     });
@@ -109,6 +120,19 @@ io.on('connection', function(socket) {
 
             rooms.playerRemove(playerParents.roomID, playerParents.playerID);
             console.log('Player '+ socket.id +' is leaving the room '+ playerParents.roomID);
+
+            // Si la partie n'est pas encore commencee
+            if (rooms.getState(playerParents.roomID) === false) {
+                // On libere le vaisseau
+                var adversaries = rooms.getPlayers(playerParents.roomID);
+                
+                for (var user in adversaries) {
+                    var player = adversaries[user];
+                    player.socket.emit('spaceship:picked', JSON.stringify(
+                        rooms.getUsedSpaceships(playerParents.roomID)
+                    ));
+                }
+            }
         }
     });
 

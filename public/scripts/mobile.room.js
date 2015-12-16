@@ -1,7 +1,11 @@
 // Quand on a rejoint la room
-socket.on('room:success', function (id) {
+//   spaceship: [] <- Spaceship already used
+socket.on('room:success', function (spaceship) {
+    usedSpaceships = JSON.parse(spaceship);
+    
     changePage('spaceship');
-    alert('Room joined');
+    updateUsedSpaceship(usedSpaceships);
+    updateSlider('init');
 });
 
 // Quand on ne peut pas rejoindre la room

@@ -104,6 +104,22 @@ var rooms_manager = {
     },
 
     /**
+     * Get adversaries
+     * @param int id
+     * @param int player
+     * @return array
+     */
+    getAdversaries: function (id, player) {
+        var adversaries = [];
+
+        for (var user in this.rooms[id].players) {
+            if (user != player) adversaries.push(this.rooms[id].players[user]);
+        }
+
+        return adversaries;
+    },
+
+    /**
      * Supprime un utilisateur de la room
      * @param int id
      * @param int user
@@ -130,6 +146,24 @@ var rooms_manager = {
         }
 
         return exists;
+    },
+
+    /**
+     * Get used spaceships in a room
+     * @param int id
+     * @return array
+     */
+    getUsedSpaceships: function (id) {
+        var spaceships = [];
+
+        for (var player in this.rooms[id].players) {
+            var spaceship = this.rooms[id].players[player].spaceship;
+
+            if(spaceship != null)
+                spaceships.push(spaceship);
+        }
+
+        return spaceships;
     },
 
     /**

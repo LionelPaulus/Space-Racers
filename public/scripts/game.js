@@ -1,5 +1,7 @@
+
 $.get("scripts/data.json", function (hitbox) {
-//var socket = io.connect('192.168.43.225:7777');
+
+var socket = io.connect('localhost:3000');
 
 var canvas = document.getElementById("game");
 var ctx = canvas.getContext("2d");
@@ -12,7 +14,9 @@ var canvas_width  = canvas_size[0];
 var canvas_height = canvas_size[1];
 canvas.setAttribute("width", canvas_width);
 canvas.setAttribute("height", canvas_height);
-var counter = 0;
+
+var positions = {}; // Positions x, y and z from gyroscope
+
 var stars = [];
 
 // creating the first stars background
@@ -24,7 +28,7 @@ for(var i = 0; i < 600;i++)
     star.size = rNumber(1,4);
     star.speed = star.size*0.5;
     star.style = "white";
-    stars.push(star)
+    stars.push(star);
 }
 
 // Create the stars in the background
@@ -37,7 +41,7 @@ function createStars()
     star.speed = star.size*0.5;
     star.style = "white";
     stars.push(star);
-};
+}
 
 
 // Update the position of the stars and delete them if they are off canvas
@@ -91,7 +95,7 @@ function createAsteroid()
     asteroid.sprite.src = "img/game/asteroid" + random +".png";
     asteroid.speed = 2;
     asteroid.y = 0 - asteroid.size.y ;
-    if (tooCloseTo(asteroid) == false)
+    if (tooCloseTo(asteroid) === false)
     {
         asteroids.push(asteroid);
     }
@@ -118,7 +122,7 @@ function updateAsteroid()
     }
 }
 
-var players = []
+var players = [];
 
 function createPlayerShip(number_of_player,ship_number, player_number)
 {
@@ -199,22 +203,24 @@ function createPlayerShip(number_of_player,ship_number, player_number)
 
     players.push(ship);
 
-//        socket.emit('game', JSON.stringify({
-//            width: canvas_width,
-//            height: canvas_height,
-//            x: ship.x,
-//            y: ship.y
-//        }));
+        // No need anymore
+        socket.emit('game', JSON.stringify({
+            width: canvas_width,
+            height: canvas_height,
+            x: ship.x,
+            y: ship.y
+        }));
 }
 
-//socket.on('position', function (datas) {
-//    datas = JSON.parse(datas);
-//    var ship = players[0];
-//    ship.x = datas.x;
-//    ship.y = datas.y;
-//});
+var first_time = true;
+socket.on('position', function (datas) {
+    positions = JSON.parse(datas);
 
-
+    if(first_time){
+        gyroIntelligence();
+        first_time = false;
+    }
+});
 
 function drawShip()
 {
@@ -387,8 +393,8 @@ function rNumber(x,y)
     if (x != y && x < y)
     {
         var random = Math.floor(Math.random()*(y-x+1))+x;
-        if (random == 0) return 1
-        else return random
+        if (random === 0) return 1;
+        else return random;
     }
 }
 
@@ -415,7 +421,7 @@ function tooCloseTo(new_asteroid)
             }
         }
 
-        if (istooclose == true)
+        if (istooclose === true)
         {
             return true;
         }
@@ -449,9 +455,7 @@ function getViewport() {
  }
 
 // IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
- else if (typeof document.documentElement != 'undefined'
- && typeof document.documentElement.clientWidth !=
- 'undefined' && document.documentElement.clientWidth != 0) {
+ else if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth !== 0) {
     viewPortWidth = document.documentElement.clientWidth,
     viewPortHeight = document.documentElement.clientHeight
  }
