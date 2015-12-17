@@ -215,8 +215,8 @@ io.on('connection', function(socket) {
             player.socket.emit('room:close');
         }
 
-        console.log(roomPlayers[winner].socket.id +' gagne la partie '+ roomID);
-        console.log('Fin de la partie '+ roomID);
+        console.log(roomPlayers[winner].socket.id +' win the game '+ roomID);
+        console.log('End of the game '+ roomID);
     });
 
 
