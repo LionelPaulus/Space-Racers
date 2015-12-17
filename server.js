@@ -126,6 +126,8 @@ io.on('connection', function(socket) {
 
         // On notifie l'utilisateur de sa mort
         rooms.getPlayers(socket.roomID)[user].socket.emit('game:dead');
+
+        console.log('The player '+ rooms.getPlayers(socket.roomID)[user].socket.id +' just died')
     });
 
 
