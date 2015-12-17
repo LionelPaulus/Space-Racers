@@ -155,9 +155,11 @@ io.on('connection', function(socket) {
 
         // Send to PC move event (spaceship and his positions)
         rooms.getHost(playerParents.roomID).emit('game:move', JSON.stringify({
-           spaceship: playerSpaceship,
+           user: playerParents.playerID,
            positions: positions
         }));
+
+        console.log('Player '+ socket.id +' is moving');
     });
 
 

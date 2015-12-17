@@ -14,11 +14,11 @@ var inGameInit = function () {
             z = -z;
         }
 
-        // socket.emit('position', JSON.stringify({
-        //     x: x,
-        //     y: y,
-        //     z: z
-        // }));
+        socket.emit('game:move', JSON.stringify({
+            x: x,
+            y: y,
+            z: z
+        }));
 
         // For tests only
         $('#mobile [data-page="game"] .coords').html(Math.floor(x) +':'+ Math.floor(y) +':'+ Math.floor(z));

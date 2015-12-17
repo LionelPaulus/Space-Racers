@@ -3,6 +3,7 @@ var virtual_ctx = virtual_canvas.getContext('2d');
 
 var canvas = document.getElementById("game");
 var ctx = canvas.getContext("2d");
+var positions = [];
 
 var canvas_size = getViewport();
 var canvas_width  = canvas_size[0];
@@ -113,14 +114,6 @@ function createPlayerShip(number_of_player,ship_number, player_number)
     }
 
     players.push(ship);
-
-//    // No need anymore
-//    socket.emit('game', JSON.stringify({
-//        width: canvas_width,
-//        height: canvas_height,
-//        x: ship.x,
-//        y: ship.y
-//    }));
 }
 
 //polyfill
@@ -164,7 +157,15 @@ socket.on('game:started', function (spaceships) {
     for (var player in spaceships) {
         var id = parseInt(player) + 1;
         createPlayerShip(spaceships.length, spaceships[player], id);
-        console.log(players);
+
+        positions[player] = {
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0,
+            x_old: 0,
+            y_old: 0
+        };
     }
 
     draw();
@@ -175,9 +176,21 @@ socket.on('game:fire', function(spaceship) {
     createBlasterShoot(players[spaceship]);
 });
 
-var game_play = null;
+var first_time = true;
 
-var positions = {}; // Positions x, y and z from gyroscope
+socket.on('game:move', function (datas) {
+    datas = JSON.parse(datas);
+    positions[datas.user].x_serv = datas.positions.x;
+    positions[datas.user].y_serv = datas.positions.y;
+    positions[datas.user].z_serv = datas.positions.z;
+
+    if (first_time) {
+        gyroIntelligence();
+        first_time = false;
+    }
+});
+
+var game_play = null;
 
 var stars = [];
 
@@ -286,16 +299,6 @@ function updateAsteroid()
         }
     }
 }
-
-var first_time = true;
-//socket.on('position', function (datas) {
-//    positions = JSON.parse(datas);
-//
-//    if(first_time){
-//        gyroIntelligence();
-//        first_time = false;
-//    }
-//});
 
 function drawShip()
 {

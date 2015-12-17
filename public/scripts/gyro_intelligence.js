@@ -1,89 +1,89 @@
 function gyroIntelligence() {
-   var x = 0,
-       y = 0,
-       vx = 0,
-       vy = 0,
-       inertia = 5,
-       x_old = 0,
-       y_old = 0;
+   var inertia = 5
 
    setInterval(function() {
-       var ship = players[0];
+      for (var user in positions) {
+        var ship = players[user];
+        var position = positions[user];
 
-       // Get positions
-       var ax = positions.x * 5,
-           ay = positions.y * 5,
-           az = positions.z * 5;
+         // Get positions
+         var ax = positions[user].x_serv * 5,
+             ay = positions[user].y_serv * 5,
+             az = positions[user].z_serv * 5;
 
-       // Calibration
-       ax -= 35;
+         // Calibration
+         ax -= 35;
 
-       // Fix bug reverse
-       if (az < 0) {
-           ax -= az;
-       }
+         // Fix bug reverse
+         if (az < 0) {
+             ax -= az;
+         }
 
-       // Dead zone
-       if (ax > -10 && ax < 10) {
-           ax = 0;
-           if (vx > inertia) {
-               vx -= inertia;
-           } else if (vx < -inertia) {
-               vx += inertia;
-           } else {
-               vx = 0;
-           }
-       }
-       if (ay > -10 && ay < 10) {
-           ay = 0;
-           if (vy > inertia) {
-               vy -= inertia;
-           } else if (vy < -inertia) {
-               vy += inertia;
-           } else {
-               vy = 0;
-           }
-       }
+         // Dead zone
+         if (ax > -10 && ax < 10) {
+             ax = 0;
+             if (positions[user].vx > inertia) {
+                 positions[user].vx -= inertia;
+             } else if (positions[user].vx < -inertia) {
+                 positions[user].vx += inertia;
+             } else {
+                 positions[user].vx = 0;
+             }
+         }
+         if (ay > -10 && ay < 10) {
+             ay = 0;
+             if (positions[user].vy > inertia) {
+                 positions[user].vy -= inertia;
+             } else if (positions[user].vy < -inertia) {
+                 positions[user].vy += inertia;
+             } else {
+                 positions[user].vy = 0;
+             }
+         }
 
-       // Inertia
-       vx = vx + ay;
-       vy = vy + ax;
+         // Inertia
+         positions[user].vx = positions[user].vx + ay;
+         positions[user].vy = positions[user].vy + ax;
 
-       vx = vx * 0.97;
-       vy = vy * 0.97;
-       y = parseInt(y + vy / 50);
-       x = parseInt(x + vx / 50);
+         positions[user].vx = positions[user].vx * 0.97;
+         positions[user].vy = positions[user].vy * 0.97;
+         positions[user].y = parseInt(positions[user].y + positions[user].vy / 50);
+         positions[user].x = parseInt(positions[user].x + positions[user].vx / 50);
 
-       boundingBoxCheck();
+         boundingBoxCheck(user);
 
-       // Check changes
-       if (x != x_old || y != y_old) {
-           // Update vessel position
-           ship.x = x;
-           ship.y = y;
-           // Save actual position
-           x_old = x;
-           y_old = y;
-       }
+         // Check changes
+         if (positions[user].x != positions[user].x_old || positions[user].y != positions[user].y_old) {
+             // Update vessel position
+             ship.x = positions[user].x;
+             ship.y = positions[user].y;
+
+             // console.log(user +" - "+ ship.x +":"+ ship.y);
+             
+             // Save actual position
+             positions[user].x_old = positions[user].x;
+             positions[user].y_old = positions[user].y;
+         }
+      }
    }, 25);
 
 
-   function boundingBoxCheck() {
-       if (x < 0) {
-           x = 0;
-           vx = -vx;
+   function boundingBoxCheck(user) {
+       if (positions[user].x < 0) {
+           positions[user].x = 0;
+           positions[user].vx = -positions[user].vx;
        }
-       if (y < 0) {
-           y = 0;
-           vy = -vy;
+       if (positions[user].y < 0) {
+           positions[user].y = 0;
+           positions[user].vy = -positions[user].vy;
        }
-       if (x > canvas_width - 20) {
-           x = canvas_width - 20;
-           vx = -vx;
+       if (positions[user].x > canvas_width - 20) {
+           positions[user].x = canvas_width - 20;
+           positions[user].vx = -positions[user].vx;
        }
-       if (y > canvas_height - 20) {
-           y = canvas_height - 20;
-           vy = -vy;
+       if (positions[user].y > canvas_height - 20) {
+           positions[user].y = canvas_height - 20;
+           positions[user].vy = -positions[user].vy;
        }
    }
 }
