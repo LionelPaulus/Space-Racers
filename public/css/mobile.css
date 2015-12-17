@@ -329,7 +329,12 @@
 
 	#mobile .spaceship,
 	#mobile .spaceship-waiting,
-	#mobile [data-page="waiting"] h3 {
+	#mobile [data-page="waiting"] h3,
+	#mobile [data-page="rules"] h3,
+	#mobile [data-page="rules"] p,
+	#mobile [data-page="rules"] img,
+	#mobile [data-page="rules"] button,
+	#mobile [data-page="game"] p {
 		display: none;
 	}
 
