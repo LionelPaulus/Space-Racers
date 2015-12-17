@@ -12,6 +12,16 @@
 	color: #fff;
 }
 
+#mobile [data-page] .error {
+	display: none;
+	position: absolute;
+	width: 300px;
+	text-align: center;
+	height: 30px;
+	top: calc(50vh - 15px);
+	left: calc(50% - 150px);
+}
+
 #mobile [data-page].active {
 	display: block;
 }
@@ -156,7 +166,9 @@
 
 /*** WAITING ***/ 
 #mobile [data-page="waiting"] {
-	position: relative;
+	position: fixed;
+	top: 0; bottom: 0;
+	left: 0; right: 0;
 }
 
 #mobile [data-page="waiting"] h3 {
@@ -215,6 +227,16 @@
 	#mobile .code-container {
 		height: 400px;
 		top: calc(50vh - 200px);
+	}
+
+	#mobile .spaceship,
+	#mobile .spaceship-waiting,
+	#mobile [data-page="waiting"] h3 {
+		display: none;
+	}
+
+	#mobile [data-page] .error {
+		display: block;
 	}
 }
 
