@@ -21,6 +21,11 @@ io.on('connection', function(socket) {
         console.log('GYRO JOINED');
     });
 
+    // On fire
+    socket.on('fire', function() {
+        game.emit('fire');
+    });
+
     // client width
     // client height
     // position start (x, y)

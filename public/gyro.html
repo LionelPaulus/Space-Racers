@@ -36,6 +36,11 @@
 
             var calibrate = document.querySelector("#calibrate");
 
+            // On tap - fire
+            document.addEventListener("touchstart", function(){
+                socket.emit('fire');
+            });
+
             window.ondevicemotion = function(e) {
                 var x = event.accelerationIncludingGravity.x,
                     y = event.accelerationIncludingGravity.y,
