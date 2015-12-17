@@ -3,8 +3,7 @@
 socket.on('room:success', function (spaceship) {
     usedSpaceships = JSON.parse(spaceship);
     
-    changePage('spaceship');
-    updateUsedSpaceship(usedSpaceships);
+    changePage('waiting');
 });
 
 // Quand on ne peut pas rejoindre la room

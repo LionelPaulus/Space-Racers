@@ -47,6 +47,14 @@ var rooms_manager = {
     },
 
     /**
+     * Recupere le host
+     * @param int id
+     */
+    getHost: function (id) {
+        return this.rooms[id].host;
+    },
+
+    /**
      * Supprime une room
      * @param int id
      */

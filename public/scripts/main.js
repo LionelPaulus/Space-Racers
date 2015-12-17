@@ -28,7 +28,7 @@ var displayError = function (message) {
 };
 
 
-var mobile_js_files = ["scripts/mobile.room.js", "scripts/mobile.spaceship.js", "scripts/mobile.waiting.js"];
+var mobile_js_files = ["scripts/mobile.room.js", "scripts/mobile.spaceship.js", "scripts/mobile.ingame.js", "scripts/mobile.rules.js", "scripts/mobile.waiting.js"];
 var desktop_js_files = ["scripts/desktop.room.js"];
 
 if (is_mobile() === true) {
