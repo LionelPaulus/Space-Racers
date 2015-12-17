@@ -13,12 +13,12 @@ var inc_js = function (js_files) {
 
 // Pour changer de page
 var changePage = function (page) {
-    $('[data-page].active').removeClass('active');
-    $('[data-page="'+ page +'"]').addClass('active');
+    $('#mobile [data-page].active').removeClass('active');
+    $('#mobile [data-page="'+ page +'"]').addClass('active');
 };
 
 
-var mobile_js_files = ["scripts/mobile.room.js", "scripts/mobile.spaceship.js"];
+var mobile_js_files = ["scripts/mobile.room.js", "scripts/mobile.spaceship.js", "scripts/mobile.waiting.js"];
 var desktop_js_files = ["scripts/desktop.room.js"];
 
 if (is_mobile() === true) {
@@ -34,9 +34,9 @@ if (is_mobile() === true) {
 }
 
 
-var socket = io.connect('localhost:3000');
+var socket = io.connect('192.168.0.11:3000');
 //var socket = io.connect('star-wars-racers.herokuapp.com');
 
-window.addEventListener('load', function () {
-    new FastClick(document.body);
+$(function() {
+    FastClick.attach(document.body);
 });

@@ -1,60 +1,81 @@
 #mobile  {
 	width: 100vw;
-	height: 100vh;
-	background: #000001;
-	border:0;
-
+	height: 100vh; /* FF3.6-15 */ /* Chrome10-25,Safari5.1-6 */
+	border: 0;
 }
 
-#mobile [data-page] {
+#mobile [data-page] {				
 	display: none;
 	width: 100%;
 	height: 100vh;
+	background: #1E1E1E;
+	color: #fff;
+}
+
+#mobile [data-page] .error {
+	display: none;
+	position: absolute;
+	width: 300px;
+	text-align: center;
+	height: 30px;
+	top: calc(50vh - 15px);
+	left: calc(50% - 150px);
 }
 
 #mobile [data-page].active {
 	display: block;
 }
 
-#mobile #txt {
-	height: 10vh;
-	padding-top: calc(5vh - 10px);
-	text-align: center;
-	font-family: 'Roboto', sans-serif;
-	color: #FFF;
-	font-size: 20px;
-	font-weight: 900;
-	box-sizing:border-box;
+#mobile .code-container {
+	height: 320px;
+	position: absolute;
+	top: calc(50vh - 160px);
+	left: 0;
+	right: 0;
+	overflow: hidden;
 }
 
-#mobile #keyboard {
-	padding-top: calc(45vh - 240px);
-	width: 100%;
-	height: 90vh;
-	background: rgba(255, 255, 255, 0.4);
-	box-sizing: border-box;
+#mobile .code-label {
+	display: none;
+	font-size: 13px;
+	margin-bottom: 20px;
+	text-align: center;
+	color: #A9A9A9;
+	font-weight: normal;
+}
+
+#mobile .code-logo {
+	text-align: center;
+	color: #CCC9C9;
+	font-size: 20px;
+	margin-top: 20px;
+	text-transform: uppercase;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+#mobile .code-label b {
+	color: #CCC9C9;
 }
 
 #mobile #code {
-	width: 268px;
-	height: 70px;
+	width: 171px;
+	height: 40px;
 	margin-right: auto;
 	margin-left: auto;
-	padding-top:16px;
-	padding-right:20px;
-	text-align: right;
-	box-sizing:border-box;
-	font-weight: 900;
+	padding-top: 10px;
+	text-align: center;
+	box-sizing: border-box;
 	font-family: 'Roboto', sans-serif;
-	color: #FFF;
-	font-size: 30px;
-	background: #363135;
-
+	color: #545454;
+	font-size: 24px;
+	background: transparent;
+	border-bottom: solid 1px #979797;
 }
 
 #mobile .number-buttons {
-	position:relative;
-	width: 268px;
+	position: relative;
+	width: 171px;
 	margin-right: auto;
 	margin-left: auto;
 	margin-top: 20px;
@@ -65,50 +86,39 @@
 #mobile .number-buttons button:nth-child(6),
 #mobile .number-buttons button:nth-child(9), 
 #mobile .number-buttons button:nth-child(12)  {
-	margin-right:0;
-
+	margin-right: 0;
 }
 
 #mobile .number-buttons button {
 	outline: none;
+	float: left;
 	border:none;
-	border-left: 7px solid #21B6CA;
-	width: 70px;
-	height: 55px;
-	background: #363135;
+	width: 55px;
+	height: 38px;
+	background: #2C2C2C;
 	text-align: center;
 	font-size: 20px;
 	font-weight: 900;
-	color:#fff;
-	margin-right:25px;
-	margin-bottom: 20px;
-
-
+	color:#E9D460;
+	margin-right: 3px;
+	margin-bottom: 3px;
 }
 
 #mobile .number-buttons button:active {
-	background:#FFF;
-	color:#363135;
-
+	background:#E9D460;
+	color:#2C2C2C;
+	box-shadow: inset 0px 1px 3px rgba(0,0,0,0.5);
 }
 
 #mobile .number-buttons button:nth-child(10), 
 #mobile .number-buttons button:nth-child(11),
 #mobile .number-buttons button:nth-child(12) {
 	margin-bottom: 0;
-
-}
-
-#mobile .code-label {
-	text-align: center;
-	color: #363135;
-	text-transform: uppercase;
-	font-size: 18px;
 }
 
 
-/*** SPACESHIP CAROUSEL ***/ 
 
+/*** SPACESHIP CHOICE ***/ 
 #mobile [data-page="spaceship"] {
 	color: #fff;
 	position: fixed;
@@ -116,115 +126,118 @@
 	right: 0;
 	top: 0;
 	bottom: 0;
-	background: #1A1A1A;
 }
 
 #mobile .spaceship {
-	position: absolute;
-	top: 0; bottom: 50px;
-	left: 0; right: 0;
-	width: 100%;
-	transform: translateY(calc(100% + 60px));
-	transition-duration: 200ms;
+	float: left;
+	width: calc(100% / 4);
+	height: 100vh;
+}
+
+#mobile .spaceship:nth-child(even) {
+	background: rgba(0,0,0,0.3);
 }
 
 #mobile .spaceship .preview {
-	width: 60px;
+	width: 150px;
+	height: 112px;
+	margin-top: calc(40vh - 56px);
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-
+	transform: rotate(-90deg);
 }
 
-#mobile .spaceship.unavailable .preview {
-	opacity: 0.3;
+#mobile .spaceship.unavailable .preview,
+#mobile .spaceship.unavailable .ship_name {
+	opacity: 0.1;
 }
 
-#mobile  .ship_name {
-	height: 15vh ;
-	padding-top: calc(15vh - 10px);
-	width: 200px;
+#mobile .ship_name {
+	margin-top: 10vh;
 	font-weight: 900;
 	font-family: 'Roboto', sans-serif;
-	color: #fff;
-	font-size:20px;
-	margin-right: auto;
-	margin-left: auto;
+	font-size: 16px;
 	text-align: center;
+	color: #F1F0F0;
 }
 
-#mobile #swipe-anim {
-	width: 7px;
-	height: 52px;
-	margin-top: calc(50vh - 26px);
-	margin-left: 95%;
+
+
+/*** WAITING ***/ 
+#mobile [data-page="waiting"] {
+	position: fixed;
+	top: 0; bottom: 0;
+	left: 0; right: 0;
 }
 
-#mobile #swipe-anim .swipe-rounds {
-	width: 7px;
-	height: 7px;
-	border-radius: 100%;
-	display: inline-block;
-	background-color: #fff;
-	z-index: 30;
-	position:relative;
-	margin-right: 4px;
-	opacity: 0.5;
-}
-
-#mobile #swipe-anim .swipe-rounds.active {
-	opacity: 1;
-}
-
-#mobile #swipe-anim .swipe-rounds:nth-child(4) {
-	margin-right: 0;
-}
-
-#mobile #spaceship-play {
+#mobile [data-page="waiting"] h3 {
+	font-family: "Roboto";
 	position: absolute;
-	z-index: 2;
-	width: 200px;
-	text-align: center;
+	margin: 0;
 	font-size: 20px;
-	color: #fff;
-	border: 0;
-	background: transparent;
-	outline: none;
+	width: 380px;
+	height: 30px;
+	text-align: center;
+	text-transform: uppercase;
+	color: #ccc9c9;
+	left: calc(50% - 190px);
+	top: calc(50vh - ((150px / 1.3)/2) - 15px);
+}
+
+#mobile .spaceship-waiting {
+	width: 150px;
+	height: calc(150px / 1.3);
+	background: url('../img/waiting.png');
+	background-size: 150px calc(150px / 1.3);
 	position: absolute;
-	bottom: 30px;
-	left: calc(50% - 100px);
+	top: calc(50vh - ((150px / 1.3)/2));
+	left: calc(50% - 75px);
+	animation: spaceship-waiting 2s linear infinite;
 }
 
+#mobile .spaceship-waiting.leave {
+	animation: spaceship-leaving 500ms linear;
+	transform: translateX(300%);
+}
 
-/** iphone 4 **/
-@media only screen and (min-height:480px) and (max-height: 568px) {
+@keyframes spaceship-waiting {
+	0% {transform: translateY(0);}
+	25% {transform: translateY(5px);}
+	50% {transform: translateY(0);}
+	75% {transform: translateY(-5px);}
+	100% {transform: translateY(0);}
+}
 
-	#mobile #code {
-		width: 240px;
-		height: 62px;
-	}
-
-	#mobile .number-buttons button {
-		width: 60px;
-		height: 50px;
-		margin-right:25px;
-		margin-bottom: 10px;
-
-	}
-
-	#mobile .number-buttons {
-		width: 240px;
-	}
-
-	#mobile #keyboard {
-		height: 90vh;
-		padding-top: calc(45vh - 200px);
-	}
+@keyframes spaceship-leaving {
+	0% {transform: translateX(0);}
+	100% {transform: translateX(300%);}
 }
 
 
 
+@media screen and (min-height: 400px) {
+	#mobile .code-label {
+		margin-top: 40px;
+		padding-left: 20px;
+		padding-right: 20px;
+		display: block;
+	}
 
+	#mobile .code-container {
+		height: 400px;
+		top: calc(50vh - 200px);
+	}
 
+	#mobile .spaceship,
+	#mobile .spaceship-waiting,
+	#mobile [data-page="waiting"] h3 {
+		display: none;
+	}
+
+	#mobile [data-page] .error {
+		display: block;
+	}
+}
 
 

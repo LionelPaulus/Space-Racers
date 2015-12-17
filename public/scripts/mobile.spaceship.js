@@ -1,7 +1,3 @@
-var currentSlide = 1;
-var hammertime = new Hammer(document.querySelector('#mobile [data-page="spaceship"]'));
-hammertime.get('swipe').set({ direction: Hammer.DIRECTION_VERTICAL });
-
 
 // Quand le spaceship a bien ete pick
 socket.on('spaceship:success', function () {
@@ -25,60 +21,18 @@ socket.on('spaceship:picked', function (spaceships) {
 ////////////////
 // EVENEMENTS //
 ////////////////
-hammertime.on('swipeup', function () {
-	if ((currentSlide + 1) > $('.spaceship').length) return;
-
-	currentSlide++;
-	updateSlider('left');
-});
-
-// User swipe Down
-hammertime.on('swipedown', function () {
-	if ((currentSlide - 1) <= 0) return;
-
-	currentSlide--;
-	updateSlider('right');
-});
-
 
 // User choose spaceship
-$('#spaceship-play').on('click', function () {
-	socket.emit('spaceship:choose', currentSlide);
+$('.spaceship[data-spaceship]').on('click', function () {
+	var spaceship = $(this).attr('data-spaceship');
+	socket.emit('spaceship:choose', spaceship);
 });
 
-
-
-function updateSlider(dir) {
-	if (dir == 'left') {
-		$('.spaceship[data-spaceship="'+ (currentSlide - 1) +'"]').css('transform', 'translateY(-100%)');
-	} else if (dir == 'right') {
-		$('.spaceship[data-spaceship="'+ (currentSlide + 1) +'"]').css('transform', 'translateY(calc(100% + 60px))');
-	}
-
-	$('.spaceship[data-spaceship="'+ currentSlide +'"]').css('transform', 'translateY(0)');
-	$('#swipe-anim .active').removeClass('active');
-	$('#swipe-anim [data-index="'+ currentSlide +'"]').addClass('active');
-
-	// Button label
-	if ($('.spaceship[data-spaceship="'+ currentSlide +'"]').hasClass('unavailable')) {
-		$('#spaceship-play').html('ALREADY USED').css('opacity', '0.3');
-	} else {
-		$('#spaceship-play').html('PLAY').css('opacity', '1');
-	}
-}
-
 function updateUsedSpaceship(spaceships) {
-	// On reset a chaque update
-	$('.spaceship').removeClass('unavailable');
-	$('#spaceship-play').html('PLAY').css('opacity', '1');
+	$('.spaceship.unavailable').removeClass('unavailable');
 
 	for (var i in spaceships) {
 		var spaceship = spaceships[i];
-
-		// On change le button label
-		// Si c'est la slide courante
-		if (spaceship == currentSlide) $('#spaceship-play').html('ALREADY USED').css('opacity', '0.3');
-
 		$('.spaceship[data-spaceship="'+ spaceship +'"]').addClass('unavailable');
 	}
 }

@@ -2,9 +2,10 @@
 	
 	<!-- CODE -->
 	<section data-page="code" class="active">
-		<div id="txt">SPACE RACERS</div>
-		<div id="keyboard"> 
-			<h2 class="code-label">Enter the room code</h2>
+		<section class="code-container">
+			<div class="code-logo">STAR WARS: SPACE RACERS</div>
+			<h2 class="code-label">open <b>star-wars-racers.heroku.com</b> on your laptop to get the code</h2>
+			
 			<div id="code"></div>
 
 			<div class="number-buttons">
@@ -17,53 +18,58 @@
 				<button data-value="7"> 7 </button>
 				<button data-value="8"> 8 </button>
 				<button data-value="9"> 9 </button>
-				<button id="del"> del </button>
+				<button id="del"> <span class="ion-backspace"></span> </button>
 				<button data-value="0"> 0 </button>
-				<button id="join"> ok </button>
+				<button id="join"> <span class="ion-checkmark"></span> </button>
 			</div>
-
-		</div>
+		</section>
 	</section>
 	<!-- END -->
 
 
 	<!-- SPACESHIP CHOICE -->
 	<section data-page="spaceship">
-		<div id="swipe-anim">
-			<div class="swipe-rounds active" data-index="1"></div>
-			<div class="swipe-rounds" data-index="2"></div>
-			<div class="swipe-rounds" data-index="3"></div>
-			<div class="swipe-rounds" data-index="4"></div>
-		</div>
-
-		<button id="spaceship-play">PLAY</button>
-
 		<section class="spaceship" data-spaceship="1">
-			<div class="ship_name">JEDI STARFIGHT</div>
-			<img src="img/game/jedi1.png" class="preview">
+			<div class="ship_name">INTERCEPTOR</div>
+			<img src="img/interceptor.png" class="preview">
 		</section>
 
 		<section class="spaceship" data-spaceship="2">
-			<div class="ship_name">X WINGS</div>
-			<img src="img/game/jedi1.png" class="preview">
+			<div class="ship_name">X WING</div>
+			<img src="img/xwing.png" class="preview">
 		</section>
 
 		<section class="spaceship" data-spaceship="3">
-			<div class="ship_name">SLAVE 1</div>
-			<img src="img/game/jedi1.png" class="preview">
+			<div class="ship_name">SMIT SITH</div>
+			<img src="img/smit_sith.png" class="preview">
 		</section>
 
 		<section class="spaceship" data-spaceship="4">
-			<div class="ship_name">VAISSEAU 4</div>
-			<img src="img/game/jedi1.png" class="preview">
+			<div class="ship_name">JEDI STARFIGHTER</div>
+			<img src="img/jedistarfight.png" class="preview">
 		</section>
+
+		<div class="error">PLEASE TURN YOUR PHONE</div>
 	</section>
 	<!-- END -->
 
 
 	<!-- WAITING PAGE -->
 	<section data-page="waiting">
-		<center><h3 style="color: white">WAITING</h3></center>
+		<h3>Waiting for the other players</h3>
+		<div class="spaceship-waiting"></div>
+
+		<div class="error">PLEASE TURN YOUR PHONE</div>
 	</section>
+	<!-- END -->
+
+
+	<!-- IN GAME PAGE -->
+	<section data-page="game">
+		<center>IN GAME</center>
+
+		<div class="error">PLEASE TURN YOUR PHONE</div>
+	</section>
+	<!-- END -->
 
 </section>
