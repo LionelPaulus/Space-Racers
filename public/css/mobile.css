@@ -4,6 +4,26 @@
 	border: 0;
 }
 
+#mobile #errors .error {
+	top: 0; left: 0; right: 0;
+	position: fixed;
+	transform: translateY(-50px);
+	transition-duration: 200ms;
+	background: #ccc9c9;
+	color: rgba(0,0,0,0.8);
+	text-align: center;
+	font-size: 13px;
+	height: 50px;
+	box-sizing: border-box;
+	padding-top: 17px;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+#mobile #errors .error.active {
+	transform: translateY(0);
+}
+
 #mobile [data-page] {				
 	display: none;
 	width: 100%;

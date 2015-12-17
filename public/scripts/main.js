@@ -17,6 +17,16 @@ var changePage = function (page) {
     $('#mobile [data-page="'+ page +'"]').addClass('active');
 };
 
+// Error display
+var displayError = function (message) {
+    $('#errors').append('<div class="error">'+ message +'</div>');
+    setTimeout(function () { $('#errors .error').addClass('active'); }, 100);
+    setTimeout(function() {
+        $('#errors .error').removeClass('active');
+        setTimeout(function() { $('#errors .error').remove(); }, 200);
+    }, 3000);
+};
+
 
 var mobile_js_files = ["scripts/mobile.room.js", "scripts/mobile.spaceship.js", "scripts/mobile.waiting.js"];
 var desktop_js_files = ["scripts/desktop.room.js"];
@@ -34,7 +44,7 @@ if (is_mobile() === true) {
 }
 
 
-var socket = io.connect('192.168.0.11:3000');
+var socket = io.connect('192.168.1.5:3000');
 //var socket = io.connect('star-wars-racers.herokuapp.com');
 
 $(function() {
