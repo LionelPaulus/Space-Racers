@@ -118,6 +118,17 @@ io.on('connection', function(socket) {
     });
 
 
+    // Quand l'utilisateur meurt
+    socket.on('game:dead', function (user) {
+        if (!socket.roomID) return;
+
+        rooms.setUserDead(socket.roomID, user);
+
+        // On notifie l'utilisateur de sa mort
+        rooms.getPlayers(socket.roomID)[user].socket.emit('game:dead');
+    });
+
+
     // Lorsque le pc demande a demarrer
     socket.on('spaceship:start', function () {
         if (!socket.roomID) return;

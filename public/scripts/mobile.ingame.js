@@ -37,3 +37,10 @@ var inGameReset = function () {
     window.ondevicemotion = function () {};
     $('#mobile [data-page="game"]').off('click');
 }
+
+
+// Quand l'utilisateur meurt
+socket.on('game:dead', function () {
+    inGameReset();
+    $('[data-page="game"] p b').html('YOU ARE DEAD');
+});
