@@ -235,6 +235,7 @@
 	100% {transform: translateX(300%);}
 }
 
+/*** RULES ***/ 
 
 #mobile [data-page="rules"] {
 	position: fixed;
@@ -290,6 +291,27 @@
     text-transform: uppercase;
 
 
+}
+
+/*** IN GAME ***/
+#mobile [data-page="game"] {
+	position: fixed;
+	top: 0; bottom: 0;
+	left: 0; right: 0;
+}
+
+#mobile [data-page="game"] p {
+	font-family: "Roboto";
+	position: absolute;
+	margin: 0;
+	font-size: 20px;
+	width: 317px;
+	height: 30px;
+	text-align: center;
+	text-transform: uppercase;
+	color: #ccc9c9;
+	left: calc(50% - 158.5px);
+	top: calc(50vh - 12px);
 }
 
 @media screen and (min-height: 400px) {
