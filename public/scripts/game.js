@@ -1,3 +1,115 @@
+function createPlayerShip(number_of_player,ship_number, player_number)
+{
+    var ship = {};
+    ship.id = player_number;
+    ship.type = ship_number;
+    ship.score = 0;
+    if(ship_number == 1)
+    {
+        ship.size = {};
+        ship.size.x = 53;
+        ship.size.y = 112;
+        ship.sprite = new Image();
+        ship.sprite.src = "img/game/jedi1.png";
+    }
+    else if(ship_number == 2)
+    {
+        ship.size = {};
+        ship.size.x = 100;
+        ship.size.y = 112;
+        ship.sprite = new Image();
+        ship.sprite.src = "img/game/jedi2.png";
+    }
+    else if(ship_number == 3)
+    {
+        ship.size = {};
+        ship.size.x = 59;
+        ship.size.y = 109;
+        ship.sprite = new Image();
+        ship.sprite.src = "img/game/sith1.png";
+    }
+    else if(ship_number == 4)
+    {
+        ship.size = {};
+        ship.size.x = 66;
+        ship.size.y = 112;
+        ship.sprite = new Image();
+        ship.sprite.src = "img/game/sith2.png";
+    }
+    if (number_of_player == 1)
+    {
+        ship.x = Math.floor(canvas_width/2 - ship.size.x/2);
+        ship.y = canvas_height-ship.size.y -50;
+    }
+    else if (number_of_player == 2)
+    {
+        if(player_number == 1)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 - canvas_width/4 ;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+        else if (player_number == 2)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 + canvas_width/4 ;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+    }
+
+    else if (number_of_player == 3)
+    {
+        if(player_number == 1)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 - canvas_width/4;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+        else if (player_number == 2)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+        else if (player_number == 3)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 + canvas_width/4;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+    }
+
+    else if (number_of_player == 4)
+    {
+        if(player_number == 1)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 - (canvas_width/8*2);
+            ship.y = canvas_height-ship.size.y -50;
+        }
+        else if (player_number == 2)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 - canvas_width/12;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+        else if (player_number == 3)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 + canvas_width/12;
+            ship.y = canvas_height-ship.size.y -50;
+        }
+
+        else if (player_number == 4)
+        {
+            ship.x = canvas_width/2 - ship.size.x/2 + (canvas_width/8*2);
+            ship.y = canvas_height-ship.size.y -50;
+        }
+    }
+
+    players.push(ship);
+
+        // No need anymore
+        socket.emit('game', JSON.stringify({
+            width: canvas_width,
+            height: canvas_height,
+            x: ship.x,
+            y: ship.y
+        }));
+}
+
 $.get("scripts/data.json", function(hitbox) {
 
 var socket = io.connect('localhost:3000');
@@ -13,6 +125,7 @@ var canvas_width  = canvas_size[0];
 var canvas_height = canvas_size[1];
 canvas.setAttribute("width", canvas_width);
 canvas.setAttribute("height", canvas_height);
+var game_play = null;
 
 var positions = {}; // Positions x, y and z from gyroscope
 
@@ -126,117 +239,7 @@ function updateAsteroid()
 
 var players = [];
 
-function createPlayerShip(number_of_player,ship_number, player_number)
-{
-    var ship = {};
-    ship.id = player_number;
-    ship.type = ship_number;
-    ship.score = 0;
-    if(ship_number == 1)
-    {
-        ship.size = {};
-        ship.size.x = 53;
-        ship.size.y = 112;
-        ship.sprite = new Image();
-        ship.sprite.src = "img/game/jedi1.png";
-    }
-    else if(ship_number == 2)
-    {
-        ship.size = {};
-        ship.size.x = 100;
-        ship.size.y = 112;
-        ship.sprite = new Image();
-        ship.sprite.src = "img/game/jedi2.png";
-    }
-    else if(ship_number == 3)
-    {
-        ship.size = {};
-        ship.size.x = 59;
-        ship.size.y = 109;
-        ship.sprite = new Image();
-        ship.sprite.src = "img/game/sith1.png";
-    }
-    else if(ship_number == 4)
-    {
-        ship.size = {};
-        ship.size.x = 66;
-        ship.size.y = 112;
-        ship.sprite = new Image();
-        ship.sprite.src = "img/game/sith2.png";
-    }
-    if (number_of_player == 1)
-    {
-        ship.x = Math.floor(canvas_width/2 - ship.size.x/2);
-        ship.y = canvas_height-ship.size.y -50;
-    }
-    else if (number_of_player == 2)
-    {
-        if(player_number == 1)
-        {
-            ship.x = canvas_width/2 - ship.size.x/2 - canvas_width/4 ;
-            ship.y = canvas_height-ship.size.y -50;
-        }
-        else if (player_number == 2)
-        {
-            ship.x = canvas_width/2 - ship.size.x/2 + canvas_width/4 ;
-            ship.y = canvas_height-ship.size.y -50;
-        }
-    }
 
-    else if (number_of_player == 3)
-    {
-        if(player_number == 1)
-        {
-            ship.x = canvas_width/2 - ship.size.x/2 - canvas_width/4;
-            ship.y = canvas_height-ship.size.y -50;
-        }
-        else if (player_number == 2)
-        {
-            ship.x = canvas_width/2 - ship.size.x/2;
-            ship.y = canvas_height-ship.size.y -50;
-        }
-        else if (player_number == 3)
-        {
-            ship.x = canvas_width/2 - ship.size.x/2 + canvas_width/4;
-            ship.y = canvas_height-ship.size.y -50;
-        }
-    }
-
-    else if (number_of_player == 4)
-    {
-        if(player_number == 1)
-        {
-            ship.x = canvas_width/2 - ship.size.x/2 - (canvas_width/8*2);
-            ship.y = canvas_height-ship.size.y -50;
-        }
-        else if (player_number == 2)
-        {
-            ship.x = canvas_width/2 - ship.size.x/2 - canvas_width/12;
-            ship.y = canvas_height-ship.size.y -50;
-        }
-        else if (player_number == 3)
-        {
-            ship.x = canvas_width/2 - ship.size.x/2 + canvas_width/12;
-            ship.y = canvas_height-ship.size.y -50;
-        }
-
-        else if (player_number == 4)
-        {
-            ship.x = canvas_width/2 - ship.size.x/2 + (canvas_width/8*2);
-            ship.y = canvas_height-ship.size.y -50;
-        }
-    }
-
-    players.push(ship);
-
-        // No need anymore
-        socket.emit('game', JSON.stringify({
-            width: canvas_width,
-            height: canvas_height,
-            x: ship.x,
-            y: ship.y
-        }));
-}
 
 var first_time = true;
 socket.on('position', function (datas) {
@@ -253,6 +256,7 @@ function drawShip()
     for(var i = 0; i < players.length;i++)
     {
         var ship = players[i];
+        ship.score++;
         ctx.drawImage(ship.sprite,ship.x,ship.y);
     }
 }
@@ -418,11 +422,8 @@ function hitboxArea(kind,obj,array)
 }
 
 
-document.addEventListener('keydown', function(e){
-    if(e.keyCode == 38)
-    {
-        createBlasterShoot(players[0],"red");
-    }
+socket.on('fire', function(data){
+    createBlasterShoot(players[0],"red");
 });
 
 var shoots = [];
@@ -485,10 +486,33 @@ function shootColision()
     }
 }
 
+function restart()
+{
+    window.cancelAnimationFrame(game_play);
+    stars = [];
+    for(var i = 0; i < 600;i++)
+    {
+        var star = {};
+        star.x = rNumber(0,canvas_width);
+        star.y = rNumber(0,canvas_height);
+        star.size = rNumber(1,4);
+        star.speed = star.size*0.5;
+        star.style = "white";
+        stars.push(star);
+    }
+    asteroids = [];
+    players = [];
+    createPlayerShip(1,3,1);
+    shoots = [];
+
+    draw();
+}
+
+
 function draw()
 {
     var random = rNumber(1,100);
-    window.requestAnimationFrame(draw);
+    game_play = window.requestAnimationFrame(draw);
     //erase canvas
     clear();
     //background updates
@@ -508,10 +532,21 @@ function draw()
     asteroidColision();
 }
 
-createPlayerShip(1,4,1);
+createPlayerShip(1,2,1);
 
 
 draw();
+
+//setTimeout(restart,5000);
+
+//function isGameOver(number_of_player)
+//{
+//    if(number_of_player == 1)
+//    {
+//
+//    }
+//}
+
 
 
 //var hitbox = {};
@@ -606,6 +641,7 @@ function tooCloseTo(new_asteroid)
         }
 }
 
+//polyfill
 function getViewport() {
 
  var viewPortWidth;
@@ -629,95 +665,5 @@ function getViewport() {
    viewPortHeight = document.getElementsByTagName('body')[0].clientHeight
  }
  return [viewPortWidth, viewPortHeight];
-}
-
-    function gyroIntelligence() {
-    var x = 0,
-        y = 0,
-        vx = 0,
-        vy = 0,
-        inertia = 5,
-        x_old = 0,
-        y_old = 0;
-
-    setInterval(function() {
-        var ship = players[0];
-
-        // Get positions
-        var ax = positions.x * 5,
-            ay = positions.y * 5,
-            az = positions.z * 5;
-
-        // Calibration
-        ax -= 35;
-
-        // Fix bug reverse
-        if (az < 0) {
-            ax -= az;
-        }
-
-        // Dead zone
-        if (ax > -10 && ax < 10) {
-            ax = 0;
-            if (vx > inertia) {
-                vx -= inertia;
-            } else if (vx < -inertia) {
-                vx += inertia;
-            } else {
-                vx = 0;
-            }
-        }
-        if (ay > -10 && ay < 10) {
-            ay = 0;
-            if (vy > inertia) {
-                vy -= inertia;
-            } else if (vy < -inertia) {
-                vy += inertia;
-            } else {
-                vy = 0;
-            }
-        }
-
-        // Inertia
-        vx = vx + ay;
-        vy = vy + ax;
-
-        vx = vx * 0.97;
-        vy = vy * 0.97;
-        y = parseInt(y + vy / 50);
-        x = parseInt(x + vx / 50);
-
-        boundingBoxCheck();
-
-        // Check changes
-        if (x != x_old || y != y_old) {
-            // Update vessel position
-            ship.x = x;
-            ship.y = y;
-            // Save actual position
-            x_old = x;
-            y_old = y;
-        }
-    }, 25);
-
-
-    function boundingBoxCheck() {
-        if (x < 0) {
-            x = 0;
-            vx = -vx;
-        }
-        if (y < 0) {
-            y = 0;
-            vy = -vy;
-        }
-        if (x > canvas_width - 20) {
-            x = canvas_width - 20;
-            vx = -vx;
-        }
-        if (y > canvas_height - 20) {
-            y = canvas_height - 20;
-            vy = -vy;
-        }
-    }
 }
 });
