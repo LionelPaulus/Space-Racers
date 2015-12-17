@@ -13,10 +13,34 @@ canvas.setAttribute("width", canvas_width);
 canvas.setAttribute("height", canvas_height);
 
 
-
 var player_alone= null;
 var players = [];
 var positions = {}; // Positions x, y and z from gyroscope
+
+var sounds = {};
+
+sounds = {};
+
+sounds.main = new Howl({
+    urls:["sounds/ingame.mp3"],
+    volume: 0.5,
+    buffer:true,
+    loop:true
+});
+
+sounds.blaster = new Howl({
+    urls:["sounds/blaster.mp3"],
+    volume: 0.5,
+    buffer:true
+});
+
+sounds.explosion = new Howl({
+    urls:["sounds/explosion.mp3"],
+    volume: 1,
+    buffer:true
+});
+
+
 
 function createPlayerShip(number_of_player,ship_number, player_number)
 {
@@ -158,7 +182,7 @@ socket.on('game:started', function (spaceships) {
     spaceships = JSON.parse(spaceships);
 
     changePage('game');
-    
+
     if (spaceships.length == 1) {
         player_alone = 1;
     }
@@ -179,13 +203,14 @@ socket.on('game:started', function (spaceships) {
             y_old: 0
         };
     }
-
+    sounds.main.play();
     draw();
 });
 
 // When the user shoot
 socket.on('game:fire', function(spaceship) {
     createBlasterShoot(players[spaceship]);
+    sounds.blaster.play();
 });
 
 var first_time = true;
@@ -278,9 +303,8 @@ function createAsteroid()
     {
         asteroid.size.x = 66;
         asteroid.size.y = 66;
-        asteroid.life = 30;
+        asteroid.life = 100;
     }
-    asteroid.life = 30;
     asteroid.sprite.src = "img/game/asteroid" + random +".png";
     asteroid.speed = 2;
     asteroid.y = 0 - asteroid.size.y ;
@@ -347,6 +371,7 @@ function asteroidColision()
                             asteroids.splice(i,1);
                             createExplosion(middle_collision_x,middle_collision_y);
                             socket.emit("game:dead",i);
+                            sounds.explosion.play();
                             return true;
                         }
                     }
@@ -596,7 +621,7 @@ function restart()
         stars.push(star);
     }
     asteroids = [];
-
+    explosions = [];
     shoots = [];
 
     draw();
@@ -639,6 +664,7 @@ function isGameOver(number_of_player)
             // Display score
             socket.emit("game:end",player_alone);
             clearInterval(gyroInterval);
+            sounds.main.fadeOut(0,1000);
             setTimeout(function () { window.cancelAnimationFrame(game_play); changePage('end'); }, 1000);
         }
     }
@@ -649,6 +675,7 @@ function isGameOver(number_of_player)
             // Display score
             socket.emit("game:end",players[0].id);
             clearInterval(gyroInterval);
+            sounds.main.fadeOut(0,1000);
             setTimeout(function () { window.cancelAnimationFrame(game_play); changePage('end'); }, 1000);
         }
     }

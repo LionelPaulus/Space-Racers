@@ -29,7 +29,7 @@ var displayError = function (message) {
 
 
 var mobile_js_files = ["scripts/mobile.ingame.js", "scripts/mobile.room.js", "scripts/mobile.spaceship.js", "scripts/mobile.rules.js", "scripts/mobile.waiting.js"];
-var desktop_js_files = ["scripts/game.js", "scripts/gyro_intelligence.js", "scripts/desktop.room.js"];
+var desktop_js_files = ["scripts/howler.min.js","scripts/game.js", "scripts/gyro_intelligence.js", "scripts/desktop.room.js"];
 
 if (is_mobile() === true) {
     $.get('template/mobile.html', function (content) {
