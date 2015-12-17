@@ -43,7 +43,7 @@ if (is_mobile() === true) {
     });
 }
 
-var socket = io.connect('192.168.0.16:3000');
+var socket = io.connect('192.168.1.15:3000');
 //var socket = io.connect('star-wars-racers.herokuapp.com');
 
 $(function() {
