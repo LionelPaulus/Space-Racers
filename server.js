@@ -101,7 +101,9 @@ io.on('connection', function(socket) {
         // On commence la partie
         if (rooms.arePlayersReady(playerParents.roomID) === true) {
             // On previent le pc
-            rooms.getHost(playerParents.roomID).emit('game:started');
+            rooms.getHost(playerParents.roomID).emit('game:started', JSON.stringify(
+                rooms.getUsedSpaceships(playerSpaceship.roomID)
+            ));
 
             // On previent les joueurs
             var players = rooms.getPlayers(playerParents.roomID);
@@ -142,6 +144,30 @@ io.on('connection', function(socket) {
             var player = players[user];
             player.socket.emit('spaceship:started');
         }
+    });
+
+
+    // Lorsque le joueur bouge
+    socket.on('game:move', function (pos) {
+        var positions = JSON.parse(pos);
+        var playerParents = rooms.getPlayersParents(socket.id);
+        var playerSpaceship = rooms.getPlayers(playerParents.roomID)[playerParents.playerID].spaceship;
+
+        // Send to PC move event (spaceship and his positions)
+        rooms.getHost(playerParents.roomID).emit('game:move', JSON.stringify({
+           spaceship: playerSpaceship,
+           positions: positions
+        }));
+    });
+
+
+    // Lorsque le joueur tire
+    socket.on('game:fire', function () {
+        var playerParents = rooms.getPlayersParents(socket.id);
+        var playerSpaceship = rooms.getPlayers(playerParents.roomID)[playerParents.playerID].spaceship;
+
+        // Send to PC fire event
+        rooms.getHost(playerParents.roomID).emit('game:fire', spaceship);
     });
 
 
