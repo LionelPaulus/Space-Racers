@@ -12,11 +12,6 @@ socket.on('game:error', function (message) {
     alert(message);
 });
 
-// Lorsque le jeu commence
-socket.on('game:started', function (spaceships) {
-    // Demarre jeu
-    $('#in-game').show();
-});
 
 // Lorsque le serveur accepte le debut du jeu
 socket.on('spaceship:started', function () {

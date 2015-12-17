@@ -24,9 +24,9 @@ var inGameInit = function () {
         $('#mobile [data-page="game"] .coords').html(Math.floor(x) +':'+ Math.floor(y) +':'+ Math.floor(z));
     };
 
-    
+
     $('#mobile [data-page="game"]').on('click', function () {
-        // Send fire to server
+        socket.emit('game:fire');
     });
 };
 

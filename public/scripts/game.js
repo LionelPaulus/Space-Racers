@@ -9,7 +9,6 @@ var canvas_width  = canvas_size[0];
 var canvas_height = canvas_size[1];
 canvas.setAttribute("width", canvas_width);
 canvas.setAttribute("height", canvas_height);
-var socket = io.connect('localhost:3000');
 var players = [];
 
 function createPlayerShip(number_of_player,ship_number, player_number)
@@ -115,13 +114,13 @@ function createPlayerShip(number_of_player,ship_number, player_number)
 
     players.push(ship);
 
-        // No need anymore
-        socket.emit('game', JSON.stringify({
-            width: canvas_width,
-            height: canvas_height,
-            x: ship.x,
-            y: ship.y
-        }));
+//    // No need anymore
+//    socket.emit('game', JSON.stringify({
+//        width: canvas_width,
+//        height: canvas_height,
+//        x: ship.x,
+//        y: ship.y
+//    }));
 }
 
 //polyfill
@@ -152,6 +151,29 @@ function getViewport() {
 }
 
 $.get("scripts/data.json", function(hitbox) {
+
+// SOCKET IO
+// Lorsque le jeu commence
+socket.on('game:started', function (spaceships) {
+    // Demarre jeu
+    spaceships = JSON.parse(spaceships);
+
+    $('#in-game').show();
+    console.log(spaceships);
+
+    for (var player in spaceships) {
+        var id = parseInt(player) + 1;
+        createPlayerShip(spaceships.length, spaceships[player], id);
+        console.log(players);
+    }
+
+    draw();
+});
+
+// When the user shoot
+socket.on('game:fire', function(spaceship) {
+    createBlasterShoot(players[spaceship]);
+});
 
 var game_play = null;
 
@@ -266,14 +288,14 @@ function updateAsteroid()
 }
 
 var first_time = true;
-socket.on('position', function (datas) {
-    positions = JSON.parse(datas);
-
-    if(first_time){
-        gyroIntelligence();
-        first_time = false;
-    }
-});
+//socket.on('position', function (datas) {
+//    positions = JSON.parse(datas);
+//
+//    if(first_time){
+//        gyroIntelligence();
+//        first_time = false;
+//    }
+//});
 
 function drawShip()
 {
@@ -305,7 +327,7 @@ function asteroidColision()
                     {
                         if(collide(ship_hitbox[o],asteroid_hitbox[k]) == true)
                         {
-                            console.log("boum");
+//                            console.log("boum");
                             break;
                         }
                     }
@@ -445,19 +467,13 @@ function hitboxArea(kind,obj,array)
     }
 }
 
-
-socket.on('fire', function(data){
-    createBlasterShoot(players[0],"red");
-});
-
 var shoots = [];
-function createBlasterShoot(player,color)
+function createBlasterShoot(player)
 {
     var shoot = {};
     shoot.x = Math.floor(player.x +player.size.x/2);
     shoot.y = player.y;
     shoot.speed = 4;
-    shoot.style = color;
     shoot.width = 2;
     shoot.height = 10;
 
@@ -554,13 +570,9 @@ function draw()
     updateBlasterShoot();
     shootColision();
     asteroidColision();
-    isGameOver();
+//    isGameOver();
 }
 
-createPlayerShip(1,2,1);
-
-
-draw();
 
 //setTimeout(restart,5000);
 
@@ -572,7 +584,7 @@ function isGameOver(number_of_player)
         {
             window.cancelAnimationFrame(game_play);
             // Display score
-            for(var i = 0, len = players.length;i++)
+            for(var i = 0, len = players.length;i < len;i++)
             {
                 console.log(player.score);
             }
@@ -584,7 +596,7 @@ function isGameOver(number_of_player)
         {
             window.cancelAnimationFrame(game_play);
             // Display score
-            for(var i = 0, len = players.length;i++)
+            for(var i = 0, len = players.length;i < len;i++)
             {
                 console.log(player.score);
             }
