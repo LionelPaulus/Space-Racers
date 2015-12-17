@@ -625,13 +625,13 @@ function isGameOver(number_of_player)
 
 
 var hitbox = {};
-hitbox.ship1 = getHitboxFromPng("img/game/jedi1.png",53,112,[],4);
+hitbox.ship1 = getHitboxFromPng("img/game/jedi1.png",53,112,[],8);
 hitbox.ship2 = getHitboxFromPng("img/game/jedi2.png",100,112,[],4);
-hitbox.ship3 = getHitboxFromPng("img/game/sith1.png",56,109,[],4);
-hitbox.ship4 = getHitboxFromPng("img/game/sith2.png",66,112,[],4);
-hitbox.asteroid3 = getHitboxFromPng("img/game/asteroid3.png",66,66,[],4);
-hitbox.asteroid2 = getHitboxFromPng("img/game/asteroid2.png",34,34,[],4);
-hitbox.asteroid1 = getHitboxFromPng("img/game/asteroid1.png",18,18,[],4);
+hitbox.ship3 = getHitboxFromPng("img/game/sith1.png",56,109,[],8);
+hitbox.ship4 = getHitboxFromPng("img/game/sith2.png",66,112,[],8);
+hitbox.asteroid3 = getHitboxFromPng("img/game/asteroid3.png",66,66,[],8);
+hitbox.asteroid2 = getHitboxFromPng("img/game/asteroid2.png",34,34,[],8);
+hitbox.asteroid1 = getHitboxFromPng("img/game/asteroid1.png",18,18,[],8);
 setTimeout(function() {console.log(JSON.stringify(hitbox));},5000);
 
 function getHitboxFromPng(src,size_x,size_y,array,resolution)
