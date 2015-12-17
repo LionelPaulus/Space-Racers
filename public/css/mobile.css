@@ -4,6 +4,10 @@
 	border: 0;
 }
 
+#mobile * {
+	user-select :none;
+}
+
 #mobile #errors .error {
 	top: 0; left: 0; right: 0;
 	position: fixed;
