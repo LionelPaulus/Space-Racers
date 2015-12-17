@@ -164,6 +164,25 @@ var rooms_manager = {
     },
 
     /**
+     * Recupere si le joueur est mort
+     * @param int id
+     * @param int user
+     * @return boolean
+     */
+    getUserState: function (id, user) {
+        return this.rooms[id].players[user].state;
+    },
+
+    /**
+     * 
+     * @param int id
+     * @param int user
+     */
+    setUserDead: function (id, user) {
+        this.rooms[id].players[user].state = false;
+    },
+
+    /**
      * Supprime un utilisateur de la room
      * @param int id
      * @param int user

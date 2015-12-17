@@ -54,7 +54,8 @@ io.on('connection', function(socket) {
         rooms.addPlayer(room, {
             socket: socket,
             spaceship: null,
-            ready: false
+            ready: false,
+            state: true
         });
 
         console.log('Player '+ socket.id +' join room '+ room + ' ('+ rooms.countPlayers(room) +'/4)');
@@ -153,6 +154,9 @@ io.on('connection', function(socket) {
         var playerParents = rooms.getPlayersParents(socket.id);
         var playerSpaceship = rooms.getPlayers(playerParents.roomID)[playerParents.playerID].spaceship;
 
+        // Si l'utilisateur est mort
+        if (rooms.getUserState(playerParents.roomID, playerParents.playerID) === false) return;
+
         // Send to PC move event (spaceship and his positions)
         rooms.getHost(playerParents.roomID).emit('game:move', JSON.stringify({
            user: playerParents.playerID,
@@ -168,10 +172,47 @@ io.on('connection', function(socket) {
         var playerParents = rooms.getPlayersParents(socket.id);
         var playerSpaceship = rooms.getPlayers(playerParents.roomID)[playerParents.playerID].spaceship;
 
+        // Si l'utilisateur est mort
+        if (rooms.getUserState(playerParents.roomID, playerParents.playerID) === false) return;
+
         // Send to PC fire event
         rooms.getHost(playerParents.roomID).emit('game:fire', playerParents.playerID);
 
         console.log('The player '+ socket.id +' shoot');
+    });
+
+
+    // Quand l'utilisateur meurt
+    socket.on('game:dead', function (user) {
+        if (!socket.roomID) return;
+
+        rooms.setUserDead(socket.roomID, user);
+
+        // On notifie l'utilisateur de sa mort
+        rooms.getPlayers(socket.roomID)[user].socket.emit('game:dead');
+
+        console.log('The player '+ rooms.getPlayers(socket.roomID)[user].socket.id +' just died')
+    });
+
+
+    // Quand le jeu se termine
+    socket.on('game:end', function (winner) {
+        if (!socket.roomID) return;
+
+        winner -= 1;
+
+        var roomPlayers = rooms.getPlayers(socket.roomID);
+
+        rooms.remove(socket.roomID);
+
+        // On deconnecte tous les utilisateurs de la room
+        for(var user in roomPlayers) {
+            var player = roomPlayers[user];
+            player.socket.emit('room:close');
+        }
+
+        console.log(roomPlayers[winner].socket.id +' gagne la partie '+ socket.roomID);
+        console.log('Fin de la partie '+ socket.roomID);
     });
 
 
