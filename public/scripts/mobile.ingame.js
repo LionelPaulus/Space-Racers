@@ -42,5 +42,6 @@ var inGameReset = function () {
 // Quand l'utilisateur meurt
 socket.on('game:dead', function () {
     inGameReset();
+    window.navigator.vibrate(200);
     $('[data-page="game"] p b').html('YOU ARE DEAD');
 });
