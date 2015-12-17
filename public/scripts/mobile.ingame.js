@@ -24,6 +24,8 @@ var inGameInit = function () {
         $('#mobile [data-page="game"] .coords').html(Math.floor(x) +':'+ Math.floor(y) +':'+ Math.floor(z));
     };
 
+    $('#mobile [data-page="game"] p b').html('TAP SCREEN TO SHOOT MISSILES');
+
 
     $('#mobile [data-page="game"]').on('click', function () {
         socket.emit('game:fire');
@@ -41,7 +43,7 @@ var inGameReset = function () {
 
 // Quand l'utilisateur meurt
 socket.on('game:dead', function () {
+    $('#mobile [data-page="game"] p b').html('YOU ARE DEAD, SORRY');
     inGameReset();
-    window.navigator.vibrate(200);
-    $('[data-page="game"] p b').html('YOU ARE DEAD');
+    window.navigator.vibrate(1000);
 });
