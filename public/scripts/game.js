@@ -151,7 +151,8 @@ socket.on('game:started', function (spaceships) {
     // Demarre jeu
     spaceships = JSON.parse(spaceships);
 
-    changePage('game');
+    $('#in-game').show();
+    console.log(spaceships);
 
     for (var player in spaceships) {
         var id = parseInt(player) + 1;
