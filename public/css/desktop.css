@@ -38,8 +38,8 @@
 }
 
 #desktop #askCode {
-	border:none;
-	height:40px;
+	border: none;
+	height: 40px;
 	box-shadow: 2px 2px 5px #000;
 	position: absolute;
 	width: 150px;
@@ -55,12 +55,28 @@
 
 #desktop p {
 	position: absolute;
-	left: calc(50% - 215px);
-	top: calc(40% - 100px);;
+	left: calc(50% - 195px);
+	top: calc(40% - 100px);
 	color: #FFF;
 	z-index: 100;
 	font-size: 30px;
 	font-family: 'Roboto';
+	opacity: 0.8;
+}
+
+#desktop #credit {
+	position: absolute;
+	left: calc(50% - 250px);
+	bottom: 30px;
+	color: grey;
+	z-index: 100;
+	font-size: 15px;
+	font-family: 'Roboto';
+	text-align: center;
+	width: 500px;
+	height: 20px;
+	text-transform: uppercase;
+	opacity: 0.5;
 }
 
 #desktop [data-page="room-code"] {
@@ -72,9 +88,9 @@
 }
 
 #desktop h1 {
-	position:absolute;
-	left:calc(50% + 20px);
-	bottom:calc(50% - 140px);
+	position: absolute;
+	left: calc(50% + 20px);
+	bottom: calc(50% - 140px);
 	width: 350px;
 	text-align: center;
 	font-size: 100px;
@@ -87,10 +103,10 @@
 	text-align: center;
 	font-size: 30px;
 	font-family: 'Roboto';
-	position:absolute;
-	left:calc(50% - 140px);
-	top:100px;
-	text-transform:uppercase;
+	position: absolute;
+	left: calc(50% - 140px);
+	top: 100px;
+	text-transform: uppercase;
 
 }
 
@@ -103,22 +119,22 @@
 	top: 250px;
 	color: #CCC9C9;
 	font-size: 15px;
-	text-transform:uppercase;
+	text-transform: uppercase;
 
 }
 
 #desktop #code img {
-	position:absolute;
-	bottom:calc(50% - 285.5px);
-	left:4%;
-	max-width:400px;
-	height:auto;
+	position: absolute;
+	bottom: calc(50% - 285.5px);
+	left: 4%;
+	max-width: 400px;
+	height: auto;
 
 }
 
 #desktop #start-game {
-	border:none;
-	height:40px;
+	border: none;
+	height: 40px;
 	box-shadow: 2px 2px 5px #000;
 	position: absolute;
 	width: 150px;
