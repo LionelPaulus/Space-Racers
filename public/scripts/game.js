@@ -1,5 +1,4 @@
-
-$.get("scripts/data.json", function (hitbox) {
+$.get("scripts/data.json", function(hitbox) {
 
 var socket = io.connect('localhost:3000');
 
@@ -240,63 +239,72 @@ function applyPhysic()
         for(var d = 0; d < asteroids.length; d++)
         {
             var asteroid = asteroids[d];
-            if((ship.x >= asteroid.x && ship.x <= asteroid.x+asteroid.size.x) || (ship.x+ship.size.x >= asteroid.x && ship.x+ship.size.x <= asteroid.x+asteroid.size.x))
+            if(collide(ship,asteroid) == true)
             {
-                if((asteroid.y >= ship.y && asteroid.y+asteroid.size.y <= ship.y+ship.size.y) || ((ship.y >= asteroid.y && ship.y <= asteroid.y+asteroid.size.y) || (ship.y+ship.size.y >= asteroid.y && ship.y+ship.size.y <= asteroid.y+asteroid.size.y)))
+                var ship_hitbox = hitboxArea("ship",ship,[]);
+                var asteroid_hitbox = hitboxArea("asteroid",asteroid,[]);
+
+                for(var o = 0, len = ship_hitbox.length; o < len;o++)
                 {
-                    //véritable coordonnées de vaisseaux
-                        var hitbox_ship = hitboxCanvas(ship,"ship",[]);
-                    //véritable coordonnées de asteroid
-                        var hitbox_asteroid = hitboxCanvas(asteroid,"asteroid",[]);
-                        for(var l = 0, len=hitbox_ship.length; l < len;l+=12)
+                    for(var k = 0, le = asteroid_hitbox.length; k < le;k++)
+                    {
+                        if(collide(ship_hitbox[o],asteroid_hitbox[k]) == true)
                         {
-                            if(hitbox_asteroid.indexOf(hitbox_ship[l]) != -1)
-                            {
-                                console.log("boum");
-                                break;
-                            }
+                            console.log("boum");
+                            break;
                         }
+                    }
                 }
             }
-
         }
     }
 }
 
-function hitboxCanvas(what,kind,array)
+
+function collide(source,target)
+{
+    return !(
+        ( ( source.y + source.height ) < ( target.y ) ) ||
+        ( source.y > ( target.y + target.height ) ) ||
+        ( ( source.x + source.width ) < target.x ) ||
+        ( source.x > ( target.x + target.width ) )
+    );
+}
+
+function hitboxArea(kind,obj,array)
 {
     if(kind == "ship")
     {
-        if(what.type == 1)
+        if(obj.type == 1)
         {
-
-            for(var p = 0, len = hitbox.ship1.length; p < len;p++)
+            for(var p = 0, len = hitbox.ship1.data.length; p < len;p++)
             {
-                var coord_img = hitbox.ship1[p].split(":");
-                var coord_x_img = parseInt(coord_img[0]);
-                var coord_y_img = parseInt(coord_img[1]);
-                var coord_x = coord_x_img + what.x;
-                var coord_y = coord_y_img + what.y;
-                var coord = coord_x + ":" + coord_y;
-                array.push(coord);
+                var area =
+                {
+                    x:hitbox.ship1.data[p].x +obj.x,
+                    y:hitbox.ship1.data[p].y +obj.y,
+                    width:hitbox.ship1.resolution,
+                    height:hitbox.ship1.resolution
+                }
+                array.push(area);
             }
             return array;
         }
     }
     else if(kind == "asteroid")
     {
-        if(what.type == 3)
+        if(obj.type == 3)
         {
-
-            for(var p = 0, len = hitbox.asteroid1.length; p < len;p++)
+            for(var n = 0, ln = hitbox.asteroid3.data.length; n < ln;n++)
             {
-                var coord_img = hitbox.asteroid1[p].split(":");
-                var coord_x_img = parseInt(coord_img[0]);
-                var coord_y_img = parseInt(coord_img[1]);
-                var coord_x = coord_x_img + what.x;
-                var coord_y = coord_y_img + what.y;
-                var coord = coord_x + ":" + coord_y;
-                array.push(coord);
+                var area =
+                {
+                    x:hitbox.asteroid3.data[n].x+obj.x,
+                    y:hitbox.asteroid3.data[n].y+obj.y,
+                    width:hitbox.asteroid3.resolution,
+                    height:hitbox.asteroid3.resolution
+                }
+                array.push(area);
             }
             return array;
         }
@@ -339,46 +347,40 @@ draw();
 
 
 //var hitbox = {};
-//hitbox.ship1 = getHitboxFromPng("img/game/jedi1.png",53,112,[]);
-//hitbox.asteroid1 = getHitboxFromPng("img/game/asteroid3.png",66,66,[]);
+//hitbox.ship1 = getHitboxFromPng("img/game/jedi1.png",53,112,[],8);
+//hitbox.asteroid3 = getHitboxFromPng("img/game/asteroid3.png",66,66,[],8);
 //setTimeout(function() {console.log(JSON.stringify(hitbox));},5000);
 
-function getHitboxFromPng(src,size_x,size_y,arrate)
+function getHitboxFromPng(src,size_x,size_y,array,resolution)
 {
 
     var sprite = new Image();
     sprite.src = src;
     sprite.onload = function()
     {
-        ctx.drawImage(sprite,0,0);
-        var map_sprite = ctx.getImageData(0,0,size_x,size_y);
-        for(var d = 0; d < map_sprite.data.length; d += 4)
+        virtual_ctx.drawImage(sprite,0,0);
+        for( var y = 0; y < size_y; y=y+resolution )
         {
-            if(d > 3)
+            for( var x = 0; x < size_x; x=x+resolution )
             {
-                var x = ((d / 4) % size_x) +1;
-            }
-            else {x = 0;}
-            var y = Math.floor((d / 4) / size_x);
-            if(map_sprite.data[d+4] >= 50) // if the pixel is not transparent
-            {
-                if(y != 0 || x !=0)
+                var pixel = virtual_ctx.getImageData( x, y, resolution, resolution );
+                var global_opacity = 0;
+                for(var i = 0, len = pixel.data.length; i < len;i+=4)
                 {
-                    arrate.push(x +":" +y);
-                }
-                else
-                {
-                    if(map_sprite.data[3] != 0)
+                    if(pixel.data[i+3] <= 50)
                     {
-                        arrate.push(x +":" +y);
+                        global_opacity++;
                     }
+                }
+                if(((resolution*resolution)/2 > global_opacity))
+                {
+                   array.push( { x:x, y:y } );
                 }
             }
         }
         clear();
-     }
-    console.log(arrate);
-    return arrate;
+    }
+    return {data:array,resolution:resolution};
 }
 
 
@@ -466,5 +468,95 @@ function getViewport() {
    viewPortHeight = document.getElementsByTagName('body')[0].clientHeight
  }
  return [viewPortWidth, viewPortHeight];
+}
+
+    function gyroIntelligence() {
+    var x = 0,
+        y = 0,
+        vx = 0,
+        vy = 0,
+        inertia = 5,
+        x_old = 0,
+        y_old = 0;
+
+    setInterval(function() {
+        var ship = players[0];
+
+        // Get positions
+        var ax = positions.x * 5,
+            ay = positions.y * 5,
+            az = positions.z * 5;
+
+        // Calibration
+        ax -= 35;
+
+        // Fix bug reverse
+        if (az < 0) {
+            ax -= az;
+        }
+
+        // Dead zone
+        if (ax > -10 && ax < 10) {
+            ax = 0;
+            if (vx > inertia) {
+                vx -= inertia;
+            } else if (vx < -inertia) {
+                vx += inertia;
+            } else {
+                vx = 0;
+            }
+        }
+        if (ay > -10 && ay < 10) {
+            ay = 0;
+            if (vy > inertia) {
+                vy -= inertia;
+            } else if (vy < -inertia) {
+                vy += inertia;
+            } else {
+                vy = 0;
+            }
+        }
+
+        // Inertia
+        vx = vx + ay;
+        vy = vy + ax;
+
+        vx = vx * 0.97;
+        vy = vy * 0.97;
+        y = parseInt(y + vy / 50);
+        x = parseInt(x + vx / 50);
+
+        boundingBoxCheck();
+
+        // Check changes
+        if (x != x_old || y != y_old) {
+            // Update vessel position
+            ship.x = x;
+            ship.y = y;
+            // Save actual position
+            x_old = x;
+            y_old = y;
+        }
+    }, 25);
+
+
+    function boundingBoxCheck() {
+        if (x < 0) {
+            x = 0;
+            vx = -vx;
+        }
+        if (y < 0) {
+            y = 0;
+            vy = -vy;
+        }
+        if (x > canvas_width - 20) {
+            x = canvas_width - 20;
+            vx = -vx;
+        }
+        if (y > canvas_height - 20) {
+            y = canvas_height - 20;
+            vy = -vy;
+        }
+    }
 }
 });
