@@ -29,7 +29,7 @@ var displayError = function (message) {
 
 
 var mobile_js_files = ["scripts/mobile.ingame.js", "scripts/mobile.room.js", "scripts/mobile.spaceship.js", "scripts/mobile.rules.js", "scripts/mobile.waiting.js"];
-var desktop_js_files = ["scripts/desktop.room.js"];
+var desktop_js_files = ["scripts/game.js", "scripts/gyro_intelligence.js", "scripts/desktop.room.js"];
 
 if (is_mobile() === true) {
     $.get('template/mobile.html', function (content) {
@@ -44,7 +44,7 @@ if (is_mobile() === true) {
 }
 
 
-var socket = io.connect('192.168.1.5:3000');
+var socket = io.connect('192.168.1.14:3000');
 //var socket = io.connect('star-wars-racers.herokuapp.com');
 
 $(function() {

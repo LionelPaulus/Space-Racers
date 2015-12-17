@@ -9,7 +9,7 @@ var port = process.env.PORT || 3000; // Process c'est pour heroku car le port pe
 var rooms = require('./src/rooms.js');
 
 
-// Site static 
+// Site static
 app.use(express.static(__dirname + '/public'));
 
 
@@ -54,9 +54,10 @@ io.on('connection', function(socket) {
         rooms.addPlayer(room, {
             socket: socket,
             spaceship: null,
-            ready: false
+            ready: false,
+            state: true
         });
-        
+
         console.log('Player '+ socket.id +' join room '+ room + ' ('+ rooms.countPlayers(room) +'/4)');
         socket.emit('room:success', JSON.stringify(
             rooms.getUsedSpaceships(room)
@@ -89,7 +90,7 @@ io.on('connection', function(socket) {
         console.log('The player '+ socket.id +' chose the spaceship '+ spaceship);
     });
 
-    
+
     // QUand tous les utilisateurs ont dismiss les regles
     socket.on('game:ready', function () {
         var playerParents = rooms.getPlayersParents(socket.id);
@@ -102,7 +103,7 @@ io.on('connection', function(socket) {
         if (rooms.arePlayersReady(playerParents.roomID) === true) {
             // On previent le pc
             rooms.getHost(playerParents.roomID).emit('game:started', JSON.stringify(
-                rooms.getUsedSpaceships(playerSpaceship.roomID)
+                rooms.getUsedSpaceships(playerParents.roomID)
             ));
 
             // On previent les joueurs
@@ -114,6 +115,19 @@ io.on('connection', function(socket) {
 
             console.log('The game '+ playerParents.roomID +' just started');
         }
+    });
+
+
+    // Quand l'utilisateur meurt
+    socket.on('game:dead', function (user) {
+        if (!socket.roomID) return;
+
+        rooms.setUserDead(socket.roomID, user);
+
+        // On notifie l'utilisateur de sa mort
+        rooms.getPlayers(socket.roomID)[user].socket.emit('game:dead');
+
+        console.log('The player '+ rooms.getPlayers(socket.roomID)[user].socket.id +' just died')
     });
 
 
@@ -135,7 +149,7 @@ io.on('connection', function(socket) {
 
         rooms.setStarted(socket.roomID);
         socket.emit('spaceship:started');
-        
+
         console.log('The game '+ socket.roomID +' just started selecting spaceship');
 
         // On previent les joueurs
@@ -153,11 +167,16 @@ io.on('connection', function(socket) {
         var playerParents = rooms.getPlayersParents(socket.id);
         var playerSpaceship = rooms.getPlayers(playerParents.roomID)[playerParents.playerID].spaceship;
 
+        // Si l'utilisateur est mort
+        if (rooms.getUserState(playerParents.roomID, playerParents.playerID) === false) return;
+
         // Send to PC move event (spaceship and his positions)
         rooms.getHost(playerParents.roomID).emit('game:move', JSON.stringify({
-           spaceship: playerSpaceship,
+           user: playerParents.playerID,
            positions: positions
         }));
+
+        // console.log('Player '+ socket.id +' is moving');
     });
 
 
@@ -166,8 +185,13 @@ io.on('connection', function(socket) {
         var playerParents = rooms.getPlayersParents(socket.id);
         var playerSpaceship = rooms.getPlayers(playerParents.roomID)[playerParents.playerID].spaceship;
 
+        // Si l'utilisateur est mort
+        if (rooms.getUserState(playerParents.roomID, playerParents.playerID) === false) return;
+
         // Send to PC fire event
-        rooms.getHost(playerParents.roomID).emit('game:fire', spaceship);
+        rooms.getHost(playerParents.roomID).emit('game:fire', playerParents.playerID);
+
+        console.log('The player '+ socket.id +' shoot');
     });
 
 
@@ -201,7 +225,7 @@ io.on('connection', function(socket) {
             if (rooms.getState(playerParents.roomID) === false) {
                 // On libere le vaisseau
                 var adversaries = rooms.getPlayers(playerParents.roomID);
-                
+
                 for (var user in adversaries) {
                     var player = adversaries[user];
                     player.socket.emit('spaceship:picked', JSON.stringify(

@@ -3,13 +3,16 @@ var virtual_ctx = virtual_canvas.getContext('2d');
 
 var canvas = document.getElementById("game");
 var ctx = canvas.getContext("2d");
+var positions = [];
 
 var canvas_size = getViewport();
 var canvas_width  = canvas_size[0];
 var canvas_height = canvas_size[1];
 canvas.setAttribute("width", canvas_width);
 canvas.setAttribute("height", canvas_height);
-var socket = io.connect('localhost:3000');
+var explosion = new Image();
+explosion.src = "img/game/explosion.png";
+var player_alone;
 var players = [];
 var positions = {}; // Positions x, y and z from gyroscope
 
@@ -19,13 +22,14 @@ function createPlayerShip(number_of_player,ship_number, player_number)
     ship.id = player_number;
     ship.type = ship_number;
     ship.score = 0;
-    if(ship_number == 1)
+    if(ship_number == 4)
     {
         ship.size = {};
         ship.size.x = 53;
         ship.size.y = 112;
         ship.sprite = new Image();
         ship.sprite.src = "img/game/jedi1.png";
+        var player_alone = ship_number;
     }
     else if(ship_number == 2)
     {
@@ -34,22 +38,25 @@ function createPlayerShip(number_of_player,ship_number, player_number)
         ship.size.y = 112;
         ship.sprite = new Image();
         ship.sprite.src = "img/game/jedi2.png";
+        var player_alone = ship_number;
     }
-    else if(ship_number == 3)
+    else if(ship_number == 1)
     {
         ship.size = {};
         ship.size.x = 59;
         ship.size.y = 109;
         ship.sprite = new Image();
         ship.sprite.src = "img/game/sith1.png";
+        var player_alone = ship_number;
     }
-    else if(ship_number == 4)
+    else if(ship_number == 3)
     {
         ship.size = {};
         ship.size.x = 66;
         ship.size.y = 112;
         ship.sprite = new Image();
         ship.sprite.src = "img/game/sith2.png";
+        var player_alone = ship_number;
     }
     if (number_of_player == 1)
     {
@@ -115,14 +122,6 @@ function createPlayerShip(number_of_player,ship_number, player_number)
     }
 
     players.push(ship);
-
-        // No need anymore
-        socket.emit('game', JSON.stringify({
-            width: canvas_width,
-            height: canvas_height,
-            x: ship.x,
-            y: ship.y
-        }));
 }
 
 //polyfill
@@ -154,8 +153,55 @@ function getViewport() {
 
 $.get("scripts/data.json", function(hitbox) {
 
-var game_play = null;
+// SOCKET IO
+// Lorsque le jeu commence
+socket.on('game:started', function (spaceships) {
+    // Demarre jeu
+    spaceships = JSON.parse(spaceships);
 
+    $('#in-game').show();
+    console.log(spaceships);
+
+    for (var player in spaceships) {
+        var id = parseInt(player) + 1;
+        createPlayerShip(spaceships.length, spaceships[player], id);
+
+        positions[player] = {
+            y_serv: 0,
+            x_serv: 0,
+            z_serv: 0,
+            x: players[player].x,
+            y: players[player].y,
+            vx: 0,
+            vy: 0,
+            x_old: 0,
+            y_old: 0
+        };
+    }
+
+    draw();
+});
+
+// When the user shoot
+socket.on('game:fire', function(spaceship) {
+    createBlasterShoot(players[spaceship]);
+});
+
+var first_time = true;
+
+socket.on('game:move', function (datas) {
+    datas = JSON.parse(datas);
+    positions[datas.user].x_serv = datas.positions.x;
+    positions[datas.user].y_serv = datas.positions.y;
+    positions[datas.user].z_serv = datas.positions.z;
+
+    if (first_time) {
+        gyroIntelligence();
+        first_time = false;
+    }
+});
+
+var game_play = null;
 var stars = [];
 
 // creating the first stars background
@@ -264,16 +310,6 @@ function updateAsteroid()
     }
 }
 
-var first_time = true;
-socket.on('position', function (datas) {
-    positions = JSON.parse(datas);
-
-    if(first_time){
-        gyroIntelligence();
-        first_time = false;
-    }
-});
-
 function drawShip()
 {
     for(var i = 0; i < players.length;i++)
@@ -304,8 +340,13 @@ function asteroidColision()
                     {
                         if(collide(ship_hitbox[o],asteroid_hitbox[k]) == true)
                         {
-                            console.log("boum");
-                            break;
+                            var middle_collision_x = (ship_hitbox[o].x + asteroid_hitbox[o].x)/2 - ship.size.x;
+                            var middle_collision_y = (ship_hitbox[o].y + asteroid_hitbox[o].y)/2;
+                            drawExplosion(middle_collision_x,middle_collision_y);
+                            players.splice(i,1);
+                            asteroids.splice(i,1);
+                            socket.emit("game:dead",i);
+                            return true;
                         }
                     }
                 }
@@ -444,19 +485,13 @@ function hitboxArea(kind,obj,array)
     }
 }
 
-
-socket.on('fire', function(data){
-    createBlasterShoot(players[0],"red");
-});
-
 var shoots = [];
-function createBlasterShoot(player,color)
+function createBlasterShoot(player)
 {
     var shoot = {};
     shoot.x = Math.floor(player.x +player.size.x/2);
     shoot.y = player.y;
     shoot.speed = 4;
-    shoot.style = color;
     shoot.width = 2;
     shoot.height = 10;
 
@@ -509,6 +544,11 @@ function shootColision()
     }
 }
 
+function drawExplosion(x,y)
+{
+    ctx.drawImage(explosion,x,y);
+}
+
 function restart()
 {
     window.cancelAnimationFrame(game_play);
@@ -553,34 +593,45 @@ function draw()
     updateBlasterShoot();
     shootColision();
     asteroidColision();
+    isGameOver();
 }
 
-createPlayerShip(1,2,1);
-
-
-draw();
 
 //setTimeout(restart,5000);
 
-//function isGameOver(number_of_player)
-//{
-//    if(number_of_player == 1)
-//    {
-//
-//    }
-//}
+function isGameOver(number_of_player)
+{
+    if(number_of_player == 1)
+    {
+        if(players.length == 0)
+        {
+            window.cancelAnimationFrame(game_play);
+            // Display score
+            socket.emit("game:end",player_alone);
+        }
+    }
+    else
+    {
+        if(players.length == 1)
+        {
+            window.cancelAnimationFrame(game_play);
+            // Display score
+            socket.emit("game:end",players[0].id);
+        }
+    }
+}
 
 
 
-//var hitbox = {};
-//hitbox.ship1 = getHitboxFromPng("img/game/jedi1.png",53,112,[],8);
-//hitbox.ship2 = getHitboxFromPng("img/game/jedi2.png",100,112,[],8);
-//hitbox.ship3 = getHitboxFromPng("img/game/sith1.png",56,109,[],8);
-//hitbox.ship4 = getHitboxFromPng("img/game/sith2.png",66,112,[],8);
-//hitbox.asteroid3 = getHitboxFromPng("img/game/asteroid3.png",66,66,[],8);
-//hitbox.asteroid2 = getHitboxFromPng("img/game/asteroid2.png",34,34,[],8);
-//hitbox.asteroid1 = getHitboxFromPng("img/game/asteroid1.png",18,18,[],8);
-//setTimeout(function() {console.log(JSON.stringify(hitbox));},5000);
+var hitbox = {};
+hitbox.ship1 = getHitboxFromPng("img/game/jedi1.png",53,112,[],8);
+hitbox.ship2 = getHitboxFromPng("img/game/jedi2.png",100,112,[],4);
+hitbox.ship3 = getHitboxFromPng("img/game/sith1.png",56,109,[],8);
+hitbox.ship4 = getHitboxFromPng("img/game/sith2.png",66,112,[],8);
+hitbox.asteroid3 = getHitboxFromPng("img/game/asteroid3.png",66,66,[],8);
+hitbox.asteroid2 = getHitboxFromPng("img/game/asteroid2.png",34,34,[],8);
+hitbox.asteroid1 = getHitboxFromPng("img/game/asteroid1.png",18,18,[],8);
+setTimeout(function() {console.log(JSON.stringify(hitbox));},5000);
 
 function getHitboxFromPng(src,size_x,size_y,array,resolution)
 {

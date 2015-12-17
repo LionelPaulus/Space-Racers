@@ -14,19 +14,21 @@ var inGameInit = function () {
             z = -z;
         }
 
-        // socket.emit('position', JSON.stringify({
-        //     x: x,
-        //     y: y,
-        //     z: z
-        // }));
+        socket.emit('game:move', JSON.stringify({
+            x: x,
+            y: y,
+            z: z
+        }));
 
         // For tests only
         $('#mobile [data-page="game"] .coords').html(Math.floor(x) +':'+ Math.floor(y) +':'+ Math.floor(z));
     };
 
-    
+    $('#mobile [data-page="game"] p b').html('TAP SCREEN TO SHOOT MISSILES');
+
+
     $('#mobile [data-page="game"]').on('click', function () {
-        // Send fire to server
+        socket.emit('game:fire');
     });
 };
 
@@ -37,3 +39,11 @@ var inGameReset = function () {
     window.ondevicemotion = function () {};
     $('#mobile [data-page="game"]').off('click');
 }
+
+
+// Quand l'utilisateur meurt
+socket.on('game:dead', function () {
+    $('#mobile [data-page="game"] p b').html('YOU ARE DEAD, SORRY');
+    inGameReset();
+    window.navigator.vibrate(1000);
+});
