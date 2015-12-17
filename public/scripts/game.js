@@ -639,7 +639,7 @@ function isGameOver(number_of_player)
             // Display score
             socket.emit("game:end",player_alone);
             clearInterval(gyroInterval);
-            setTimeout(function () { window.cancelAnimationFrame(game_play); }, 1000);
+            setTimeout(function () { window.cancelAnimationFrame(game_play); changePage('end'); }, 1000);
         }
     }
     else
@@ -649,7 +649,7 @@ function isGameOver(number_of_player)
             // Display score
             socket.emit("game:end",players[0].id);
             clearInterval(gyroInterval);
-            setTimeout(function () { window.cancelAnimationFrame(game_play); }, 1000);
+            setTimeout(function () { window.cancelAnimationFrame(game_play); changePage('end'); }, 1000);
         }
     }
 }
