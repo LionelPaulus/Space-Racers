@@ -3,6 +3,8 @@ body
     background:white;
     font-family:Helvetica,Arial;
     font-size:14px;
+    background-color:black;
+    overflow-y:hidden;
 }
 
 #game

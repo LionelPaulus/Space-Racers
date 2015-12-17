@@ -69,7 +69,7 @@ var asteroids = [];
 // Create the asteroids
 function createAsteroid()
 {
-    var random = 3;//rNumber(1,3);
+    var random = rNumber(1,3);
     var asteroid = {};
     asteroid.x = rNumber(0,canvas_width);
     asteroid.sprite = new Image();
@@ -139,6 +139,30 @@ function createPlayerShip(number_of_player,ship_number, player_number)
         ship.size.y = 112;
         ship.sprite = new Image();
         ship.sprite.src = "img/game/jedi1.png";
+    }
+    else if(ship_number == 2)
+    {
+        ship.size = {};
+        ship.size.x = 100;
+        ship.size.y = 112;
+        ship.sprite = new Image();
+        ship.sprite.src = "img/game/jedi2.png";
+    }
+    else if(ship_number == 3)
+    {
+        ship.size = {};
+        ship.size.x = 59;
+        ship.size.y = 109;
+        ship.sprite = new Image();
+        ship.sprite.src = "img/game/sith1.png";
+    }
+    else if(ship_number == 4)
+    {
+        ship.size = {};
+        ship.size.x = 66;
+        ship.size.y = 112;
+        ship.sprite = new Image();
+        ship.sprite.src = "img/game/sith2.png";
     }
     if (number_of_player == 1)
     {
@@ -292,10 +316,90 @@ function hitboxArea(kind,obj,array)
             }
             return array;
         }
+
+        else if(obj.type == 2)
+        {
+            for(var p = 0, len = hitbox.ship2.data.length; p < len;p++)
+            {
+                var area =
+                {
+                    x:hitbox.ship2.data[p].x +obj.x,
+                    y:hitbox.ship2.data[p].y +obj.y,
+                    width:hitbox.ship2.resolution,
+                    height:hitbox.ship2.resolution
+                }
+                array.push(area);
+            }
+            return array;
+        }
+
+        else if(obj.type == 3)
+        {
+            for(var p = 0, len = hitbox.ship3.data.length; p < len;p++)
+            {
+                var area =
+                {
+                    x:hitbox.ship3.data[p].x +obj.x,
+                    y:hitbox.ship3.data[p].y +obj.y,
+                    width:hitbox.ship3.resolution,
+                    height:hitbox.ship3.resolution
+                }
+                array.push(area);
+            }
+            return array;
+        }
+
+        else if(obj.type == 4)
+        {
+            for(var p = 0, len = hitbox.ship4.data.length; p < len;p++)
+            {
+                var area =
+                {
+                    x:hitbox.ship4.data[p].x +obj.x,
+                    y:hitbox.ship4.data[p].y +obj.y,
+                    width:hitbox.ship4.resolution,
+                    height:hitbox.ship4.resolution
+                }
+                array.push(area);
+            }
+            return array;
+        }
     }
     else if(kind == "asteroid")
     {
-        if(obj.type == 3)
+        if(obj.type == 1)
+        {
+            for(var n = 0, ln = hitbox.asteroid1.data.length; n < ln;n++)
+            {
+                var area =
+                {
+                    x:hitbox.asteroid1.data[n].x+obj.x,
+                    y:hitbox.asteroid1.data[n].y+obj.y,
+                    width:hitbox.asteroid1.resolution,
+                    height:hitbox.asteroid1.resolution
+                }
+                array.push(area);
+            }
+            return array;
+        }
+
+        else if(obj.type == 2)
+        {
+            for(var n = 0, ln = hitbox.asteroid2.data.length; n < ln;n++)
+            {
+                var area =
+                {
+                    x:hitbox.asteroid2.data[n].x+obj.x,
+                    y:hitbox.asteroid2.data[n].y+obj.y,
+                    width:hitbox.asteroid2.resolution,
+                    height:hitbox.asteroid2.resolution
+                }
+                array.push(area);
+            }
+            return array;
+        }
+
+        else if(obj.type == 3)
         {
             for(var n = 0, ln = hitbox.asteroid3.data.length; n < ln;n++)
             {
@@ -368,9 +472,7 @@ function shootColision()
                 {
                     asteroids[k].life -=10;
                     shoots.splice(n,1);
-                    console.log(len);
                     len--;
-                    console.log(len);
                     if(asteroids[k].life == 0)
                     {
                         asteroids.splice(k,1);
@@ -406,23 +508,20 @@ function draw()
     asteroidColision();
 }
 
-createPlayerShip(1,1,1);
-//createAsteroid();
-//console.log(asteroids[0]);
-//asteroids[0].sprite.onload = function() {
-//ctx.drawImage(asteroids[0].sprite,asteroids[0].x,asteroids[0].y);
-//}
-//players[0].sprite.onload = function() {
-//ctx.drawImage(players[0].sprite,players[0].x,players[0].y);
-//applyPhysic();
-//}
+createPlayerShip(1,4,1);
+
 
 draw();
 
 
 //var hitbox = {};
 //hitbox.ship1 = getHitboxFromPng("img/game/jedi1.png",53,112,[],8);
+//hitbox.ship2 = getHitboxFromPng("img/game/jedi2.png",100,112,[],8);
+//hitbox.ship3 = getHitboxFromPng("img/game/sith1.png",56,109,[],8);
+//hitbox.ship4 = getHitboxFromPng("img/game/sith2.png",66,112,[],8);
 //hitbox.asteroid3 = getHitboxFromPng("img/game/asteroid3.png",66,66,[],8);
+//hitbox.asteroid2 = getHitboxFromPng("img/game/asteroid2.png",34,34,[],8);
+//hitbox.asteroid1 = getHitboxFromPng("img/game/asteroid1.png",18,18,[],8);
 //setTimeout(function() {console.log(JSON.stringify(hitbox));},5000);
 
 function getHitboxFromPng(src,size_x,size_y,array,resolution)
@@ -506,18 +605,6 @@ function tooCloseTo(new_asteroid)
             return false;
         }
 }
-
-
-
-//function drawRotated(image, x, y, angle)
-//{
-//    ctx.save();
-//    ctx.translate(x, y);
-//    ctx.rotate(angle*Math.PI/180);
-//    ctx.drawImage(image, -(image.width/2), -(image.height/2));
-//    ctx.restore();
-//}
-
 
 function getViewport() {
 
