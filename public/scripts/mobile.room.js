@@ -14,6 +14,7 @@ socket.on('room:error', function (message) {
 
 // Quand l'hote se deconnecte
 socket.on('room:close', function () {
+    inGameReset();
 	displayError('L\'hote de la partie c\'est deconnecte');
     $('#code').html('');
 	changePage('code');

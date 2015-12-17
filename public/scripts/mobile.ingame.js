@@ -23,4 +23,17 @@ var inGameInit = function () {
         // For tests only
         $('#mobile [data-page="game"] .coords').html(Math.floor(x) +':'+ Math.floor(y) +':'+ Math.floor(z));
     };
+
+    
+    $('#mobile [data-page="game"]').on('click', function () {
+        // Send fire to server
+    });
 };
+
+
+var inGameReset = function () {
+    noSleep.disable();
+
+    window.ondevicemotion = function () {};
+    $('#mobile [data-page="game"]').off('click');
+}
