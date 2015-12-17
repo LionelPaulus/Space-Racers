@@ -34,19 +34,19 @@ io.on('connection', function(socket) {
     socket.on('room:join', function (room) {
         // Si la room demande n'existe pas
         if (rooms.exists(room) === false) {
-            socket.emit('room:error', 'Partie non trouvée');
+            socket.emit('room:error', 'Game not found');
             return;
         }
 
         // Si la room demande est deja commencee
         if (rooms.getState(room) === true) {
-            socket.emit('room:error', 'Partie deja en cours');
+            socket.emit('room:error', 'Game already started');
             return;
         }
 
         // Si la room demande est deja complete
         if (rooms.countPlayers(room) >= 4) {
-            socket.emit('room:error', 'Partie complète');
+            socket.emit('room:error', 'Game full');
             return;
         }
 
@@ -71,7 +71,7 @@ io.on('connection', function(socket) {
 
         // Si le vaisseau est deja occupe
         if (rooms.isSpaceshipUsed(playerParents.roomID, spaceship) === true) {
-            socket.emit('spaceship:error', 'Vaisseau deja utilisé');
+            socket.emit('spaceship:error', 'Spaceship already used');
             return;
         }
 
@@ -124,13 +124,13 @@ io.on('connection', function(socket) {
 
         // Si la partie est deja en cours
         if (rooms.getState(socket.roomID) === true) {
-            socket.emit('game:error', 'Partie deja en cours');
+            socket.emit('game:error', 'Game already started');
             return;
         }
 
         // Si il n'y a pas de joueurs
         if (rooms.getPlayers(socket.roomID).length == 0) {
-            socket.emit('game:error', 'Aucun joueur');
+            socket.emit('game:error', 'No players !');
             return;
         }
 
