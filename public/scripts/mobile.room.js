@@ -9,13 +9,13 @@ socket.on('room:success', function (spaceship) {
 
 // Quand on ne peut pas rejoindre la room
 socket.on('room:error', function (message) {
-    alert(message);
+    displayError(message);
 });
 
 
 // Quand l'hote se deconnecte
 socket.on('room:close', function () {
-	alert('L\'hote de la partie c\'est deconnecte');
+	displayError('L\'hote de la partie c\'est deconnecte');
     $('#code').html('');
 	changePage('code');
 });

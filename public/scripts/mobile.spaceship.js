@@ -7,7 +7,7 @@ socket.on('spaceship:success', function () {
 
 // Quand le vaisseau est deja used
 socket.on('spaceship:error', function (message) {
-	alert(message);
+	displayError(message);
 });
 
 // Quand un utilisateur choisi un vaisseau
