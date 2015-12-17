@@ -236,6 +236,61 @@
 }
 
 
+#mobile [data-page="rules"] {
+	position: fixed;
+	top: 0; bottom: 0;
+	left: 0; right: 0;
+}
+
+#mobile [data-page="rules"] h3 {
+	font-family: "Roboto";
+	position: absolute;
+	margin-top: -50px;
+	font-size: 20px;
+	width: 380px;
+	height: 30px;
+	text-align: center;
+	text-transform: uppercase;
+	color: #ccc9c9;
+	left: calc(50% - 190px);
+	top: calc(50vh - ((150px / 1.3)/2) - 15px);
+}
+
+#mobile [data-page="rules"] .multi {
+    width: 100vh;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 15px;
+    font-family: "Roboto";
+    color: #ccc9c9;
+    text-align: center;
+    margin-top: 35vh;
+    position: relative;
+
+}
+
+#mobile [data-page="rules"] img {
+    width:202px;
+    left: calc(50% - 101px);
+    bottom: -25px;
+    position: absolute;
+
+}
+
+#mobile #pass {
+	border:0;
+	background:none;
+	width:110px;
+    left: calc(100% - 120px);
+    bottom:7px;
+    position: absolute;
+    font-family: "Roboto";
+    font-size: 15px;
+    color: #636363;
+    text-transform: uppercase;
+
+
+}
 
 @media screen and (min-height: 400px) {
 	#mobile .code-label {
