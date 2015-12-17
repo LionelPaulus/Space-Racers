@@ -2,7 +2,7 @@
 //   spaceship: [] <- Spaceship already used
 socket.on('room:success', function (spaceship) {
     usedSpaceships = JSON.parse(spaceship);
-    
+
     changePage('waiting');
 });
 
@@ -15,7 +15,7 @@ socket.on('room:error', function (message) {
 // Quand l'hote se deconnecte
 socket.on('room:close', function () {
     inGameReset();
-	displayError('L\'hote de la partie c\'est deconnecte');
+	displayError('The host of the game is offline');
     $('#code').html('');
 	changePage('code');
 });
@@ -32,12 +32,16 @@ $('#join').on('click', function (e) {
     var code = $('#code').html();
 
     socket.emit('room:join', code);
+
+    // Enable noSleep
+    var noSleep = new NoSleep();
+    noSleep.enable();
 });
 
 // entering the code on smartphone
 $('button[data-value]').on('click', function() {
     if ($('#mobile #code').html().length == 4) return;
-    
+
     $("#mobile #code").first().append($(this).data("value"));
 });
 
@@ -47,4 +51,3 @@ $('#del').on('click', function() {
         return text.slice(0, -1);
     });
 });
-

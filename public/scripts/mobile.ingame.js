@@ -1,17 +1,33 @@
-var noSleep = new NoSleep();
-
 var inGameInit = function () {
-    noSleep.enable();
-    // Chrome solution
+    var x = 0,
+        y = 0,
+        z = 0,
+        invert = false,
+        first_time = true;
+
+    // Actually, it doesn't work (that's why we are using noSleep) but we are waiting the Chrome update
     document.keepScreenAwake = true;
 
     window.ondevicemotion = function(e) {
-        var x = event.accelerationIncludingGravity.x,
-            y = event.accelerationIncludingGravity.y,
-            z = event.accelerationIncludingGravity.z;
+        x = event.accelerationIncludingGravity.x;
+        y = event.accelerationIncludingGravity.y;
+        z = event.accelerationIncludingGravity.z;
 
+        // Adapt for iPhone & iPod
         if((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) {
             z = -z;
+        }
+
+        // Verify how the player is holding the phone
+        if((x < 0)&&(first_time)){
+            invert = true;
+        }
+        first_time = false;
+        
+        // If phone is handed in the other side
+        if(invert){
+            x = -x;
+            y = -y;
         }
 
         socket.emit('game:move', JSON.stringify({
@@ -36,8 +52,6 @@ var inGameInit = function () {
 
 
 var inGameReset = function () {
-    noSleep.disable();
-
     window.ondevicemotion = function () {};
     $('#mobile [data-page="game"]').off('click');
 }
