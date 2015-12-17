@@ -159,7 +159,7 @@ io.on('connection', function(socket) {
            positions: positions
         }));
 
-        console.log('Player '+ socket.id +' is moving');
+        // console.log('Player '+ socket.id +' is moving');
     });
 
 
