@@ -102,7 +102,7 @@ io.on('connection', function(socket) {
         if (rooms.arePlayersReady(playerParents.roomID) === true) {
             // On previent le pc
             rooms.getHost(playerParents.roomID).emit('game:started', JSON.stringify(
-                rooms.getUsedSpaceships(playerSpaceship.roomID)
+                rooms.getUsedSpaceships(playerParents.roomID)
             ));
 
             // On previent les joueurs
