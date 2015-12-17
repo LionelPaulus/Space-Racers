@@ -186,6 +186,8 @@ io.on('connection', function(socket) {
     socket.on('game:dead', function (user) {
         if (!socket.roomID) return;
 
+        if (rooms.exists(socket.roomID) === false) return;
+
         rooms.setUserDead(socket.roomID, user);
 
         // On notifie l'utilisateur de sa mort
@@ -200,10 +202,12 @@ io.on('connection', function(socket) {
         if (!socket.roomID) return;
 
         winner -= 1;
+        var roomID = socket.roomID;
 
-        var roomPlayers = rooms.getPlayers(socket.roomID);
+        var roomPlayers = rooms.getPlayers(roomID);
 
-        rooms.remove(socket.roomID);
+        rooms.remove(roomID);
+        socket.roomID = false;
 
         // On deconnecte tous les utilisateurs de la room
         for(var user in roomPlayers) {
@@ -211,8 +215,8 @@ io.on('connection', function(socket) {
             player.socket.emit('room:close');
         }
 
-        console.log(roomPlayers[winner].socket.id +' gagne la partie '+ socket.roomID);
-        console.log('Fin de la partie '+ socket.roomID);
+        console.log(roomPlayers[winner].socket.id +' gagne la partie '+ roomID);
+        console.log('Fin de la partie '+ roomID);
     });
 
 
