@@ -54,7 +54,8 @@ io.on('connection', function(socket) {
         rooms.addPlayer(room, {
             socket: socket,
             spaceship: null,
-            ready: false
+            ready: false,
+            state: true
         });
 
         console.log('Player '+ socket.id +' join room '+ room + ' ('+ rooms.countPlayers(room) +'/4)');
@@ -153,6 +154,9 @@ io.on('connection', function(socket) {
         var playerParents = rooms.getPlayersParents(socket.id);
         var playerSpaceship = rooms.getPlayers(playerParents.roomID)[playerParents.playerID].spaceship;
 
+        // Si l'utilisateur est mort
+        if (rooms.getUserState(playerParents.roomID, playerParents.playerID) === false) return;
+
         // Send to PC move event (spaceship and his positions)
         rooms.getHost(playerParents.roomID).emit('game:move', JSON.stringify({
            user: playerParents.playerID,
@@ -167,6 +171,9 @@ io.on('connection', function(socket) {
     socket.on('game:fire', function () {
         var playerParents = rooms.getPlayersParents(socket.id);
         var playerSpaceship = rooms.getPlayers(playerParents.roomID)[playerParents.playerID].spaceship;
+
+        // Si l'utilisateur est mort
+        if (rooms.getUserState(playerParents.roomID, playerParents.playerID) === false) return;
 
         // Send to PC fire event
         rooms.getHost(playerParents.roomID).emit('game:fire', playerParents.playerID);
