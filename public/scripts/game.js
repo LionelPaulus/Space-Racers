@@ -1,3 +1,17 @@
+var virtual_canvas = document.createElement('canvas');
+var virtual_ctx = virtual_canvas.getContext('2d');
+
+var canvas = document.getElementById("game");
+var ctx = canvas.getContext("2d");
+
+var canvas_size = getViewport();
+var canvas_width  = canvas_size[0];
+var canvas_height = canvas_size[1];
+canvas.setAttribute("width", canvas_width);
+canvas.setAttribute("height", canvas_height);
+var socket = io.connect('localhost:3000');
+var players = [];
+
 function createPlayerShip(number_of_player,ship_number, player_number)
 {
     var ship = {};
@@ -110,21 +124,35 @@ function createPlayerShip(number_of_player,ship_number, player_number)
         }));
 }
 
+//polyfill
+function getViewport() {
+
+ var viewPortWidth;
+ var viewPortHeight;
+
+ // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
+ if (typeof window.innerWidth != 'undefined') {
+   viewPortWidth = window.innerWidth,
+   viewPortHeight = window.innerHeight
+ }
+
+// IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
+ else if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth !== 0) {
+    viewPortWidth = document.documentElement.clientWidth,
+    viewPortHeight = document.documentElement.clientHeight
+ }
+
+ // older versions of IE
+ else {
+   viewPortWidth = document.getElementsByTagName('body')[0].clientWidth,
+   viewPortHeight = document.getElementsByTagName('body')[0].clientHeight
+ }
+
+ return [viewPortWidth, viewPortHeight];
+}
+
 $.get("scripts/data.json", function(hitbox) {
 
-var socket = io.connect('localhost:3000');
-
-var canvas = document.getElementById("game");
-var ctx = canvas.getContext("2d");
-
-var virtual_canvas = document.createElement('canvas');
-var virtual_ctx = virtual_canvas.getContext('2d');
-
-var canvas_size = getViewport();
-var canvas_width  = canvas_size[0];
-var canvas_height = canvas_size[1];
-canvas.setAttribute("width", canvas_width);
-canvas.setAttribute("height", canvas_height);
 var game_play = null;
 
 var positions = {}; // Positions x, y and z from gyroscope
@@ -236,10 +264,6 @@ function updateAsteroid()
         }
     }
 }
-
-var players = [];
-
-
 
 var first_time = true;
 socket.on('position', function (datas) {
@@ -662,29 +686,5 @@ function tooCloseTo(new_asteroid)
         }
 }
 
-//polyfill
-function getViewport() {
 
- var viewPortWidth;
- var viewPortHeight;
-
- // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
- if (typeof window.innerWidth != 'undefined') {
-   viewPortWidth = window.innerWidth,
-   viewPortHeight = window.innerHeight
- }
-
-// IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
- else if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth !== 0) {
-    viewPortWidth = document.documentElement.clientWidth,
-    viewPortHeight = document.documentElement.clientHeight
- }
-
- // older versions of IE
- else {
-   viewPortWidth = document.getElementsByTagName('body')[0].clientWidth,
-   viewPortHeight = document.getElementsByTagName('body')[0].clientHeight
- }
- return [viewPortWidth, viewPortHeight];
-}
 });
