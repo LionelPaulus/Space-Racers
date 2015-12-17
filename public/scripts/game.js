@@ -79,18 +79,21 @@ function createAsteroid()
     {
         asteroid.size.x = 18;
         asteroid.size.y = 18;
+        asteroid.life = 10;
     }
     else if(random == 2)
     {
         asteroid.size.x = 34;
         asteroid.size.y = 34;
+        asteroid.life = 50;
     }
     else if(random == 3)
     {
         asteroid.size.x = 66;
         asteroid.size.y = 66;
+        asteroid.life = 30;
     }
-
+    asteroid.life = 30;
     asteroid.sprite.src = "img/game/asteroid" + random +".png";
     asteroid.speed = 2;
     asteroid.y = 0 - asteroid.size.y ;
@@ -106,7 +109,7 @@ function updateAsteroid()
     {
         var asteroid = asteroids[i];
         asteroid.y += asteroid.speed;
-        if (asteroid.y-asteroid.size.y > canvas_height)
+        if ((asteroid.y-asteroid.size.y > canvas_height))
         {
             asteroids.splice(i,1);
             i--;
@@ -231,7 +234,7 @@ function drawShip()
 }
 
 
-function applyPhysic()
+function asteroidColision()
 {
     for(var i = 0; i < players.length;i++)
     {
@@ -259,7 +262,6 @@ function applyPhysic()
         }
     }
 }
-
 
 function collide(source,target)
 {
@@ -311,6 +313,76 @@ function hitboxArea(kind,obj,array)
     }
 }
 
+
+document.addEventListener('keydown', function(e){
+    if(e.keyCode == 38)
+    {
+        createBlasterShoot(players[0],"red");
+    }
+});
+
+var shoots = [];
+function createBlasterShoot(player,color)
+{
+    var shoot = {};
+    shoot.x = Math.floor(player.x +player.size.x/2);
+    shoot.y = player.y;
+    shoot.speed = 4;
+    shoot.style = color;
+    shoot.width = 2;
+    shoot.height = 10;
+
+    shoots.push(shoot);
+}
+
+function updateBlasterShoot()
+{
+    for(var i = 0, len = shoots.length; i < len; i++)
+    {
+        var shoot = shoots[i];
+        shoot.y -= shoot.speed;
+        if (shoot.y-shoot.height < 0)
+        {
+            shoots.splice(i,1);
+            i--;
+            len--;
+        }
+        else
+        {
+                ctx.fillStyle = "red";
+                ctx.fillRect(shoot.x,shoot.y,shoot.width,shoot.height);
+        }
+    }
+}
+
+function shootColision()
+{
+    for(var n = 0, len = shoots.length; n < shoots.length;n++)
+    {
+        for(var k = 0, ln = asteroids.length; k < ln;k++)
+        {
+            var asteroid_hitbox = hitboxArea("asteroid",asteroids[k],[]);
+            for(l = 0 , u = asteroid_hitbox.length; l < u; l++)
+            {
+                if(collide(shoots[n],asteroid_hitbox[l]) == true)
+                {
+                    asteroids[k].life -=10;
+                    shoots.splice(n,1);
+                    console.log(len);
+                    len--;
+                    console.log(len);
+                    if(asteroids[k].life == 0)
+                    {
+                        asteroids.splice(k,1);
+                        ln--;
+                    }
+                    return "stop it";
+                }
+            }
+        }
+    }
+}
+
 function draw()
 {
     var random = rNumber(1,100);
@@ -329,7 +401,9 @@ function draw()
 
     updateAsteroid();
     drawShip();
-    applyPhysic();
+    updateBlasterShoot();
+    shootColision();
+    asteroidColision();
 }
 
 createPlayerShip(1,1,1);
