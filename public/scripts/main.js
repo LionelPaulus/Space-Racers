@@ -43,12 +43,7 @@ if (is_mobile() === true) {
     });
 }
 
-
-<<<<<<< HEAD
-var socket = io.connect('localhost:3000');
-=======
 var socket = io.connect('192.168.0.42:3000');
->>>>>>> origin/master
 //var socket = io.connect('star-wars-racers.herokuapp.com');
 
 $(function() {
