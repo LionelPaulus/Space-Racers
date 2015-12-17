@@ -12,7 +12,7 @@ socket.on('game:error', function (message) {
 
 // Lorsque le serveur accepte le debut du jeu
 socket.on('spaceship:started', function () {
-    changePage('selection');
+    $('#code').hide();
 });
 
 
