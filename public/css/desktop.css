@@ -15,6 +15,7 @@
 	display: block;
 }
 
+/*** LANDING PAGE ***/
 
 #desktop #video-opacity {
 	position: fixed;
@@ -53,6 +54,10 @@
 
 }
 
+#desktop #askCode:active {
+	box-shadow: inset 0px 1px 3px rgba(0,0,0,0.5); 
+}
+
 #desktop p {
 	position: absolute;
 	left: calc(50% - 195px);
@@ -79,6 +84,8 @@
 	opacity: 0.5;
 }
 
+/*** ROOM CODE PAGE ***/
+
 #desktop [data-page="room-code"] {
 	position: fixed;
 	top: 0; bottom: 0;
@@ -104,7 +111,7 @@
 	font-size: 30px;
 	font-family: 'Roboto';
 	position: absolute;
-	left: calc(50% - 140px);
+	left: calc(50% - 130px);
 	top: 100px;
 	text-transform: uppercase;
 
@@ -146,4 +153,37 @@
     background: #E9D460;
     font-family: 'Roboto';
 
+
+}
+
+#desktop #start-game:active {
+	box-shadow: inset 0px 1px 3px rgba(0,0,0,0.5); 
+}
+
+/*** SELECTION PAGE ***/
+#desktop [data-page="selection"] {
+	position: fixed;
+	top: 0; bottom: 0;
+	left: 0; right: 0;
+	background: #1E1E1E;
+	color: #fff;
+}
+
+#desktop #select-txt {
+	position:absolute;
+	left:calc(50% - 435px);
+	top:calc(50% - 23.5px);
+	font-family: 'Roboto';
+	font-size:40px;
+	font-weight: 900;
+}
+
+/*** END GAME PAGE ***/
+
+#desktop [data-page="end"] {
+	position: fixed;
+	top: 0; bottom: 0;
+	left: 0; right: 0;
+	background: #1E1E1E;
+	color: #fff;
 }
