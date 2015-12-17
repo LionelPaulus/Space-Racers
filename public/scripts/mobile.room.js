@@ -3,8 +3,7 @@
 socket.on('room:success', function (spaceship) {
     usedSpaceships = JSON.parse(spaceship);
     
-    changePage('spaceship');
-    updateUsedSpaceship(usedSpaceships);
+    changePage('waiting');
 });
 
 // Quand on ne peut pas rejoindre la room
@@ -15,6 +14,7 @@ socket.on('room:error', function (message) {
 
 // Quand l'hote se deconnecte
 socket.on('room:close', function () {
+    inGameReset();
 	displayError('L\'hote de la partie c\'est deconnecte');
     $('#code').html('');
 	changePage('code');

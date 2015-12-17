@@ -13,7 +13,7 @@ socket.on('game:error', function (message) {
 });
 
 // Lorsque le serveur accepte le debut du jeu
-socket.on('game:started', function () {
+socket.on('spaceship:started', function () {
     $('#code').hide();
     $('#in-game').show();
 });
@@ -25,5 +25,5 @@ $('#askCode').on('click', function () {
 });
 
 $('#start-game').on('click', function () {
-    socket.emit('game:start');
+    socket.emit('spaceship:start');
 });

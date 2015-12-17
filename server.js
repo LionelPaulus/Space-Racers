@@ -53,7 +53,8 @@ io.on('connection', function(socket) {
         // Ajoute le player a la room
         rooms.addPlayer(room, {
             socket: socket,
-            spaceship: null
+            spaceship: null,
+            ready: false
         });
         
         console.log('Player '+ socket.id +' join room '+ room + ' ('+ rooms.countPlayers(room) +'/4)');
@@ -66,12 +67,6 @@ io.on('connection', function(socket) {
     // Lorsqu'un utilisateur choisi son vaisseau
     socket.on('spaceship:choose', function (spaceship) {
         var playerParents = rooms.getPlayersParents(socket.id);
-
-        // Si la partie est deja en cours
-        if (rooms.getState(playerParents.roomID) === true) {
-            socket.emit('spaceship:error', 'Partie deja en cours');
-            return;
-        }
 
         // Si le vaisseau est deja occupe
         if (rooms.isSpaceshipUsed(playerParents.roomID, spaceship) === true) {
@@ -94,9 +89,34 @@ io.on('connection', function(socket) {
         console.log('The player '+ socket.id +' chose the spaceship '+ spaceship);
     });
 
+    
+    // QUand tous les utilisateurs ont dismiss les regles
+    socket.on('game:ready', function () {
+        var playerParents = rooms.getPlayersParents(socket.id);
 
-    // Lorsque le pc demande a demarer
-    socket.on('game:start', function () {
+        // On set le player actuel comme ready
+        rooms.setPlayerReady(playerParents.roomID, playerParents.playerID);
+
+        // Si tout le monde a choisi son vaisseau
+        // On commence la partie
+        if (rooms.arePlayersReady(playerParents.roomID) === true) {
+            // On previent le pc
+            rooms.getHost(playerParents.roomID).emit('game:started');
+
+            // On previent les joueurs
+            var players = rooms.getPlayers(playerParents.roomID);
+            for (var user in players) {
+                var player = players[user];
+                player.socket.emit('game:started');
+            }
+
+            console.log('The game '+ playerParents.roomID +' just started');
+        }
+    });
+
+
+    // Lorsque le pc demande a demarrer
+    socket.on('spaceship:start', function () {
         if (!socket.roomID) return;
 
         // Si la partie est deja en cours
@@ -111,22 +131,16 @@ io.on('connection', function(socket) {
             return;
         }
 
-        // Si tous les joueurs n'ont pas choisi un vaisseau
-        if (rooms.countPlayersWithoutSpaceships(socket.roomID) > 0) {
-            socket.emit('game:error', 'Des joueurs ont pas encore choisi leur vaisseau');
-            return;
-        }
-
         rooms.setStarted(socket.roomID);
-        socket.emit('game:started');
+        socket.emit('spaceship:started');
         
-        console.log('The game '+ socket.roomID +' just started');
+        console.log('The game '+ socket.roomID +' just started selecting spaceship');
 
         // On previent les joueurs
         var players = rooms.getPlayers(socket.roomID);
         for (var user in players) {
             var player = players[user];
-            player.socket.emit('game:started');
+            player.socket.emit('spaceship:started');
         }
     });
 

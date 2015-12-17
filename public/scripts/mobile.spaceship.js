@@ -1,7 +1,6 @@
-
 // Quand le spaceship a bien ete pick
 socket.on('spaceship:success', function () {
-	changePage('waiting');
+	changePage('rules');
 	updateUsedSpaceship([]);
 });
 

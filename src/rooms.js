@@ -47,6 +47,14 @@ var rooms_manager = {
     },
 
     /**
+     * Recupere le host
+     * @param int id
+     */
+    getHost: function (id) {
+        return this.rooms[id].host;
+    },
+
+    /**
      * Supprime une room
      * @param int id
      */
@@ -126,6 +134,33 @@ var rooms_manager = {
         }
 
         return adversaries;
+    },
+
+    /**
+     * Verifie s itous les players sont ready
+     * @param int id
+     * @return boolean
+     */
+    arePlayersReady: function (id) {
+        var playersCount = this.rooms[id].players.length;
+        var playerReady = 0;
+
+        for (var user in this.rooms[id].players) {
+            var player = this.rooms[id].players[user];
+
+            if (player.ready === true) playerReady++;
+        }
+
+        return (playerReady == playersCount) ? true : false;
+    },
+
+    /**
+     * Set a player ready
+     * @param int id
+     * @param int user
+     */
+    setPlayerReady: function (id, user) {
+        this.rooms[id].players[user].ready = true;
     },
 
     /**
