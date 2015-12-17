@@ -1,5 +1,5 @@
-// Quand la partie commence
-socket.on('game:started', function () {    
-    changePage('game');
-    inGameInit();
+
+$('#mobile [data-page="rules"]').on('click', function () {
+    socket.emit('game:ready');
+    changePage('waiting');
 });

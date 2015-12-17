@@ -137,6 +137,33 @@ var rooms_manager = {
     },
 
     /**
+     * Verifie s itous les players sont ready
+     * @param int id
+     * @return boolean
+     */
+    arePlayersReady: function (id) {
+        var playersCount = this.rooms[id].players.length;
+        var playerReady = 0;
+
+        for (var user in this.rooms[id].players) {
+            var player = this.rooms[id].players[user];
+
+            if (player.ready === true) playerReady++;
+        }
+
+        return (playerReady == playersCount) ? true : false;
+    },
+
+    /**
+     * Set a player ready
+     * @param int id
+     * @param int user
+     */
+    setPlayerReady: function (id, user) {
+        this.rooms[id].players[user].ready = true;
+    },
+
+    /**
      * Supprime un utilisateur de la room
      * @param int id
      * @param int user
