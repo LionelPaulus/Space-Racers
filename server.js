@@ -118,19 +118,6 @@ io.on('connection', function(socket) {
     });
 
 
-    // Quand l'utilisateur meurt
-    socket.on('game:dead', function (user) {
-        if (!socket.roomID) return;
-
-        rooms.setUserDead(socket.roomID, user);
-
-        // On notifie l'utilisateur de sa mort
-        rooms.getPlayers(socket.roomID)[user].socket.emit('game:dead');
-
-        console.log('The player '+ rooms.getPlayers(socket.roomID)[user].socket.id +' just died')
-    });
-
-
     // Lorsque le pc demande a demarrer
     socket.on('spaceship:start', function () {
         if (!socket.roomID) return;
@@ -192,6 +179,38 @@ io.on('connection', function(socket) {
         rooms.getHost(playerParents.roomID).emit('game:fire', playerParents.playerID);
 
         console.log('The player '+ socket.id +' shoot');
+    });
+
+
+    // Quand l'utilisateur meurt
+    socket.on('game:dead', function (user) {
+        if (!socket.roomID) return;
+
+        rooms.setUserDead(socket.roomID, user);
+
+        // On notifie l'utilisateur de sa mort
+        rooms.getPlayers(socket.roomID)[user].socket.emit('game:dead');
+
+        console.log('The player '+ rooms.getPlayers(socket.roomID)[user].socket.id +' just died')
+    });
+
+
+    // Quand le jeu se termine
+    socket.on('game:end', function (winner) {
+        if (!socket.roomID) return;
+
+        var roomPlayers = rooms.getPlayers(socket.roomID);
+
+        rooms.remove(socket.roomID);
+
+        // On deconnecte tous les utilisateurs de la room
+        for(var user in roomPlayers) {
+            var player = roomPlayers[user];
+            player.socket.emit('room:close');
+        }
+
+        console.log(winner +' gagne la partie '+ socket.roomID);
+        console.log('Fin de la partie '+ socket.roomID);
     });
 
 
