@@ -1,7 +1,7 @@
 function gyroIntelligence() {
    var inertia = 5;
 
-   setInterval(function() {
+   gyroInterval = setInterval(function() {
       for (var user in positions) {
         var ship = players[user];
         var position = positions[user];

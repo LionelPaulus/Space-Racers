@@ -4,6 +4,7 @@ var virtual_ctx = virtual_canvas.getContext('2d');
 var canvas = document.getElementById("game");
 var ctx = canvas.getContext("2d");
 var positions = [];
+var gyroInterval = null;
 
 var canvas_size = getViewport();
 var canvas_width  = canvas_size[0];
@@ -30,7 +31,6 @@ function createPlayerShip(number_of_player,ship_number, player_number)
         ship.size.y = 112;
         ship.sprite = new Image();
         ship.sprite.src = "img/game/jedi1.png";
-        var player_alone = ship_number;
     }
     else if(ship_number == 2)
     {
@@ -39,7 +39,6 @@ function createPlayerShip(number_of_player,ship_number, player_number)
         ship.size.y = 112;
         ship.sprite = new Image();
         ship.sprite.src = "img/game/jedi2.png";
-        var player_alone = ship_number;
     }
     else if(ship_number == 1)
     {
@@ -48,7 +47,6 @@ function createPlayerShip(number_of_player,ship_number, player_number)
         ship.size.y = 109;
         ship.sprite = new Image();
         ship.sprite.src = "img/game/sith1.png";
-        var player_alone = ship_number;
     }
     else if(ship_number == 3)
     {
@@ -57,7 +55,6 @@ function createPlayerShip(number_of_player,ship_number, player_number)
         ship.size.y = 112;
         ship.sprite = new Image();
         ship.sprite.src = "img/game/sith2.png";
-        var player_alone = ship_number;
     }
     if (number_of_player == 1)
     {
@@ -161,7 +158,10 @@ socket.on('game:started', function (spaceships) {
     spaceships = JSON.parse(spaceships);
 
     $('#in-game').show();
-    console.log(spaceships);
+    
+    if (spaceships.length == 1) {
+        player_alone = 1;
+    }
 
     for (var player in spaceships) {
         var id = parseInt(player) + 1;
@@ -625,29 +625,31 @@ function draw()
     shootColision();
     asteroidColision();
     updateExplosion();
-//    isGameOver();
+    isGameOver();
 }
 
 
 
 function isGameOver(number_of_player)
 {
-    if(player_alone === null)
+    if(player_alone !== null)
     {
         if(players.length == 0)
         {
-            window.cancelAnimationFrame(game_play);
             // Display score
             socket.emit("game:end",player_alone);
+            clearInterval(gyroInterval);
+            setTimeout(function () { window.cancelAnimationFrame(game_play); }, 1000);
         }
     }
     else
     {
         if(players.length == 1)
         {
-            window.cancelAnimationFrame(game_play);
             // Display score
             socket.emit("game:end",players[0].id);
+            clearInterval(gyroInterval);
+            setTimeout(function () { window.cancelAnimationFrame(game_play); }, 1000);
         }
     }
 }

@@ -199,6 +199,8 @@ io.on('connection', function(socket) {
     socket.on('game:end', function (winner) {
         if (!socket.roomID) return;
 
+        winner -= 1;
+
         var roomPlayers = rooms.getPlayers(socket.roomID);
 
         rooms.remove(socket.roomID);
@@ -209,7 +211,7 @@ io.on('connection', function(socket) {
             player.socket.emit('room:close');
         }
 
-        console.log(winner +' gagne la partie '+ socket.roomID);
+        console.log(roomPlayers[winner].socket.id +' gagne la partie '+ socket.roomID);
         console.log('Fin de la partie '+ socket.roomID);
     });
 
