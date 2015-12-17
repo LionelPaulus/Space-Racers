@@ -11,6 +11,7 @@ canvas.setAttribute("width", canvas_width);
 canvas.setAttribute("height", canvas_height);
 var socket = io.connect('localhost:3000');
 var players = [];
+var positions = {}; // Positions x, y and z from gyroscope
 
 function createPlayerShip(number_of_player,ship_number, player_number)
 {
@@ -154,8 +155,6 @@ function getViewport() {
 $.get("scripts/data.json", function(hitbox) {
 
 var game_play = null;
-
-var positions = {}; // Positions x, y and z from gyroscope
 
 var stars = [];
 

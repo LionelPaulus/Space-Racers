@@ -21,7 +21,7 @@ io.on('connection', function(socket) {
         console.log('GYRO JOINED');
     });
 
-    // On fire
+    // When the player fire -> send to game
     socket.on('fire', function() {
         game.emit('fire');
     });
