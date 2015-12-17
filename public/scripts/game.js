@@ -530,6 +530,7 @@ function draw()
     updateBlasterShoot();
     shootColision();
     asteroidColision();
+    isGameOver();
 }
 
 createPlayerShip(1,2,1);
@@ -539,13 +540,33 @@ draw();
 
 //setTimeout(restart,5000);
 
-//function isGameOver(number_of_player)
-//{
-//    if(number_of_player == 1)
-//    {
-//
-//    }
-//}
+function isGameOver(number_of_player)
+{
+    if(number_of_player == 1)
+    {
+        if(players.length == 0)
+        {
+            window.cancelAnimationFrame(game_play);
+            // Display score
+            for(var i = 0, len = players.length;i++)
+            {
+                console.log(player.score);
+            }
+        }
+    }
+    else
+    {
+        if(players.length > 0)
+        {
+            window.cancelAnimationFrame(game_play);
+            // Display score
+            for(var i = 0, len = players.length;i++)
+            {
+                console.log(player.score);
+            }
+        }
+    }
+}
 
 
 
