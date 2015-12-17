@@ -1,5 +1,5 @@
 function gyroIntelligence() {
-   var inertia = 5
+   var inertia = 5;
 
    setInterval(function() {
       for (var user in positions) {
@@ -58,7 +58,7 @@ function gyroIntelligence() {
              ship.x = positions[user].x;
              ship.y = positions[user].y;
 
-             // console.log(user +" - "+ ship.x +":"+ ship.y);
+             //console.log(user +" - "+ ship.x +":"+ ship.y);
              
              // Save actual position
              positions[user].x_old = positions[user].x;

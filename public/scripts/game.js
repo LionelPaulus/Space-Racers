@@ -159,6 +159,9 @@ socket.on('game:started', function (spaceships) {
         createPlayerShip(spaceships.length, spaceships[player], id);
 
         positions[player] = {
+            y_serv: 0,
+            x_serv: 0,
+            z_serv: 0,
             x: 0,
             y: 0,
             vx: 0,
