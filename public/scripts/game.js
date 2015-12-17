@@ -297,13 +297,13 @@ function createAsteroid()
     {
         asteroid.size.x = 34;
         asteroid.size.y = 34;
-        asteroid.life = 50;
+        asteroid.life = 30;
     }
     else if(random == 3)
     {
         asteroid.size.x = 66;
         asteroid.size.y = 66;
-        asteroid.life = 100;
+        asteroid.life = 60;
     }
     asteroid.sprite.src = "img/game/asteroid" + random +".png";
     asteroid.speed = 2;
