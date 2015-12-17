@@ -1,9 +1,6 @@
-$('#code').hide();
-$('#in-game').hide();
-
 // Lorsque le serveur nous envoie le code de la room
 socket.on('room:created', function (id) {
-    $('#code').show();
+    changePage('room-code');
     $('#code h1').html(id);
 });
 
@@ -21,7 +18,6 @@ socket.on('spaceship:started', function () {
 
 $('#askCode').on('click', function () {
     socket.emit('room:create');
-    $(this).hide();
 });
 
 $('#start-game').on('click', function () {

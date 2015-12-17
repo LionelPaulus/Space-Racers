@@ -1,13 +1,47 @@
-<button id="askCode">CREATE ROOM</button>
+<section id="desktop">
 
+	<!--LANDING PAGE-->
+	<section data-page="landing-page" class="active">
+		
+		<video src="img/SRacers.mp4" id="video" 
+		autoplay
+		loop
+		>
+		Your browser doesn't support video API, sorry.
+		</video>
 
-<div id="code">
-    <h1></h1>
-    <button id="start-game">START THE GAME</button>
-</div>
+		<div id="video-opacity"></div>
 
-<div id="in-game" style="display: none;">
-    <canvas id="game">
-        Your browser doesn't support canvas
-    </canvas>
-</div>
+		<p>STAR WARS: SPACE RACERS</p>
+		
+		<button id="askCode">play now</button>
+
+	</section>
+
+	<!--ROOM CODE-->
+	<section data-page="room-code">
+		
+		<div id="code">
+		    <h1></h1>
+		    <button id="start-game">CONTINUE</button>
+		</div>
+
+	</section>
+
+	<!-- SPACESHIP SELECTION --> 
+	<section data-page="selection">
+		
+
+		
+	</section>
+
+	<!-- GAME PAGE --> 
+	<section data-page="game-page">
+		
+		<canvas id="game">
+	        Your browser doesn't support canvas
+	    </canvas>
+		
+	</section>
+
+</section>

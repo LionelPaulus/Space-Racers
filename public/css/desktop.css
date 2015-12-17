@@ -1,0 +1,64 @@
+#desktop {
+	width: 100vw;
+	height: 100vh; 
+	border: 0;
+}
+
+#desktop [data-page] {				
+	display: none;
+	width: 100%;
+	height: 100vh;
+	color: #fff;
+}
+
+#desktop [data-page].active {
+	display: block;
+}
+
+
+#desktop #video-opacity {
+	position: fixed;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index:10;
+    opacity:0.8;
+    background: black;
+}
+
+#desktop #video {
+	position: fixed;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+  
+}
+
+#desktop #askCode {
+	border:none;
+	height:40px;
+	box-shadow: 2px 2px 5px #000;
+	position: absolute;
+	width: 150px;
+    left: calc(50% - 75px);
+    bottom: 300px;
+    z-index: 100;
+    text-transform: uppercase;
+    font-size: 15px;
+    background: #E9D460;
+    font-family: 'Roboto';
+
+}
+
+#desktop p {
+	position: absolute;
+	left: calc(50% - 215px);
+	top: calc(40% - 100px);;
+	color: #FFF;
+	z-index: 100;
+	font-size: 30px;
+	font-family: 'Roboto';
+}

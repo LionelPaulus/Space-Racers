@@ -13,8 +13,8 @@ var inc_js = function (js_files) {
 
 // Pour changer de page
 var changePage = function (page) {
-    $('#mobile [data-page].active').removeClass('active');
-    $('#mobile [data-page="'+ page +'"]').addClass('active');
+    $('[data-page].active').removeClass('active');
+    $('[data-page="'+ page +'"]').addClass('active');
 };
 
 // Error display
@@ -44,7 +44,7 @@ if (is_mobile() === true) {
 }
 
 
-var socket = io.connect('192.168.1.5:3000');
+var socket = io.connect('localhost:3000');
 //var socket = io.connect('star-wars-racers.herokuapp.com');
 
 $(function() {
