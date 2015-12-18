@@ -1,56 +1,56 @@
-var express = require('express'); //EXPRESS c'est un framework qui va juste servir a servir le site statique aux utilisateur
+var express = require('express'); // EXPRESS : framework for static website
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var port = process.env.PORT || 3000; // Process c'est pour heroku car le port peut changer
+var port = process.env.PORT || 3000; // Process : for heroku
 
 
 // Partials
 var rooms = require('./src/rooms.js');
 
 
-// Site static
+// Static website
 app.use(express.static(__dirname + '/public'));
 
 
 
-// Lorsqu'un utilisateur se connecte au serv
+// When a player connect to server
 io.on('connection', function(socket) {
 
-    // Lorsque le PC cree une room
+    // When the PC create a room
     socket.on('room:create', function () {
         var id = rooms.generateID();
         rooms.create(id, socket);
         socket.roomID = id;
 
-        // On envoie l'id de la room au client
+        // Send the room ID to the client
         socket.emit('room:created', id);
 
         console.log("New room "+ id +" created");
     });
 
 
-    // Lorsqu'un iPhone rejoint une room
+    // When a smartphone is joining a room
     socket.on('room:join', function (room) {
-        // Si la room demande n'existe pas
+        // If the asked room does not exist
         if (rooms.exists(room) === false) {
             socket.emit('room:error', 'Game not found');
             return;
         }
 
-        // Si la room demande est deja commencee
+        // If the asked room has already started
         if (rooms.getState(room) === true) {
             socket.emit('room:error', 'Game already started');
             return;
         }
 
-        // Si la room demande est deja complete
+        // If the asked room is full
         if (rooms.countPlayers(room) >= 4) {
             socket.emit('room:error', 'Game full');
             return;
         }
 
-        // Ajoute le player a la room
+        // Add the player to the room
         rooms.addPlayer(room, {
             socket: socket,
             spaceship: null,
@@ -67,11 +67,11 @@ io.on('connection', function(socket) {
     });
 
 
-    // Lorsqu'un utilisateur choisi son vaisseau
+    // When a player choose his spaceship
     socket.on('spaceship:choose', function (spaceship) {
         var playerParents = rooms.getPlayersParents(socket.id);
 
-        // Si le vaisseau est deja occupe
+        // If the spaceship is already taken
         if (rooms.isSpaceshipUsed(playerParents.roomID, spaceship) === true) {
             socket.emit('spaceship:error', 'Spaceship already used');
             return;
@@ -80,7 +80,7 @@ io.on('connection', function(socket) {
         rooms.spaceshipAssign(playerParents.roomID, playerParents.playerID, spaceship);
         socket.emit('spaceship:success');
 
-        // On previent les autres utilisateurs
+        // We prevent other players
         var adversaries = rooms.getAdversaries(playerParents.roomID, playerParents.playerID);
         for (var user in adversaries) {
             var player = adversaries[user];
@@ -93,22 +93,22 @@ io.on('connection', function(socket) {
     });
 
 
-    // QUand tous les utilisateurs ont dismiss les regles
+    // Quand all the players have dismiss rules
     socket.on('game:ready', function () {
         var playerParents = rooms.getPlayersParents(socket.id);
 
-        // On set le player actuel comme ready
+        // Actual player is ready
         rooms.setPlayerReady(playerParents.roomID, playerParents.playerID);
 
-        // Si tout le monde a choisi son vaisseau
-        // On commence la partie
+        // If everybody have his spaceship
+        // We start the game
         if (rooms.arePlayersReady(playerParents.roomID) === true) {
-            // On previent le pc
+            // We prevent the PC
             rooms.getHost(playerParents.roomID).emit('game:started', JSON.stringify(
                 rooms.getUsedSpaceships(playerParents.roomID)
             ));
 
-            // On previent les joueurs
+            // We prevent the players
             var players = rooms.getPlayers(playerParents.roomID);
             for (var user in players) {
                 var player = players[user];
@@ -120,17 +120,17 @@ io.on('connection', function(socket) {
     });
 
 
-    // Lorsque le pc demande a demarrer
+    // When the PC ask for start
     socket.on('spaceship:start', function () {
         if (!socket.roomID) return;
 
-        // Si la partie est deja en cours
+        // If the game has already started
         if (rooms.getState(socket.roomID) === true) {
             socket.emit('game:error', 'Game already started');
             return;
         }
 
-        // Si il n'y a pas de joueurs
+        // If there isn't any player
         if (rooms.getPlayers(socket.roomID).length == 0) {
             socket.emit('game:error', 'No players !');
             return;
@@ -141,7 +141,7 @@ io.on('connection', function(socket) {
 
         console.log('The game '+ socket.roomID +' just started selecting spaceship');
 
-        // On previent les joueurs
+        // We prevent the players
         var players = rooms.getPlayers(socket.roomID);
         for (var user in players) {
             var player = players[user];
@@ -150,13 +150,13 @@ io.on('connection', function(socket) {
     });
 
 
-    // Lorsque le joueur bouge
+    // When the player moves
     socket.on('game:move', function (pos) {
         var positions = JSON.parse(pos);
         var playerParents = rooms.getPlayersParents(socket.id);
         var playerSpaceship = rooms.getPlayers(playerParents.roomID)[playerParents.playerID].spaceship;
 
-        // Si l'utilisateur est mort
+        // If dead
         if (rooms.getUserState(playerParents.roomID, playerParents.playerID) === false) return;
 
         // Send to PC move event (spaceship and his positions)
@@ -164,17 +164,15 @@ io.on('connection', function(socket) {
            user: playerParents.playerID,
            positions: positions
         }));
-
-        // console.log('Player '+ socket.id +' is moving');
     });
 
 
-    // Lorsque le joueur tire
+    // When the player fires
     socket.on('game:fire', function () {
         var playerParents = rooms.getPlayersParents(socket.id);
         var playerSpaceship = rooms.getPlayers(playerParents.roomID)[playerParents.playerID].spaceship;
 
-        // Si l'utilisateur est mort
+        // If dead
         if (rooms.getUserState(playerParents.roomID, playerParents.playerID) === false) return;
 
         // Send to PC fire event
@@ -184,7 +182,7 @@ io.on('connection', function(socket) {
     });
 
 
-    // Quand l'utilisateur meurt
+    // If the player die
     socket.on('game:dead', function (user) {
         if (!socket.roomID) return;
 
@@ -192,14 +190,14 @@ io.on('connection', function(socket) {
 
         rooms.setUserDead(socket.roomID, user);
 
-        // On notifie l'utilisateur de sa mort
+        // It notifies the user of his death
         rooms.getPlayers(socket.roomID)[user].socket.emit('game:dead');
 
         console.log('The player '+ rooms.getPlayers(socket.roomID)[user].socket.id +' just died')
     });
 
 
-    // Quand le jeu se termine
+    // When the game end
     socket.on('game:end', function (winner) {
         if (!socket.roomID) return;
 
@@ -211,7 +209,7 @@ io.on('connection', function(socket) {
         rooms.remove(roomID);
         socket.roomID = false;
 
-        // On deconnecte tous les utilisateurs de la room
+        // We disconnect all users from the room
         for(var user in roomPlayers) {
             var player = roomPlayers[user];
             player.socket.emit('room:close');
@@ -222,16 +220,16 @@ io.on('connection', function(socket) {
     });
 
 
-    // Lorsqu'un client se deconnecte
+    // When someone disconnect
     socket.on('disconnect', function () {
-        // Lorsque l'hote se deconnecte on supprime la room
-        // Et on deconnecte les telephones de la room
+        // If he is the host, we delete the room
+        // And kick all players
         if (socket.roomID) {
             var roomPlayers = rooms.getPlayers(socket.roomID);
 
             rooms.remove(socket.roomID);
 
-            // On deconnecte tous les utilisateurs de la room
+            // Kick all players
             for(var user in roomPlayers) {
                 var player = roomPlayers[user];
                 player.socket.emit('room:close');
@@ -239,10 +237,10 @@ io.on('connection', function(socket) {
 
             console.log("Host logged out, delete the room "+ socket.roomID);
         } else {
-            // Lorsqu'un joueur se deconnecte on le supprime de la room a laquelle il appartient
+            // When a player disconnect, we remove it from the room to which he belongs
             var playerParents = rooms.getPlayersParents(socket.id);
 
-            // Si il n'appartient a aucune partie
+            // No room
             if (playerParents === false) return;
 
             rooms.playerRemove(playerParents.roomID, playerParents.playerID);
@@ -250,8 +248,8 @@ io.on('connection', function(socket) {
 
             // Send number of players to Host
             rooms.getHost(playerParents.roomID).emit('room:players', rooms.getPlayers(playerParents.roomID).length);
-            
-            // On libere le vaisseau
+
+            // The spaceship is back available
             var adversaries = rooms.getPlayers(playerParents.roomID);
             for (var user in adversaries) {
                 var player = adversaries[user];
@@ -265,7 +263,7 @@ io.on('connection', function(socket) {
 });
 
 
-// On lance le serveur sur le port 3000
+// We start the server on the port 3000
 server.listen(port, function () {
     console.log('Server listening at port %d', port);
 });

@@ -15,9 +15,9 @@ node server
 Just go to `http://localhost:3000`
 
 ## Used libraries
-- gyro.js
 - NoSleep.js
 - howler.js
+- fastclick.js
 
 ## NPM Lib
 - Express
