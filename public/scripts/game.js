@@ -59,6 +59,7 @@ function createPlayerShip(number_of_player,ship_number, player_number)
     ship.id = player_number;
     ship.type = ship_number;
     ship.score = 0;
+    ship.spaceship = ship_number;
     if(ship_number == 4)
     {
         ship.width = 53;
