@@ -6,7 +6,11 @@ socket.on('room:created', function (id) {
 
 // When a new player join the room
 socket.on('room:players', function (players) {
-    $('#playersNumber').html(players +' joueurs');
+    if(players > 1){
+        $('#playersNumber').html(players +' players');
+    }else{
+        $('#playersNumber').html(players +' player');
+    }
 });
 
 // When the server refuse to start the game

@@ -367,10 +367,11 @@ function asteroidColision()
                             var middle_collision_y = (ship_hitbox[o].y + asteroid_hitbox[o].y)/2;
                             players.splice(i,1);
                             asteroids.splice(i,1);
-                            //positions.splice(i,1);
                             createExplosion(middle_collision_x,middle_collision_y);
                             socket.emit("game:dead",i);
                             sounds.explosion.play();
+
+                            //positions.splice(i,1);
                             return true;
                         }
                     }
