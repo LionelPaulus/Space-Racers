@@ -169,7 +169,7 @@ function getViewport() {
  return [viewPortWidth, viewPortHeight];
 }
 
-$.get("scripts/data.json", function(hitbox) {
+$.get("scripts/data.JSON", function(hitbox) {
 
 // SOCKET IO
 // When the game starts
