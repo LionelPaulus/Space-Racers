@@ -23,7 +23,7 @@ var inGameInit = function () {
             invert = true;
         }
         first_time = false;
-        
+
         // If phone is handed in the other side
         if(invert){
             x = -x;
@@ -57,7 +57,7 @@ var inGameReset = function () {
 }
 
 
-// Quand l'utilisateur meurt
+// When the player die
 socket.on('game:dead', function () {
     $('#mobile [data-page="game"] p b').html('YOU ARE DEAD, SORRY');
     inGameReset();

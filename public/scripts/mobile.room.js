@@ -1,32 +1,32 @@
-// Quand on a rejoint la room
-//   spaceship: [] <- Spaceship already used
+// When we join the room
+// spaceship: [] <- Spaceship already used
 socket.on('room:success', function (spaceship) {
     usedSpaceships = JSON.parse(spaceship);
 
     changePage('waiting');
 });
 
-// Quand on ne peut pas rejoindre la room
+// When we can't join the room
 socket.on('room:error', function (message) {
     displayError(message);
 });
 
 
-// Quand l'hote se deconnecte
+// Whe the host goes offline
 socket.on('room:close', function () {
     inGameReset();
-	displayError('The host of the game is offline');
+	displayError('The host of the game left');
     $('#code').html('');
 	changePage('code');
 });
 
 
 
-////////////////
-// EVENEMENTS //
-////////////////
+////////////
+// EVENTS //
+////////////
 
-// Quand on soumet le code
+// When we submit the code
 $('#join').on('click', function (e) {
     e.preventDefault();
     var code = $('#code').html();
@@ -38,14 +38,14 @@ $('#join').on('click', function (e) {
     noSleep.enable();
 });
 
-// entering the code on smartphone
+// Entering the code on smartphone
 $('button[data-value]').on('click', function() {
     if ($('#mobile #code').html().length == 4) return;
 
     $("#mobile #code").first().append($(this).data("value"));
 });
 
-//deleting a number
+// Deleting a number
 $('#del').on('click', function() {
     $("#mobile #code").text(function(i, text) {
         return text.slice(0, -1);

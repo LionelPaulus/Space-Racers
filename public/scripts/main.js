@@ -4,14 +4,14 @@ var is_mobile = function () {
     return check;
 };
 
-// Inclue les fichiers JS du device correspondant
+// JS files from the device
 var inc_js = function (js_files) {
     for(var index in js_files) {
         $('body').append('<script src="'+ js_files[index] +'"></script>');
     }
 };
 
-// Pour changer de page
+// For changing page
 var changePage = function (page) {
     $('[data-page].active').removeClass('active');
     $('[data-page="'+ page +'"]').addClass('active');
@@ -43,7 +43,7 @@ if (is_mobile() === true) {
     });
 }
 
-var socket = io.connect('192.168.0.42:3000');
+var socket = io.connect('192.168.1.15:3000');
 //var socket = io.connect('star-wars-racers.herokuapp.com');
 
 $(function() {

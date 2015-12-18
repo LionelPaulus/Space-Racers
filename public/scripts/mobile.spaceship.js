@@ -1,15 +1,15 @@
-// Quand le spaceship a bien ete pick
+// When the spaceship is pick
 socket.on('spaceship:success', function () {
 	changePage('rules');
 	updateUsedSpaceship([]);
 });
 
-// Quand le vaisseau est deja used
+// When the spaceship is already used
 socket.on('spaceship:error', function (message) {
 	displayError(message);
 });
 
-// Quand un utilisateur choisi un vaisseau
+// When a user try to pick a spaceship
 socket.on('spaceship:picked', function (spaceships) {
 	spaceships = JSON.parse(spaceships);
 	updateUsedSpaceship(spaceships);
@@ -17,9 +17,9 @@ socket.on('spaceship:picked', function (spaceships) {
 
 
 
-////////////////
-// EVENEMENTS //
-////////////////
+////////////
+// EVENTS //
+////////////
 
 // User choose spaceship
 $('.spaceship[data-spaceship]').on('click', function () {

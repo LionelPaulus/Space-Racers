@@ -176,9 +176,9 @@ function getViewport() {
 $.get("scripts/data.json", function(hitbox) {
 
 // SOCKET IO
-// Lorsque le jeu commence
+// When the game starts
 socket.on('game:started', function (spaceships) {
-    // Demarre jeu
+    // Start the game
     spaceships = JSON.parse(spaceships);
 
     changePage('game');
@@ -316,7 +316,7 @@ function createAsteroid()
         asteroids.push(asteroid);
     }
 }
-//Update the position of asteroids and delete them if they are off canvas
+// Update the position of asteroids and delete them if they are off canvas
 function updateAsteroid()
 {
     for(var i = 0, len = asteroids.length; i < len; i++)
@@ -777,6 +777,4 @@ function tooCloseTo(new_asteroid)
             return false;
         }
 }
-
-
 });

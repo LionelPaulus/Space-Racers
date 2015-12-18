@@ -1,16 +1,16 @@
-// Lorsque le serveur nous envoie le code de la room
+// When the server send us the room code
 socket.on('room:created', function (id) {
     changePage('room-code');
     $('#code h1').html(id);
 });
 
-// Lorsque le serveur refuse le demarage du jeu
+// When the server refuse to start the game
 socket.on('game:error', function (message) {
     alert(message);
 });
 
 
-// Lorsque le serveur accepte le debut du jeu
+// When the server accept the start of the game
 socket.on('spaceship:started', function () {
     changePage('selection');
     sounds.starship_selection = new Howl({
