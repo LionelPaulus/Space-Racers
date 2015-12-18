@@ -61,5 +61,5 @@ var inGameReset = function () {
 socket.on('game:dead', function () {
     $('#mobile [data-page="game"] p b').html('YOU ARE DEAD, SORRY');
     inGameReset();
-    window.navigator.vibrate(1000);
+    navigator.vibrate(500);
 });

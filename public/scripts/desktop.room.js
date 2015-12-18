@@ -4,6 +4,11 @@ socket.on('room:created', function (id) {
     $('#code h1').html(id);
 });
 
+// When a new player join the room
+socket.on('room:players', function (players) {
+    $('#playersNumber').html(players +' joueurs');
+});
+
 // Lorsque le serveur refuse le demarage du jeu
 socket.on('game:error', function (message) {
     alert(message);
