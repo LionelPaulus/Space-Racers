@@ -248,17 +248,16 @@ io.on('connection', function(socket) {
             rooms.playerRemove(playerParents.roomID, playerParents.playerID);
             console.log('Player '+ socket.id +' is leaving the room '+ playerParents.roomID);
 
-            // Si la partie n'est pas encore commencee
-            if (rooms.getState(playerParents.roomID) === false) {
-                // On libere le vaisseau
-                var adversaries = rooms.getPlayers(playerParents.roomID);
-
-                for (var user in adversaries) {
-                    var player = adversaries[user];
-                    player.socket.emit('spaceship:picked', JSON.stringify(
-                        rooms.getUsedSpaceships(playerParents.roomID)
-                    ));
-                }
+            // Send number of players to Host
+            rooms.getHost(playerParents.roomID).emit('room:players', rooms.getPlayers(playerParents.roomID).length);
+            
+            // On libere le vaisseau
+            var adversaries = rooms.getPlayers(playerParents.roomID);
+            for (var user in adversaries) {
+                var player = adversaries[user];
+                player.socket.emit('spaceship:picked', JSON.stringify(
+                    rooms.getUsedSpaceships(playerParents.roomID)
+                ));
             }
         }
     });
