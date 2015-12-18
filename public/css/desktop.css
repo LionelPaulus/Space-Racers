@@ -206,8 +206,8 @@
 
 #desktop [data-page="end"] #end-txt {
     position:absolute;
-    left:calc(50% - 160px);
-    width: 320px;
+    left:calc(50% - 180px);
+    width: 360px;
     height: 50px;
     top:calc(50% + 50px);
     font-family: 'Roboto';

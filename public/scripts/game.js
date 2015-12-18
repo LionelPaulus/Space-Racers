@@ -12,6 +12,8 @@ var canvas_height = canvas_size[1];
 canvas.setAttribute("width", canvas_width);
 canvas.setAttribute("height", canvas_height);
 
+var time_start = 0;
+
 var count = document.getElementById("counter");
 
 var wait = true;
@@ -201,6 +203,7 @@ socket.on('game:started', function (spaceships) {
     changePage('game');
 
     if (spaceships.length == 1) {
+        time_start = Date.now();
         player_alone = 1;
         player_alone_spaceship = spaceships[0];
     }
@@ -715,8 +718,11 @@ function isGameOver(number_of_player)
             socket.emit("game:end", player_alone);
             // We put spaceship image
             $('#end-preview').attr('src', getSpaceshipImage(player_alone_spaceship));
+            // We display time
+            var seconds = (Date.now() - time_start) / 1000;
+            $('#end-txt').html('YOU SURVIVED '+ Math.round(seconds) +'s');
             clearInterval(gyroInterval);
-            sounds.main.fadeOut(0,1000);
+            sounds.main.fadeOut(0, 1000);
             setTimeout(function () { window.cancelAnimationFrame(game_play); changePage('end'); }, 1000);
         }
     }
