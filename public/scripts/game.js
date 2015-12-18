@@ -648,7 +648,10 @@ function updateExplosion()
 
 function restart()
 {
-    window.cancelAnimationFrame(game_play);
+    game_play = null;
+    time_start = 0;
+    gyroInterval = null;
+    wait = true;
     stars = [];
     for(var i = 0; i < 600;i++)
     {
@@ -663,7 +666,15 @@ function restart()
     asteroids = [];
     explosions = [];
     shoots = [];
-
+    dead_player = [];
+    for(var player in players)
+    {
+        createPlayerShip(players.length,players[player].type,players[player].id);
+    }
+    players.splice((players.length/2),(players.length/2));
+    countdown();
+    setTimeout(function() {wait = false;},5000);
+    clear();
     draw();
 }
 
