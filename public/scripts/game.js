@@ -14,6 +14,8 @@ canvas.setAttribute("height", canvas_height);
 
 var count = document.getElementById("counter");
 
+var wait = true;
+
 var player_alone= null;
 var players = [];
 var dead_player = [];
@@ -221,6 +223,7 @@ socket.on('game:started', function (spaceships) {
     // Sounds
     sounds.starship_selection.fadeOut(0,200);
     sounds.main.play();
+    setTimeout(function() {wait = false;},5000);
     draw();
 });
 
@@ -671,7 +674,10 @@ function draw()
     //asteroid updates
     if(random > 85)
     {
-        createAsteroid();
+        if (wait == false)
+        {
+            createAsteroid();
+        }
     }
 
     updateAsteroid();
