@@ -12,6 +12,7 @@ var canvas_height = canvas_size[1];
 canvas.setAttribute("width", canvas_width);
 canvas.setAttribute("height", canvas_height);
 
+var count = document.getElementById("counter");
 
 var player_alone= null;
 var players = [];
@@ -40,7 +41,12 @@ sounds.explosion = new Howl({
     buffer:true
 });
 
-
+function countdown()
+{
+    setTimeout(function() {counter.innerHTML = "2"},1000);
+    setTimeout(function() {counter.innerHTML = "1"},2000);
+    setTimeout(function() {counter.innerHTML = "0"; counter.style.display = "none"},3000);
+}
 
 function createPlayerShip(number_of_player,ship_number, player_number)
 {
@@ -175,7 +181,7 @@ function isDead(user) {
     for (var player in dead_player) {
         var current = dead_player[player];
 
-        if (current.id == (user+1)) dead = true;
+        if (current.id == (user)) dead = true;
     }
 
     return dead;
@@ -188,7 +194,7 @@ $.get("scripts/data.JSON", function(hitbox) {
 socket.on('game:started', function (spaceships) {
     // Start the game
     spaceships = JSON.parse(spaceships);
-
+    countdown();
     changePage('game');
 
     if (spaceships.length == 1) {
@@ -229,7 +235,7 @@ var first_time = true;
 socket.on('game:move', function (datas) {
     datas = JSON.parse(datas);
 
-    if(isDead(datas.user)) return;
+    if(isDead((datas.user + 1))) return;
 
     positions[datas.user].x_serv = datas.positions.x;
     positions[datas.user].y_serv = datas.positions.y;
@@ -353,6 +359,9 @@ function drawShip()
     for(var i = 0; i < players.length;i++)
     {
         var ship = players[i];
+
+        if (isDead(ship.id)) continue;
+
         ship.score++;
         ctx.drawImage(ship.sprite,ship.x,ship.y);
     }
@@ -364,6 +373,9 @@ function asteroidColision()
     for(var i = 0; i < players.length;i++)
     {
         var ship = players[i];
+
+        if (isDead(ship.id) === true) continue;
+
         for(var d = 0; d < asteroids.length; d++)
         {
             var asteroid = asteroids[d];
@@ -381,9 +393,7 @@ function asteroidColision()
                             var middle_collision_x = (ship_hitbox[o].x + asteroid_hitbox[o].x)/2 - ship.width;
                             var middle_collision_y = (ship_hitbox[o].y + asteroid_hitbox[o].y)/2;
                             dead_player.push(ship);
-                            positions.splice(i,1);
-                            players.splice(i,1);
-                            asteroids.splice(i,1);
+                            ship.sprite =  null;
                             createExplosion(middle_collision_x,middle_collision_y);
                             socket.emit("game:dead",i);
                             sounds.explosion.play();
@@ -679,7 +689,7 @@ function isGameOver(number_of_player)
 {
     if(player_alone !== null)
     {
-        if(players.length == 0)
+        if(dead_player.length == 1)
         {
             // Display score
             socket.emit("game:end",player_alone);
@@ -690,7 +700,7 @@ function isGameOver(number_of_player)
     }
     else
     {
-        if(players.length == 1)
+        if((players.length - 1) == dead_player.length)
         {
             // Display score
             socket.emit("game:end",players[0].id);

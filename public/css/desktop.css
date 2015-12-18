@@ -1,24 +1,25 @@
 #desktop {
-	width: 100vw;
-	height: 100vh; 
-	border: 0;
+    width: 100vw;
+    height: 100vh;
+    border: 0;
+    overflow:hidden;
 }
 
-#desktop [data-page] {				
-	display: none;
-	width: 100%;
-	height: 100vh;
-	color: #fff;
+#desktop [data-page] {
+    display: none;
+    width: 100%;
+    height: 100vh;
+    color: #fff;
 }
 
 #desktop [data-page].active {
-	display: block;
+    display: block;
 }
 
 /*** LANDING PAGE ***/
 
 #desktop #video-opacity {
-	position: fixed;
+    position: fixed;
     min-width: 100%;
     min-height: 100%;
     width: auto;
@@ -29,21 +30,21 @@
 }
 
 #desktop #video {
-	position: fixed;
+    position: fixed;
     min-width: 100%;
     min-height: 100%;
     width: auto;
     height: auto;
     z-index: -100;
-  
+
 }
 
 #desktop #askCode {
-	border: none;
-	height: 40px;
-	box-shadow: 2px 2px 5px #000;
-	position: absolute;
-	width: 150px;
+    border: none;
+    height: 40px;
+    box-shadow: 2px 2px 5px #000;
+    position: absolute;
+    width: 150px;
     left: calc(50% - 75px);
     bottom: 300px;
     z-index: 100;
@@ -55,96 +56,96 @@
 }
 
 #desktop #askCode:active {
-	box-shadow: inset 0px 1px 3px rgba(0,0,0,0.5); 
+    box-shadow: inset 0px 1px 3px rgba(0,0,0,0.5);
 }
 
 #desktop p {
-	position: absolute;
-	left: calc(50% - 195px);
-	top: calc(40% - 100px);
-	color: #FFF;
-	z-index: 100;
-	font-size: 30px;
-	font-family: 'Roboto';
-	opacity: 0.8;
+    position: absolute;
+    left: calc(50% - 195px);
+    top: calc(40% - 100px);
+    color: #FFF;
+    z-index: 100;
+    font-size: 30px;
+    font-family: 'Roboto';
+    opacity: 0.8;
 }
 
 #desktop #credit {
-	position: absolute;
-	left: calc(50% - 250px);
-	bottom: 30px;
-	color: grey;
-	z-index: 100;
-	font-size: 15px;
-	font-family: 'Roboto';
-	text-align: center;
-	width: 500px;
-	height: 20px;
-	text-transform: uppercase;
-	opacity: 0.5;
+    position: absolute;
+    left: calc(50% - 250px);
+    bottom: 30px;
+    color: grey;
+    z-index: 100;
+    font-size: 15px;
+    font-family: 'Roboto';
+    text-align: center;
+    width: 500px;
+    height: 20px;
+    text-transform: uppercase;
+    opacity: 0.5;
 }
 
 /*** ROOM CODE PAGE ***/
 
 #desktop [data-page="room-code"] {
-	position: fixed;
-	top: 0; bottom: 0;
-	left: 0; right: 0;
-	background: #1E1E1E;
-	color: #fff;
+    position: fixed;
+    top: 0; bottom: 0;
+    left: 0; right: 0;
+    background: #1E1E1E;
+    color: #fff;
 }
 
 #desktop h1 {
-	position: absolute;
-	left: calc(50% + 20px);
-	bottom: calc(50% - 140px);
-	width: 350px;
-	text-align: center;
-	font-size: 100px;
-	color: #EAD556;
-	letter-spacing: 10px;
-	
+    position: absolute;
+    left: calc(50% + 20px);
+    bottom: calc(50% - 140px);
+    width: 350px;
+    text-align: center;
+    font-size: 100px;
+    color: #EAD556;
+    letter-spacing: 10px;
+
 }
 
 #desktop #code #p1 {
-	text-align: center;
-	font-size: 30px;
-	font-family: 'Roboto';
-	position: absolute;
-	left: calc(50% - 130px);
-	top: 100px;
-	text-transform: uppercase;
+    text-align: center;
+    font-size: 30px;
+    font-family: 'Roboto';
+    position: absolute;
+    left: calc(50% - 130px);
+    top: 100px;
+    text-transform: uppercase;
 
 }
 
 #desktop #code #p2 {
-	text-align: center;
-	font-size: 30px;
-	font-family: 'Roboto';
-	position: absolute;
-	left: calc(50% - 10px);
-	top: 250px;
-	color: #CCC9C9;
-	font-size: 15px;
-	text-transform: uppercase;
+    text-align: center;
+    font-size: 30px;
+    font-family: 'Roboto';
+    position: absolute;
+    left: calc(50% - 10px);
+    top: 250px;
+    color: #CCC9C9;
+    font-size: 15px;
+    text-transform: uppercase;
 
 }
 
 #desktop #code img {
-	position: absolute;
-	bottom: calc(50% - 285.5px);
-	left: 4%;
-	max-width: 400px;
-	height: auto;
+    position: absolute;
+    bottom: calc(50% - 285.5px);
+    left: 4%;
+    max-width: 400px;
+    height: auto;
 
 }
 
 #desktop #start-game {
-	border: none;
-	height: 40px;
-	box-shadow: 2px 2px 5px #000;
-	position: absolute;
-	width: 150px;
+    border: none;
+    height: 40px;
+    box-shadow: 2px 2px 5px #000;
+    position: absolute;
+    width: 150px;
     left: calc(50% + 120px);
     bottom: 200px;
     z-index: 100;
@@ -155,39 +156,50 @@
     font-family: 'Roboto';
 }
 
+#desktop #counter
+{
+    color:white;
+    text-align: center;
+    width:100vw;
+    height: 100px;
+    position:absolute;
+    top:50vh;
+    font-size: 100px;
+}
+
 #desktop #playersNumber {
     font-size: 11px;
 }
 
 #desktop #start-game:active {
-	box-shadow: inset 0px 1px 3px rgba(0,0,0,0.5); 
+    box-shadow: inset 0px 1px 3px rgba(0,0,0,0.5);
 }
 
 /*** SELECTION PAGE ***/
 #desktop [data-page="selection"] {
-	position: fixed;
-	top: 0; bottom: 0;
-	left: 0; right: 0;
-	background: #1E1E1E;
-	color: #fff;
+    position: fixed;
+    top: 0; bottom: 0;
+    left: 0; right: 0;
+    background: #1E1E1E;
+    color: #fff;
 }
 
 #desktop #select-txt {
-	position:absolute;
-	left:calc(50% - 435px);
-	top:calc(50% - 23.5px);
-	font-family: 'Roboto';
-	font-size:40px;
-	font-weight: 900;
-	color:#CCC9C9;
+    position:absolute;
+    left:calc(50% - 435px);
+    top:calc(50% - 23.5px);
+    font-family: 'Roboto';
+    font-size:40px;
+    font-weight: 900;
+    color:#CCC9C9;
 }
 
 /*** END GAME PAGE ***/
 
 #desktop [data-page="end"] {
-	position: fixed;
-	top: 0; bottom: 0;
-	left: 0; right: 0;
-	background: #1E1E1E;
-	color: #fff;
+    position: fixed;
+    top: 0; bottom: 0;
+    left: 0; right: 0;
+    background: #1E1E1E;
+    color: #fff;
 }
