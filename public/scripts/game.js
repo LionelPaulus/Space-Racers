@@ -203,6 +203,9 @@ socket.on('game:started', function (spaceships) {
             y_old: 0
         };
     }
+
+    // Sounds
+    sounds.starship_selection.fadeOut(0,200);
     sounds.main.play();
     draw();
 });

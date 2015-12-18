@@ -13,6 +13,12 @@ socket.on('game:error', function (message) {
 // Lorsque le serveur accepte le debut du jeu
 socket.on('spaceship:started', function () {
     changePage('selection');
+    sounds.starship_selection = new Howl({
+        urls:["sounds/starship_selection.mp3"],
+        volume: 0.5,
+        buffer:true,
+        loop:true
+    }).play();
 });
 
 
