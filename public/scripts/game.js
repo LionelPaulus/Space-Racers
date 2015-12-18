@@ -17,6 +17,7 @@ var count = document.getElementById("counter");
 var wait = true;
 
 var player_alone= null;
+var player_alone_spaceship = null;
 var players = [];
 var dead_player = [];
 
@@ -201,6 +202,7 @@ socket.on('game:started', function (spaceships) {
 
     if (spaceships.length == 1) {
         player_alone = 1;
+        player_alone_spaceship = spaceships[0];
     }
 
     for (var player in spaceships) {
@@ -690,6 +692,18 @@ function draw()
 }
 
 
+function getSpaceshipImage(spaceship) {
+    if(spaceship == 4) {
+        return "img/game/jedistarfight.png";
+    } else if(spaceship == 2) {
+        return "img/xwing.png";
+    } else if(spaceship == 1) {
+        return "img/interceptor.png";
+    } else if(spaceship == 3) {
+        return "img/smit_sith.png";
+    }
+}
+
 
 function isGameOver(number_of_player)
 {
@@ -698,7 +712,9 @@ function isGameOver(number_of_player)
         if(dead_player.length == 1)
         {
             // Display score
-            socket.emit("game:end",player_alone);
+            socket.emit("game:end", player_alone);
+            // We put spaceship image
+            $('#end-preview').attr('src', getSpaceshipImage(player_alone_spaceship));
             clearInterval(gyroInterval);
             sounds.main.fadeOut(0,1000);
             setTimeout(function () { window.cancelAnimationFrame(game_play); changePage('end'); }, 1000);
@@ -709,7 +725,9 @@ function isGameOver(number_of_player)
         if((players.length - 1) == dead_player.length)
         {
             // Display score
-            socket.emit("game:end",players[0].id);
+            socket.emit("game:end", players[0].id);
+            // We put spaceship image
+            $('#end-preview').attr('src', getSpaceshipImage(players[0].spaceship));
             clearInterval(gyroInterval);
             sounds.main.fadeOut(0,1000);
             setTimeout(function () { window.cancelAnimationFrame(game_play); changePage('end'); }, 1000);
