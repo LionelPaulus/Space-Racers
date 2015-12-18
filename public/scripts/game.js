@@ -15,7 +15,7 @@ canvas.setAttribute("height", canvas_height);
 
 var player_alone= null;
 var players = [];
-var positions = {}; // Positions x, y and z from gyroscope
+var dead_player = [];
 
 var sounds = {};
 
@@ -169,6 +169,18 @@ function getViewport() {
  return [viewPortWidth, viewPortHeight];
 }
 
+function isDead(user) {
+    var dead = false;
+
+    for (var player in dead_player) {
+        var current = dead_player[player];
+
+        if (current.id == (user+1)) dead = true;
+    }
+
+    return dead;
+}
+
 $.get("scripts/data.JSON", function(hitbox) {
 
 // SOCKET IO
@@ -216,6 +228,9 @@ var first_time = true;
 
 socket.on('game:move', function (datas) {
     datas = JSON.parse(datas);
+
+    if(isDead(datas.user)) return;
+
     positions[datas.user].x_serv = datas.positions.x;
     positions[datas.user].y_serv = datas.positions.y;
     positions[datas.user].z_serv = datas.positions.z;
@@ -365,13 +380,13 @@ function asteroidColision()
                         {
                             var middle_collision_x = (ship_hitbox[o].x + asteroid_hitbox[o].x)/2 - ship.width;
                             var middle_collision_y = (ship_hitbox[o].y + asteroid_hitbox[o].y)/2;
+                            dead_player.push(ship);
+                            positions.splice(i,1);
                             players.splice(i,1);
                             asteroids.splice(i,1);
                             createExplosion(middle_collision_x,middle_collision_y);
                             socket.emit("game:dead",i);
                             sounds.explosion.play();
-
-                            //positions.splice(i,1);
                             return true;
                         }
                     }
@@ -554,7 +569,6 @@ function shootColision()
             var asteroid = asteroids[k];
             if(collide(shoot,asteroid) == true)
             {
-                console.log("hi");
                 var asteroid_hitbox = hitboxArea("asteroid",asteroid,[]);
                 for(l = 0 , u = asteroid_hitbox.length; l < u; l++)
                 {
