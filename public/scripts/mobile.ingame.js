@@ -41,8 +41,6 @@ var inGameInit = function () {
     };
 
     $('#mobile [data-page="game"] p b').html('TAP SCREEN TO SHOOT MISSILES');
-    Waves.attach('#mobile [data-page="game"]');
-    Waves.init();
 
 
     $('#mobile [data-page="game"]').on('click', function () {
