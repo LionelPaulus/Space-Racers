@@ -203,3 +203,23 @@
     background: #1E1E1E;
     color: #fff;
 }
+
+#desktop [data-page="end"] #end-txt {
+    position:absolute;
+    left:calc(50% - 180px);
+    width: 360px;
+    height: 50px;
+    top:calc(50% + 50px);
+    font-family: 'Roboto';
+    font-size: 40px;
+    text-align: center;
+    font-weight: 900;
+    color:#CCC9C9;
+}
+
+#desktop [data-page="end"] img {
+    width: 300px;
+    position: absolute;
+    left: calc(50% - 150px);
+    top: calc(50vh - 162px);
+}
