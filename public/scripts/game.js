@@ -50,52 +50,48 @@ function createPlayerShip(number_of_player,ship_number, player_number)
     ship.score = 0;
     if(ship_number == 4)
     {
-        ship.size = {};
-        ship.size.x = 53;
-        ship.size.y = 112;
+        ship.width = 53;
+        ship.height = 112;
         ship.sprite = new Image();
         ship.sprite.src = "img/game/jedi1.png";
     }
     else if(ship_number == 2)
     {
-        ship.size = {};
-        ship.size.x = 100;
-        ship.size.y = 112;
+        ship.width = 100;
+        ship.height = 112;
         ship.sprite = new Image();
         ship.sprite.src = "img/game/jedi2.png";
     }
     else if(ship_number == 1)
     {
-        ship.size = {};
-        ship.size.x = 59;
-        ship.size.y = 109;
+        ship.width = 59;
+        ship.height = 109;
         ship.sprite = new Image();
         ship.sprite.src = "img/game/sith1.png";
     }
     else if(ship_number == 3)
     {
-        ship.size = {};
-        ship.size.x = 66;
-        ship.size.y = 112;
+        ship.width = 66;
+        ship.height = 112;
         ship.sprite = new Image();
         ship.sprite.src = "img/game/sith2.png";
     }
     if (number_of_player == 1)
     {
-        ship.x = Math.floor(canvas_width/2 - ship.size.x/2);
-        ship.y = canvas_height-ship.size.y -50;
+        ship.x = Math.floor(canvas_width/2 - ship.width/2);
+        ship.y = canvas_height-ship.height -50;
     }
     else if (number_of_player == 2)
     {
         if(player_number == 1)
         {
-            ship.x = canvas_width/2 - ship.size.x/2 - canvas_width/4 ;
-            ship.y = canvas_height-ship.size.y -50;
+            ship.x = canvas_width/2 - ship.width/2 - canvas_width/4 ;
+            ship.y = canvas_height-ship.height -50;
         }
         else if (player_number == 2)
         {
-            ship.x = canvas_width/2 - ship.size.x/2 + canvas_width/4 ;
-            ship.y = canvas_height-ship.size.y -50;
+            ship.x = canvas_width/2 - ship.width/2 + canvas_width/4 ;
+            ship.y = canvas_height-ship.height -50;
         }
     }
 
@@ -103,18 +99,18 @@ function createPlayerShip(number_of_player,ship_number, player_number)
     {
         if(player_number == 1)
         {
-            ship.x = canvas_width/2 - ship.size.x/2 - canvas_width/4;
-            ship.y = canvas_height-ship.size.y -50;
+            ship.x = canvas_width/2 - ship.width/2 - canvas_width/4;
+            ship.y = canvas_height-ship.height -50;
         }
         else if (player_number == 2)
         {
-            ship.x = canvas_width/2 - ship.size.x/2;
-            ship.y = canvas_height-ship.size.y -50;
+            ship.x = canvas_width/2 - ship.width/2;
+            ship.y = canvas_height-ship.height -50;
         }
         else if (player_number == 3)
         {
-            ship.x = canvas_width/2 - ship.size.x/2 + canvas_width/4;
-            ship.y = canvas_height-ship.size.y -50;
+            ship.x = canvas_width/2 - ship.width/2 + canvas_width/4;
+            ship.y = canvas_height-ship.height -50;
         }
     }
 
@@ -122,24 +118,24 @@ function createPlayerShip(number_of_player,ship_number, player_number)
     {
         if(player_number == 1)
         {
-            ship.x = canvas_width/2 - ship.size.x/2 - (canvas_width/8*2);
-            ship.y = canvas_height-ship.size.y -50;
+            ship.x = canvas_width/2 - ship.width/2 - (canvas_width/8*2);
+            ship.y = canvas_height-ship.height -50;
         }
         else if (player_number == 2)
         {
-            ship.x = canvas_width/2 - ship.size.x/2 - canvas_width/12;
-            ship.y = canvas_height-ship.size.y -50;
+            ship.x = canvas_width/2 - ship.width/2 - canvas_width/12;
+            ship.y = canvas_height-ship.height -50;
         }
         else if (player_number == 3)
         {
-            ship.x = canvas_width/2 - ship.size.x/2 + canvas_width/12;
-            ship.y = canvas_height-ship.size.y -50;
+            ship.x = canvas_width/2 - ship.width/2 + canvas_width/12;
+            ship.y = canvas_height-ship.height -50;
         }
 
         else if (player_number == 4)
         {
-            ship.x = canvas_width/2 - ship.size.x/2 + (canvas_width/8*2);
-            ship.y = canvas_height-ship.size.y -50;
+            ship.x = canvas_width/2 - ship.width/2 + (canvas_width/8*2);
+            ship.y = canvas_height-ship.height -50;
         }
     }
 
@@ -289,28 +285,27 @@ function createAsteroid()
     asteroid.x = rNumber(0,canvas_width);
     asteroid.sprite = new Image();
     asteroid.type = random;
-    asteroid.size = {};
     if(random == 1)
     {
-        asteroid.size.x = 18;
-        asteroid.size.y = 18;
+        asteroid.width = 18;
+        asteroid.height = 18;
         asteroid.life = 10;
     }
     else if(random == 2)
     {
-        asteroid.size.x = 34;
-        asteroid.size.y = 34;
+        asteroid.width = 34;
+        asteroid.height = 34;
         asteroid.life = 30;
     }
     else if(random == 3)
     {
-        asteroid.size.x = 66;
-        asteroid.size.y = 66;
+        asteroid.width = 66;
+        asteroid.height = 66;
         asteroid.life = 60;
     }
     asteroid.sprite.src = "img/game/asteroid" + random +".png";
     asteroid.speed = 2;
-    asteroid.y = 0 - asteroid.size.y ;
+    asteroid.y = 0 - asteroid.height ;
     if (tooCloseTo(asteroid) === false)
     {
         asteroids.push(asteroid);
@@ -323,7 +318,7 @@ function updateAsteroid()
     {
         var asteroid = asteroids[i];
         asteroid.y += asteroid.speed;
-        if ((asteroid.y-asteroid.size.y > canvas_height))
+        if ((asteroid.y-asteroid.height > canvas_height))
         {
             asteroids.splice(i,1);
             i--;
@@ -368,7 +363,7 @@ function asteroidColision()
                     {
                         if(collide(ship_hitbox[o],asteroid_hitbox[k]) == true)
                         {
-                            var middle_collision_x = (ship_hitbox[o].x + asteroid_hitbox[o].x)/2 - ship.size.x;
+                            var middle_collision_x = (ship_hitbox[o].x + asteroid_hitbox[o].x)/2 - ship.width;
                             var middle_collision_y = (ship_hitbox[o].y + asteroid_hitbox[o].y)/2;
                             players.splice(i,1);
                             asteroids.splice(i,1);
@@ -518,10 +513,10 @@ var shoots = [];
 function createBlasterShoot(player)
 {
     var shoot = {};
-    shoot.x = Math.floor(player.x +player.size.x/2);
+    shoot.x = Math.floor(player.x +player.width/2);
     shoot.y = player.y;
     shoot.speed = 4;
-    shoot.width = 2;
+    shoot.width = 3;
     shoot.height = 10;
 
     shoots.push(shoot);
@@ -551,22 +546,28 @@ function shootColision()
 {
     for(var n = 0, len = shoots.length; n < shoots.length;n++)
     {
+        var shoot = shoots[n];
         for(var k = 0, ln = asteroids.length; k < ln;k++)
         {
-            var asteroid_hitbox = hitboxArea("asteroid",asteroids[k],[]);
-            for(l = 0 , u = asteroid_hitbox.length; l < u; l++)
+            var asteroid = asteroids[k];
+            if(collide(shoot,asteroid) == true)
             {
-                if(collide(shoots[n],asteroid_hitbox[l]) == true)
+                console.log("hi");
+                var asteroid_hitbox = hitboxArea("asteroid",asteroid,[]);
+                for(l = 0 , u = asteroid_hitbox.length; l < u; l++)
                 {
-                    asteroids[k].life -=10;
-                    shoots.splice(n,1);
-                    len--;
-                    if(asteroids[k].life == 0)
+                    if(collide(shoot,asteroid_hitbox[l]) == true)
                     {
-                        asteroids.splice(k,1);
-                        ln--;
+                        asteroid.life -=10;
+                        shoots.splice(n,1);
+                        len--;
+                        if(asteroid.life == 0)
+                        {
+                            asteroids.splice(k,1);
+                            ln--;
+                        }
+                        return "stop it";
                     }
-                    return "stop it";
                 }
             }
         }
@@ -754,9 +755,9 @@ function tooCloseTo(new_asteroid)
         {
             var asteroid = asteroids[i];
 
-            if (asteroid.y <= ((asteroid.size.y * 2) + (asteroid.size.y / 2)))
+            if (asteroid.y <= ((asteroid.height * 2) + (asteroid.height / 2)))
             {
-                if (((new_asteroid.x + new_asteroid.size.x) >= asteroid.x && (new_asteroid.x + new_asteroid.size.x) <= (asteroid.x + asteroid.size.x)) || (new_asteroid.x >= asteroid.x && new_asteroid.x <= asteroid.x + asteroid.size.x))
+                if (((new_asteroid.x + new_asteroid.width) >= asteroid.x && (new_asteroid.x + new_asteroid.width) <= (asteroid.x + asteroid.width)) || (new_asteroid.x >= asteroid.x && new_asteroid.x <= asteroid.x + asteroid.width))
                 {
                     istooclose = true;
                     break;

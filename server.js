@@ -62,6 +62,8 @@ io.on('connection', function(socket) {
         socket.emit('room:success', JSON.stringify(
             rooms.getUsedSpaceships(room)
         ));
+        // Send number of players to Host
+        rooms.getHost(room).emit('room:players', rooms.getPlayers(room).length);
     });
 
 

@@ -151,9 +151,12 @@
     text-transform: uppercase;
     font-size: 15px;
     background: #E9D460;
+    cursor: pointer;
     font-family: 'Roboto';
+}
 
-
+#desktop #playersNumber {
+    font-size: 11px;
 }
 
 #desktop #start-game:active {
