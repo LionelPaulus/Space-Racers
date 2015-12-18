@@ -43,7 +43,7 @@ if (is_mobile() === true) {
     });
 }
 
-var socket = io.connect('star-wars-space-racers.herokuapp.com');
+var socket = io.connect(window.location.hostname);
 //var socket = io.connect('star-wars-racers.herokuapp.com');
 
 $(function() {
