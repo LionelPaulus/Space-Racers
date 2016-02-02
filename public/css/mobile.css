@@ -318,7 +318,7 @@
 	top: calc(50vh - 12px);
 }
 
-@media screen and (min-height: 400px) {
+@media screen and (min-height: 420px) {
 	#mobile .code-label {
 		margin-top: 40px;
 		padding-left: 20px;
