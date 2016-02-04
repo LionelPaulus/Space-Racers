@@ -206,17 +206,53 @@ io.on('connection', function(socket) {
 
         var roomPlayers = rooms.getPlayers(roomID);
 
-        rooms.remove(roomID);
-        socket.roomID = false;
+        //rooms.remove(roomID);
+        //socket.roomID = false;
 
         // We disconnect all users from the room
         for(var user in roomPlayers) {
             var player = roomPlayers[user];
-            player.socket.emit('room:close');
+            player.socket.emit('game:end');
         }
 
         console.log(roomPlayers[winner].socket.id +' win the game '+ roomID);
         console.log('End of the game '+ roomID);
+    });
+
+
+    // When the user answers the "do you want to replay" question
+    socket.on('game:replay', function (answer) {
+        var playerParents = rooms.getPlayersParents(socket.id);
+        var currentPlayer = rooms.getPlayers(playerParents.roomID)[playerParents.playerID];
+        var playersAlive = rooms.getPlayersState(playerParents.roomID);
+
+        switch(answer) {
+            case 0:
+                // Si je suis le dernier joueur, on supprime la room
+                if(playersAlive === 0 && rooms.countPlayers(playerParents.roomID) == 1) {
+                    rooms.remove(playerParents.roomID);
+                    // dis au PC d'afficher page d'accueil
+                    console.log("Delete the room "+ playerParents.roomID);
+                } else {
+                    rooms.playerRemove(playerParents.roomID, playerParents.playerID);
+                } 
+                
+                socket.emit('room:close');
+                console.log("Player "+ playerParents.playerID +" doesn't want to play again");
+                break;
+
+            case 1:
+                if(playersAlive === 0) {
+                    // je suis le premier joueur a être prêt
+                    // envoie au serveur d'afficher page "select spaceship"
+                } 
+
+                socket.emit('spaceship:started');
+
+                rooms.setUserAlive(playerParents.roomID, playerParents.playerID);
+                console.log("Player "+ playerParents.playerID +" wants to play again");   
+                break;
+        }
     });
 
 

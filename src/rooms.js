@@ -155,6 +155,24 @@ var rooms_manager = {
     },
 
     /**
+     * Retourne le nombre de players prêts
+     * @param int id
+     * @return boolean
+     */
+    getPlayersState: function (id) {
+        var playersCount = this.rooms[id].players.length;
+        var playerReady = 0;
+
+        for (var user in this.rooms[id].players) {
+            var player = this.rooms[id].players[user];
+
+            if (player.state === true) playerReady++;
+        }
+
+        return playerReady;
+    },
+
+    /**
      * Set a player ready
      * @param int id
      * @param int user
@@ -180,6 +198,15 @@ var rooms_manager = {
      */
     setUserDead: function (id, user) {
         this.rooms[id].players[user].state = false;
+    },
+
+    /**
+     * 
+     * @param int id
+     * @param int user
+     */
+    setUserAlive: function (id, user) {
+        this.rooms[id].players[user].state = true;
     },
 
     /**
