@@ -243,13 +243,14 @@ io.on('connection', function(socket) {
 
             case 1:
                 if(playersAlive === 0) {
-                    // je suis le premier joueur a être prêt
-                    // envoie au serveur d'afficher page "select spaceship"
+                    rooms.getHost(playerParents.roomID).emit('spaceship:started');
                 } 
 
                 socket.emit('spaceship:started');
-
                 rooms.setUserAlive(playerParents.roomID, playerParents.playerID);
+                // Send number of players to Host
+                rooms.getHost(playerParents.roomID).emit('room:players', rooms.getPlayersState(playerParents.roomID));
+
                 console.log("Player "+ playerParents.playerID +" wants to play again");   
                 break;
         }
