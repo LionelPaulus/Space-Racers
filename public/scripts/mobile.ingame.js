@@ -61,3 +61,7 @@ socket.on('game:dead', function () {
     inGameReset();
     navigator.vibrate(500);
 });
+
+socket.on('game:end', function() {
+    changePage('replay');
+});
