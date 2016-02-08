@@ -211,6 +211,11 @@ io.on('connection', function(socket) {
 
         // We disconnect all users from the room
         for(var user in roomPlayers) {
+            // Reset
+            roomPlayers[user].state = false;
+            roomPlayers[user].ready = false;
+            roomPlayers[user].spaceship = false;
+
             var player = roomPlayers[user];
             player.socket.emit('game:end');
         }
@@ -243,11 +248,13 @@ io.on('connection', function(socket) {
 
             case 1:
                 if(playersAlive === 0) {
+                    console.log('First player who wants to play again - Contact screen');
                     rooms.getHost(playerParents.roomID).emit('spaceship:started');
-                } 
+                }
 
                 socket.emit('spaceship:started');
                 rooms.setUserAlive(playerParents.roomID, playerParents.playerID);
+
                 // Send number of players to Host
                 rooms.getHost(playerParents.roomID).emit('room:players', rooms.getPlayersState(playerParents.roomID));
 
@@ -259,6 +266,9 @@ io.on('connection', function(socket) {
 
     // When someone disconnect
     socket.on('disconnect', function () {
+
+        if (!rooms.exists(socket.roomID)) return;
+
         // If he is the host, we delete the room
         // And kick all players
         if (socket.roomID) {
@@ -282,10 +292,7 @@ io.on('connection', function(socket) {
 
             rooms.playerRemove(playerParents.roomID, playerParents.playerID);
             console.log('Player '+ socket.id +' is leaving the room '+ playerParents.roomID);
-
-            // Send number of players to Host
-            rooms.getHost(playerParents.roomID).emit('room:players', rooms.getPlayers(playerParents.roomID).length);
-
+            
             // The spaceship is back available
             var adversaries = rooms.getPlayers(playerParents.roomID);
             for (var user in adversaries) {

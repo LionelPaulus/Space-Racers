@@ -18,33 +18,31 @@ var count = document.getElementById("counter");
 
 var wait = true;
 
-var player_alone= null;
+var player_alone = null;
 var player_alone_spaceship = null;
 var players = [];
 var dead_player = [];
 
 var sounds = {};
 
-sounds = {};
-
 sounds.main = new Howl({
-    urls:["sounds/ingame.mp3"],
-    volume: 0.5,
-    buffer:true,
-    loop:true
-});
+        urls:["sounds/ingame.mp3"],
+        volume: 0.5,
+        buffer:true,
+        loop:true
+    });
 
-sounds.blaster = new Howl({
-    urls:["sounds/blaster.mp3"],
-    volume: 0.5,
-    buffer:true
-});
+    sounds.blaster = new Howl({
+        urls:["sounds/blaster.mp3"],
+        volume: 0.5,
+        buffer:true
+    });
 
-sounds.explosion = new Howl({
-    urls:["sounds/explosion.mp3"],
-    volume: 1,
-    buffer:true
-});
+    sounds.explosion = new Howl({
+        urls:["sounds/explosion.mp3"],
+        volume: 1,
+        buffer:true
+    });
 
 function countdown()
 {
@@ -199,6 +197,8 @@ $.get("scripts/data.JSON", function(hitbox) {
 // SOCKET IO
 // When the game starts
 socket.on('game:started', function (spaceships) {
+    reset();
+
     // Start the game
     spaceships = JSON.parse(spaceships);
     countdown();
@@ -404,7 +404,7 @@ function asteroidColision()
                             var middle_collision_y = (ship_hitbox[o].y + asteroid_hitbox[o].y)/2;
                             dead_player.push(ship);
                             ship.sprite =  null;
-                            createExplosion(middle_collision_x,middle_collision_y);
+                            createExplosion(middle_collision_x, middle_collision_y);
                             socket.emit("game:dead",i);
                             sounds.explosion.play();
                             return true;
@@ -646,15 +646,21 @@ function updateExplosion()
     }
 }
 
-function restart()
+function reset()
 {
-    game_play = null;
-    time_start = 0;
-    gyroInterval = null;
     wait = true;
+    first_time = true;
+    player_alone = null;
+    player_alone_spaceship = null;
     stars = [];
-    for(var i = 0; i < 600;i++)
-    {
+    asteroids = [];
+    explosions = [];
+    positions = [];
+    shoots = [];
+    dead_player = [];
+    players = [];
+
+    for(var i = 0; i < 600;i++) {
         var star = {};
         star.x = rNumber(0,canvas_width);
         star.y = rNumber(0,canvas_height);
@@ -663,19 +669,30 @@ function restart()
         star.style = "white";
         stars.push(star);
     }
-    asteroids = [];
-    explosions = [];
-    shoots = [];
-    dead_player = [];
-    for(var player in players)
-    {
-        createPlayerShip(players.length,players[player].type,players[player].id);
-    }
-    players.splice((players.length/2),(players.length/2));
-    countdown();
-    setTimeout(function() {wait = false;},5000);
-    clear();
-    draw();
+
+    initSounds();
+}
+
+function initSounds()
+{
+    sounds.main = new Howl({
+        urls:["sounds/ingame.mp3"],
+        volume: 0.5,
+        buffer:true,
+        loop:true
+    });
+
+    sounds.blaster = new Howl({
+        urls:["sounds/blaster.mp3"],
+        volume: 0.5,
+        buffer:true
+    });
+
+    sounds.explosion = new Howl({
+        urls:["sounds/explosion.mp3"],
+        volume: 1,
+        buffer:true
+    });
 }
 
 
@@ -742,6 +759,7 @@ function isGameOver(number_of_player)
     {
         if(dead_player.length == 1)
         {
+            clearInterval(gyroInterval);
             // Display score
             socket.emit("game:end", player_alone);
             // We put spaceship image
@@ -749,23 +767,37 @@ function isGameOver(number_of_player)
             // We display time
             var seconds = (Date.now() - time_start) / 1000;
             $('#end-txt').html('YOU SURVIVED '+ Math.round(seconds) +'s');
-            clearInterval(gyroInterval);
             sounds.main.fadeOut(0, 1000);
-            setTimeout(function () { window.cancelAnimationFrame(game_play); changePage('end'); }, 1000);
+
+            setTimeout(function () {
+                window.cancelAnimationFrame(game_play);
+                changePage('end');
+                clear();
+                counter.innerHTML = "3";
+                counter.style.display = "block";
+            }, 1000);
         }
     }
     else
     {
         if((players.length - 1) == dead_player.length)
         {
+            clearInterval(gyroInterval);
+
             var player = getAlivePlayer();
             // Display score
             socket.emit("game:end", player.id);
             // We put spaceship image
             $('#end-preview').attr('src', getSpaceshipImage(player.spaceship));
-            clearInterval(gyroInterval);
             sounds.main.fadeOut(0,1000);
-            setTimeout(function () { window.cancelAnimationFrame(game_play); changePage('end'); }, 1000);
+
+            setTimeout(function () {
+                window.cancelAnimationFrame(game_play);
+                changePage('end');
+                clear();
+                counter.innerHTML = "3";
+                counter.style.display = "block";
+            }, 1000);
         }
     }
 }
