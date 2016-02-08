@@ -286,9 +286,6 @@ socket.on('game:started', function (spaceships) {
                      y_old: 0
                  };
             }
-            console.log(asteroidImgs[0].src);
-            console.log(shipImgs[0].src);
-            console.log(explosionImgs[0].src);
             ctx.font="46px Georgia";
             ctx.fillStyle = "white"
             var text = "Loading images... " +loaded_images+"/71";
