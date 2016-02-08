@@ -11,6 +11,13 @@ var canvas_width  = canvas_size[0];
 var canvas_height = canvas_size[1];
 canvas.setAttribute("width", canvas_width);
 canvas.setAttribute("height", canvas_height);
+var loading;
+
+explosionImgs = [];
+asteroidImgs = [];
+shipImgs = [];
+
+loaded_images = 0;
 
 var time_start = 0;
 
@@ -46,6 +53,7 @@ sounds.main = new Howl({
 
 function countdown()
 {
+    counter.innerHTML = "3";
     setTimeout(function() {counter.innerHTML = "2"},1000);
     setTimeout(function() {counter.innerHTML = "1"},2000);
     setTimeout(function() {counter.innerHTML = "0"; counter.style.display = "none"},3000);
@@ -63,29 +71,25 @@ function createPlayerShip(number_of_player,ship_number, player_number)
     {
         ship.width = 53;
         ship.height = 112;
-        ship.sprite = new Image();
-        ship.sprite.src = "img/game/jedi1.png";
+        ship.sprite = shipImgs[0];
     }
     else if(ship_number == 2)
     {
         ship.width = 100;
         ship.height = 112;
-        ship.sprite = new Image();
-        ship.sprite.src = "img/game/jedi2.png";
+        ship.sprite = shipImgs[1];
     }
     else if(ship_number == 1)
     {
         ship.width = 59;
         ship.height = 109;
-        ship.sprite = new Image();
-        ship.sprite.src = "img/game/sith1.png";
+        ship.sprite = shipImgs[2];
     }
     else if(ship_number == 3)
     {
         ship.width = 66;
         ship.height = 112;
-        ship.sprite = new Image();
-        ship.sprite.src = "img/game/sith2.png";
+        ship.sprite = shipImgs[3];
     }
     if (number_of_player == 1)
     {
@@ -180,6 +184,50 @@ function getViewport() {
  return [viewPortWidth, viewPortHeight];
 }
 
+function loadImages() {
+    var _loop = function () {
+        var explo = new Image();
+
+        explo.addEventListener("load", function () {
+            explosionImgs.push(explo);
+            loaded_images++;
+        });
+        explo.src = "img/game/explosion_sprite/" + i + ".png";
+    };
+
+    for (var i = 1; i <= 64; i++) {
+        _loop();
+    }
+
+    var _loop2 = function () {
+        var astero = new Image();
+
+        astero.addEventListener("load", function () {
+            asteroidImgs.push(astero);
+            loaded_images++;
+        });
+        astero.src = "img/game/asteroid" + b + ".png";
+    };
+
+    for (var b = 1; b <= 3; b++) {
+        _loop2();
+    }
+
+    var _loop3 = function () {
+        var ship = new Image();
+
+        ship.addEventListener("load", function () {
+            shipImgs.push(ship);
+            loaded_images++;
+        });
+        ship.src = "img/game/ship" + s + ".png";
+    };
+
+    for (var s = 1; s <= 4; s++) {
+        _loop3();
+    }
+}
+
 function isDead(user) {
     var dead = false;
 
@@ -201,37 +249,61 @@ socket.on('game:started', function (spaceships) {
 
     // Start the game
     spaceships = JSON.parse(spaceships);
-    countdown();
     changePage('game');
 
-    if (spaceships.length == 1) {
-        time_start = Date.now();
-        player_alone = 1;
-        player_alone_spaceship = spaceships[0];
-    }
-
-    for (var player in spaceships) {
-        var id = parseInt(player) + 1;
-        createPlayerShip(spaceships.length, spaceships[player], id);
-
-        positions[player] = {
-            y_serv: 0,
-            x_serv: 0,
-            z_serv: 0,
-            x: players[player].x,
-            y: players[player].y,
-            vx: 0,
-            vy: 0,
-            x_old: 0,
-            y_old: 0
-        };
-    }
 
     // Sounds
     sounds.starship_selection.fadeOut(0,200);
     sounds.main.play();
     setTimeout(function() {wait = false;},5000);
-    draw();
+    loadImages();
+    loading = setInterval(function()
+    {
+        if(loaded_images == 71)
+        {
+            clearInterval(loading);
+            if (spaceships.length == 1)
+            {
+                time_start = Date.now();
+                player_alone = 1;
+                player_alone_spaceship = spaceships[0];
+            }
+
+            for (var player in spaceships)
+            {
+                 var id = parseInt(player) + 1;
+                 createPlayerShip(spaceships.length, spaceships[player], id);
+                 positions[player] =
+                 {
+                     y_serv: 0,
+                     x_serv: 0,
+                     z_serv: 0,
+                     x: players[player].x,
+                     y: players[player].y,
+                     vx: 0,
+                     vy: 0,
+                     x_old: 0,
+                     y_old: 0
+                 };
+            }
+            console.log(asteroidImgs[0].src);
+            console.log(shipImgs[0].src);
+            console.log(explosionImgs[0].src);
+            ctx.font="46px Georgia";
+            ctx.fillStyle = "white"
+            var text = "Loading images... " +loaded_images+"/71";
+            ctx.fillText(text,((canvas_width/2)-320),((canvas_height/2)-60));
+            setTimeout(function(){clear(); countdown(); draw();},2000);
+        }
+        else
+        {
+            ctx.font="46px Georgia";
+            ctx.fillStyle = "white"
+            var text = "Loading images... " +loaded_images+"/71";
+            ctx.fillText(text,((canvas_width/2)-320),((canvas_height/2)-60));
+            clear();
+        }
+    },50);
 });
 
 // When the user shoot
@@ -314,7 +386,7 @@ function createAsteroid()
     var random = rNumber(1,3);
     var asteroid = {};
     asteroid.x = rNumber(0,canvas_width);
-    asteroid.sprite = new Image();
+    asteroid.sprite = asteroidImgs[random-1];
     asteroid.type = random;
     if(random == 1)
     {
@@ -334,7 +406,6 @@ function createAsteroid()
         asteroid.height = 66;
         asteroid.life = 60;
     }
-    asteroid.sprite.src = "img/game/asteroid" + random +".png";
     asteroid.speed = 2;
     asteroid.y = 0 - asteroid.height ;
     if (tooCloseTo(asteroid) === false)
@@ -615,10 +686,9 @@ function createExplosion(x,y)
 {
     var explosion = {};
     explosion.sprite = [];
-    for(var i = 1; i <= 64;i++)
+    for(var i = 0; i <= 63;i++)
     {
-        var hello = new Image();
-        hello.src = "img/game/explosion_sprite/"+i+".png";
+        hello = explosionImgs[i];
         explosion.sprite.push(hello);
     }
     explosion.x = x;
