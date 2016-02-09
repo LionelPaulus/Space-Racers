@@ -5,6 +5,7 @@ var canvas = document.getElementById("game");
 var ctx = canvas.getContext("2d");
 var positions = [];
 var gyroInterval = null;
+var reset_count = 0;
 
 var canvas_size = getViewport();
 var canvas_width  = canvas_size[0];
@@ -245,7 +246,7 @@ $.get("scripts/data.JSON", function(hitbox) {
 // SOCKET IO
 // When the game starts
 socket.on('game:started', function (spaceships) {
-    reset();
+      reset();
 
     // Start the game
     spaceships = JSON.parse(spaceships);
@@ -259,7 +260,7 @@ socket.on('game:started', function (spaceships) {
     loadImages();
     loading = setInterval(function()
     {
-        if(loaded_images == 71)
+        if(loaded_images == 71 || reset_count >= 2)
         {
             clearInterval(loading);
             if (spaceships.length == 1)
@@ -286,11 +287,14 @@ socket.on('game:started', function (spaceships) {
                      y_old: 0
                  };
             }
-            ctx.font="46px Georgia";
-            ctx.fillStyle = "white"
-            var text = "Loading images... " +loaded_images+"/71";
-            ctx.fillText(text,((canvas_width/2)-320),((canvas_height/2)-60));
-            setTimeout(function(){clear(); countdown(); draw();},2000);
+            if (reset_count < 2)
+            {
+                ctx.font="46px Georgia";
+                ctx.fillStyle = "white"
+                var text = "Loading images... " +loaded_images+"/71";
+                ctx.fillText(text,((canvas_width/2)-320),((canvas_height/2)-60));
+            }
+            setTimeout(function(){clear(); countdown(); draw();},200);
         }
         else
         {
@@ -736,7 +740,7 @@ function reset()
         star.style = "white";
         stars.push(star);
     }
-
+    reset_count++;
     initSounds();
 }
 
