@@ -289,20 +289,23 @@ socket.on('game:started', function (spaceships) {
             }
             if (reset_count < 2)
             {
+                clear();
                 ctx.font="46px Georgia";
                 ctx.fillStyle = "white"
                 var text = "Loading images... " +loaded_images+"/71";
-                ctx.fillText(text,((canvas_width/2)-320),((canvas_height/2)-60));
+                var text_width = ctx.measureText(text).width;
+                ctx.fillText(text,((canvas_width/2)-(text_width/2)),((canvas_height/2)-23));
             }
             setTimeout(function(){clear(); countdown(); draw();},200);
         }
         else
         {
+            clear();
             ctx.font="46px Georgia";
             ctx.fillStyle = "white"
             var text = "Loading images... " +loaded_images+"/71";
-            ctx.fillText(text,((canvas_width/2)-320),((canvas_height/2)-60));
-            clear();
+            var text_width = ctx.measureText(text).width;
+            ctx.fillText(text,((canvas_width/2)-(text_width/2)),((canvas_height/2)-23));
         }
     },50);
 });
