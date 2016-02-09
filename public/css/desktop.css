@@ -100,7 +100,7 @@
 #desktop h1 {
     position: absolute;
     left: calc(50% + 20px);
-    bottom: calc(50% - 140px);
+    bottom: calc(50% - 200px);
     width: 350px;
     text-align: center;
     font-size: 100px;
@@ -149,7 +149,7 @@
     position: absolute;
     width: 150px;
     left: calc(50% + 120px);
-    bottom: 200px;
+    bottom: 150px;
     z-index: 100;
     text-transform: uppercase;
     font-size: 15px;

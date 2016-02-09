@@ -20,7 +20,7 @@ function gyroIntelligence() {
          }
 
          // Dead zone
-         if (ax > -10 && ax < 10) {
+         if (ax > -2 && ax < 2) {
              ax = 0;
              if (positions[user].vx > inertia) {
                  positions[user].vx -= inertia;
@@ -30,7 +30,7 @@ function gyroIntelligence() {
                  positions[user].vx = 0;
              }
          }
-         if (ay > -10 && ay < 10) {
+         if (ay > -2 && ay < 2) {
              ay = 0;
              if (positions[user].vy > inertia) {
                  positions[user].vy -= inertia;
@@ -59,7 +59,7 @@ function gyroIntelligence() {
              ship.y = positions[user].y;
 
              //console.log(user +" - "+ ship.x +":"+ ship.y);
-             
+
              // Save actual position
              positions[user].x_old = positions[user].x;
              positions[user].y_old = positions[user].y;
