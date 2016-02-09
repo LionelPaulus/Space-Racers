@@ -8,6 +8,11 @@ socket.on('room:created', function (id) {
 socket.on('room:players', function (players) {
     if(players > 1){
         $('#playersNumber').html(players +' players');
+
+        // Force game start when 4 players in the room
+        if(players === 4){
+            socket.emit('spaceship:start');
+        }
     }else{
         $('#playersNumber').html(players +' player');
     }
