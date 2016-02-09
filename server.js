@@ -62,6 +62,7 @@ io.on('connection', function(socket) {
         socket.emit('room:success', JSON.stringify(
             rooms.getUsedSpaceships(room)
         ));
+
         // Send number of players to Host
         rooms.getHost(room).emit('room:players', rooms.getPlayers(room).length);
     });
@@ -93,7 +94,7 @@ io.on('connection', function(socket) {
     });
 
 
-    // Quand all the players have dismiss rules
+    // When all the players have dismiss rules
     socket.on('game:ready', function () {
         var playerParents = rooms.getPlayersParents(socket.id);
 
@@ -240,8 +241,8 @@ io.on('connection', function(socket) {
                     console.log("Delete the room "+ playerParents.roomID);
                 } else {
                     rooms.playerRemove(playerParents.roomID, playerParents.playerID);
-                } 
-                
+                }
+
                 socket.emit('room:close');
                 console.log("Player "+ playerParents.playerID +" doesn't want to play again");
                 break;
@@ -258,7 +259,7 @@ io.on('connection', function(socket) {
                 // Send number of players to Host
                 rooms.getHost(playerParents.roomID).emit('room:players', rooms.getPlayersState(playerParents.roomID));
 
-                console.log("Player "+ playerParents.playerID +" wants to play again");   
+                console.log("Player "+ playerParents.playerID +" wants to play again");
                 break;
         }
     });
@@ -292,7 +293,7 @@ io.on('connection', function(socket) {
 
             rooms.playerRemove(playerParents.roomID, playerParents.playerID);
             console.log('Player '+ socket.id +' is leaving the room '+ playerParents.roomID);
-            
+
             // The spaceship is back available
             var adversaries = rooms.getPlayers(playerParents.roomID);
             for (var user in adversaries) {
