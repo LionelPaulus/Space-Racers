@@ -35,11 +35,31 @@ socket.on('spaceship:started', function () {
     }).play();
 });
 
+$('#start-game').on('click', function () {
+    socket.emit('spaceship:start');
+});
+
+$('section[data-page="end"]').on('click', function () {
+    // Exit fullscreen
+    if(document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if(document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if(document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+});
 
 $('#askCode').on('click', function () {
     socket.emit('room:create');
-});
 
-$('#start-game').on('click', function () {
-    socket.emit('spaceship:start');
+    // Go into fullscreen
+    var elem = document.querySelector('#content');
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen();
+    }
 });
