@@ -15,7 +15,7 @@ socket.on('room:error', function (message) {
 // Whe the host goes offline
 socket.on('room:close', function () {
     inGameReset();
-	displayError('The host of the game left');
+	displayError('The host of the game has left');
     $('#code').html('');
 	changePage('code');
 });
