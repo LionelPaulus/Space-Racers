@@ -82,7 +82,7 @@ function createPlayerShip(number_of_player,ship_number, player_number)
     }
     else if(ship_number == 1)
     {
-        ship.width = 59;
+        ship.width = 56;
         ship.height = 109;
         ship.sprite = shipImgs[2];
     }
@@ -185,15 +185,26 @@ function getViewport() {
  return [viewPortWidth, viewPortHeight];
 }
 
+
+//If the user resize the window
+var resizeTimer = 500;
+window.addEventListener("resize", function(){
+        canvas_size = getViewport();
+        canvas_width  = canvas_size[0];
+        canvas_height = canvas_size[1];
+        canvas.setAttribute("width", canvas_width);
+        canvas.setAttribute("height", canvas_height);
+});
+
 function loadImages() {
     var _loop = function () {
         var explo = new Image();
 
         explo.addEventListener("load", function () {
-            explosionImgs.push(explo);
             loaded_images++;
         });
         explo.src = "img/game/explosion_sprite/" + i + ".png";
+        explosionImgs.push(explo);
     };
 
     for (var i = 1; i <= 64; i++) {
@@ -204,10 +215,10 @@ function loadImages() {
         var astero = new Image();
 
         astero.addEventListener("load", function () {
-            asteroidImgs.push(astero);
             loaded_images++;
         });
         astero.src = "img/game/asteroid" + b + ".png";
+        asteroidImgs.push(astero);
     };
 
     for (var b = 1; b <= 3; b++) {
@@ -218,10 +229,10 @@ function loadImages() {
         var ship = new Image();
 
         ship.addEventListener("load", function () {
-            shipImgs.push(ship);
             loaded_images++;
         });
         ship.src = "img/game/ship" + s + ".png";
+        shipImgs.push(ship);
     };
 
     for (var s = 1; s <= 4; s++) {
@@ -246,7 +257,7 @@ $.get("scripts/data.JSON", function(hitbox) {
 // SOCKET IO
 // When the game starts
 socket.on('game:started', function (spaceships) {
-      reset();
+    reset();
 
     // Start the game
     spaceships = JSON.parse(spaceships);
