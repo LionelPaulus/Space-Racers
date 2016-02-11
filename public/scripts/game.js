@@ -301,22 +301,37 @@ socket.on('game:started', function (spaceships) {
             if (reset_count < 2)
             {
                 clear();
-                ctx.font="46px Georgia";
+                ctx.font="46px Arial";
                 ctx.fillStyle = "white"
-                var text = "Loading images... " +loaded_images+"/71";
+                var text = "Loading...";
                 var text_width = ctx.measureText(text).width;
-                ctx.fillText(text,((canvas_width/2)-(text_width/2)),((canvas_height/2)-23));
+                ctx.fillText(text,((canvas_width/2)-(text_width/2)),((canvas_height/2)-93));
+                ctx.lineWidth=13;
+                ctx.strokeStyle = "white";
+                ctx.beginPath();
+                ctx.arc((canvas_width/2)-20,(canvas_height/2)-20, 40, -90*Math.PI/180, (((loaded_images/71)*360)-90)*Math.PI/180);
+                ctx.stroke();
             }
             setTimeout(function(){clear(); countdown(); draw();},200);
         }
         else
         {
             clear();
-            ctx.font="46px Georgia";
+            ctx.font="46px Arial";
             ctx.fillStyle = "white"
-            var text = "Loading images... " +loaded_images+"/71";
+            var text = "Loading...";
             var text_width = ctx.measureText(text).width;
-            ctx.fillText(text,((canvas_width/2)-(text_width/2)),((canvas_height/2)-23));
+            ctx.fillText(text,((canvas_width/2)-(text_width/2)),((canvas_height/2)-93));
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc((canvas_width/2)-20,(canvas_height/2)-20, 44, -90*Math.PI/180, 270*Math.PI/180);
+            ctx.arc((canvas_width/2)-20,(canvas_height/2)-20, 34, -90*Math.PI/180, 270*Math.PI/180);
+            ctx.stroke();
+            ctx.lineWidth = 11;
+            ctx.beginPath();
+            ctx.arc((canvas_width/2)-20,(canvas_height/2)-20, 40, -90*Math.PI/180, (((loaded_images/71)*360)-90)*Math.PI/180);
+            ctx.stroke();
         }
     },50);
 });
@@ -486,11 +501,12 @@ function asteroidColision()
                     {
                         if(collide(ship_hitbox[o],asteroid_hitbox[k]) == true)
                         {
-                            var middle_collision_x = (ship_hitbox[o].x + asteroid_hitbox[o].x)/2 - ship.width;
-                            var middle_collision_y = (ship_hitbox[o].y + asteroid_hitbox[o].y)/2;
+                            var middle_collision_x = ((ship_hitbox[o].x + asteroid_hitbox[k].x)/2) -96;
+                            var middle_collision_y = ((ship_hitbox[o].y + asteroid_hitbox[k].y)/2) -96;
                             dead_player.push(ship);
                             ship.sprite =  null;
                             createExplosion(middle_collision_x, middle_collision_y);
+                            asteroids.splice(k,1);
                             socket.emit("game:dead",i);
                             sounds.explosion.play();
                             return true;
