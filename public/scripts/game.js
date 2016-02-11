@@ -506,7 +506,6 @@ function asteroidColision()
                             dead_player.push(ship);
                             ship.sprite =  null;
                             createExplosion(middle_collision_x, middle_collision_y);
-                            asteroids.splice(k,1);
                             socket.emit("game:dead",i);
                             sounds.explosion.play();
                             return true;
