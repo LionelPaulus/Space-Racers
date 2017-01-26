@@ -44,8 +44,11 @@ if (is_mobile() === true) {
     });
 }
 
-var socket = io.connect(window.location.hostname +":3000");
-//var socket = io.connect('star-wars-racers.herokuapp.com');
+if (location.hostname === "localhost"){
+  var socket = io.connect(window.location.hostname +":3000");
+} else {
+  var socket = io.connect(window.location.hostname);
+}
 
 $(function() {
     FastClick.attach(document.body);
